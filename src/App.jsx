@@ -1,13 +1,13 @@
-import { useState } from 'react'
-
-import './App.css'
-
+import LoginForm from "./components/LoginForm.jsx";
+import "./App.css";
+import SelectRolePage from "./pages/SelectRolePage.jsx";
 function App() {
 
 
   return (
     <>
-        <h1>hi</h1>
+
+        <SelectRolePage/>
     </>
   )
 }
