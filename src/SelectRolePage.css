@@ -12,101 +12,163 @@ body,
 }
 
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
     overflow-x: hidden;
     background: #020617;
 }
 
-/* כל המסך */
 .select-role-page {
     width: 100%;
     min-height: 100vh;
     position: relative;
     overflow: hidden;
 
-    background:
-            radial-gradient(circle at top left, rgba(124, 58, 237, 0.45), transparent 23%),
-            radial-gradient(circle at top right, rgba(37, 99, 235, 0.35), transparent 23%),
-            radial-gradient(circle at bottom left, rgba(15, 23, 42, 0.9), transparent 38%),
-            linear-gradient(135deg, #020617, #0f172a, #1e1b4b);
-
-    color: white;
-
     display: flex;
     flex-direction: column;
     align-items: center;
 
-    padding-top: 20px;
+    padding-top: 60px;
     padding-bottom: 40px;
+
+    background:
+            radial-gradient(circle at top left, rgba(124, 58, 237, 0.4), transparent 25%),
+            radial-gradient(circle at top right, rgba(37, 99, 235, 0.3), transparent 25%),
+            radial-gradient(circle at bottom left, rgba(15, 23, 42, 0.9), transparent 40%),
+            linear-gradient(135deg, #020617, #0f172a, #1e1b4b);
+
+    color: white;
 }
 
-/* כותרת עליונה */
 .role-header {
     text-align: center;
     z-index: 2;
-    margin-top: 40px;
-    margin-bottom: 45px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .main-icon {
-    font-size: 42px;
-    margin-bottom: 6px;
+    width: 95px;
+    height: 70px;
+    position: relative;
+    margin-bottom: 10px;
+}
+
+.welcome-people-icon {
+    width: 95px;
+    height: 70px;
+    position: relative;
+    filter: drop-shadow(0 0 12px rgba(56, 189, 248, 0.6));
+}
+
+.welcome-person {
+    position: absolute;
+    border: 4px solid #38bdf8;
+    border-bottom: none;
+    background: transparent;
+    border-radius: 35px 35px 0 0;
+}
+
+.welcome-person::before {
+    content: "";
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    border: 4px solid #38bdf8;
+    border-radius: 50%;
+    background: #020617;
+    top: -28px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.welcome-center {
+    width: 42px;
+    height: 30px;
+    left: 26px;
+    top: 36px;
+    z-index: 3;
+}
+
+.welcome-left {
+    width: 34px;
+    height: 24px;
+    left: 4px;
+    top: 42px;
+    opacity: 0.75;
+}
+
+.welcome-right {
+    width: 34px;
+    height: 24px;
+    right: 4px;
+    top: 42px;
+    opacity: 0.75;
 }
 
 .welcome-text {
-    font-size: 24px;
-    margin: 0 0 8px;
-    color: #dbeafe;
-    /*margin-bottom: 20px;*/
+    font-size: 22px;
+    margin: 15px 0 0;
+    color: #94a3b8;
 }
+
 .role-header h1 {
-    margin: 0 0 12px;
-    font-size: 82px;
+    margin: 10px 0;
+    font-size: 90px;
     font-weight: 900;
     letter-spacing: 12px;
-    color: white;
-    text-shadow: 0 0 30px rgba(56, 189, 248, 0.35);
+    color: #ffffff;
+    line-height: 1.1;
+    text-shadow:
+            0 0 20px rgba(255, 255, 255, 0.2),
+            0 0 40px rgba(56, 189, 248, 0.3);
 }
 
 .subtitle {
     margin: 0;
     color: #cbd5e1;
-    font-size: 19px;
-    line-height: 2;
+    font-size: 18px;
+    line-height: 1.5;
+    max-width: 450px;
 }
 
-/* כרטיס בחירת תפקיד */
 .role-card {
     width: 520px;
-    padding: 36px;
-    border-radius: 28px;
-    background: rgba(255, 255, 255, 0.09);
-    border: 1px solid rgba(167, 139, 250, 0.55);
-    backdrop-filter: blur(18px);
-    box-shadow:
-            0 25px 70px rgba(0, 0, 0, 0.45),
-            0 0 40px rgba(59, 130, 246, 0.18);
+    padding: 40px;
+    border-radius: 32px;
+
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+
+    backdrop-filter: blur(20px);
+
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+
     z-index: 2;
+    margin-top: 40px;
 }
 
 .choose-text {
     text-align: center;
-    color: #cbd5e1;
-    font-size: 20px;
+    color: #94a3b8;
+    font-size: 18px;
     margin: 0 0 30px;
 }
 
 .choose-text span {
     color: #38bdf8;
+    font-weight: bold;
 }
 
-/* כפתורים */
 .role-box {
     width: 100%;
     border: none;
     border-radius: 20px;
-    padding: 26px 30px;
-    margin-bottom: 22px;
+
+    padding: 24px;
+    margin-bottom: 20px;
+
     color: white;
     cursor: pointer;
 
@@ -114,8 +176,7 @@ body {
     align-items: center;
     justify-content: space-between;
 
-    transition: 0.3s;
-    text-align: left;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .role-box:last-child {
@@ -123,47 +184,43 @@ body {
 }
 
 .role-box:hover {
-    transform: translateY(-6px) scale(1.03);
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
 }
 
 .manager-box {
     background: linear-gradient(135deg, #2563eb, #7c3aed);
-    box-shadow: 0 18px 40px rgba(124, 58, 237, 0.4);
 }
 
 .employee-box {
     background: linear-gradient(135deg, #10b981, #14b8a6);
-    box-shadow: 0 18px 40px rgba(20, 184, 166, 0.4);
 }
 
 .role-left {
     display: flex;
     align-items: center;
-    gap: 24px;
+    gap: 20px;
 }
 
 .role-icon {
-    font-size: 44px;
+    font-size: 38px;
 }
 
 .role-box h2 {
-    margin: 0 0 10px;
-    font-size: 28px;
-    color: white;
+    margin: 0;
+    font-size: 26px;
 }
 
 .role-box p {
-    margin: 0;
-    font-size: 17px;
-    color: rgba(255, 255, 255, 0.9);
+    margin: 5px 0 0;
+    font-size: 15px;
+    opacity: 0.9;
 }
 
 .arrow {
-    font-size: 52px;
-    color: white;
+    font-size: 35px;
 }
 
-/* עיגולים ברקע */
 .background-circle {
     position: absolute;
     border-radius: 50%;
@@ -185,22 +242,13 @@ body {
     background: rgba(124, 58, 237, 0.22);
 }
 
-/* מובייל */
 @media (max-width: 600px) {
     .role-card {
-        width: 100%;
+        width: 90%;
     }
 
     .role-header h1 {
         font-size: 60px;
         letter-spacing: 6px;
-    }
-
-    .subtitle {
-        font-size: 17px;
-    }
-
-    .role-box {
-        padding: 20px;
     }
 }
