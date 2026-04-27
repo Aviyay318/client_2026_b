@@ -1,4 +1,4 @@
-import "../SelectRolePage.css";
+import "./SelectRolePage.css";
 import { useNavigate } from "react-router-dom";
 
 function SelectRolePage() {

@@ -1,5 +1,5 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import SelectRolePage from "./pages/SelectRolePage.jsx";
+import SelectRolePage from "./pages/select-role/SelectRolePage.jsx";
 import EmployeeLoginPage from "./pages/employee/EmployeeLoginPage.jsx";
 import EmployeeDashboard from "./pages/employee/EmployeeDashboard.jsx";
 import EmployerLoginPage from "./pages/employer/EmployerLoginPage.jsx";

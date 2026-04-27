@@ -1,4 +1,4 @@
-import "../LoginFrome.css";
+import "./LoginForm.css";
 import {useState} from "react";
 import {loginEmployee, loginEmployer} from "../service/AuthApi.js";
 import {useNavigate} from "react-router-dom";
@@ -14,7 +14,6 @@ function LoginForm({role}) {
     const isValid = () => {
         return id.trim() === "" || password.trim() === "";
     };
-    // לעשות regex  על id ,password
 
 
     const handleLogin = (e) => {
@@ -75,7 +74,7 @@ function LoginForm({role}) {
                             <input
                                 type="text"
                                 value={id}
-                                placeholder="Enter your username"
+                                placeholder="Enter your id"
                                 onChange={(e) => setId(e.target.value)}
                             />
                         </div>
