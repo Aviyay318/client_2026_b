@@ -4,15 +4,14 @@ import {loginEmployee, loginEmployer} from "../service/AuthApi.js";
 import {useNavigate} from "react-router-dom";
 import Cookies from "js-cookie";
 
-
 function LoginForm({role}) {
-    const [id, setId] = useState("");
+    const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const navigate = useNavigate();
     const [error, setError] = useState("");
 
     const isValid = () => {
-        return id.trim() === "" || password.trim() === "";
+        return username.trim() === "" || password.trim() === "";
     };
 
 
@@ -21,7 +20,7 @@ function LoginForm({role}) {
         setError("");
 
         const data = {
-            id: id,
+            username: username,
             password: password
         };
         const requestApi =
@@ -73,9 +72,9 @@ function LoginForm({role}) {
                             <span className="field-icon">👤</span>
                             <input
                                 type="text"
-                                value={id}
-                                placeholder="Enter your id"
-                                onChange={(e) => setId(e.target.value)}
+                                value={username}
+                                placeholder="Enter your username"
+                                onChange={(e) => setUsername(e.target.value)}
                             />
                         </div>
                     </div>
