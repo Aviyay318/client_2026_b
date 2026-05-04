@@ -1,7 +1,8 @@
 import {useEffect, useState} from "react";
 import dayjs from "dayjs";
 import duration from "dayjs/plugin/duration";
-
+import {calculateDuration, formatDuration} from "../utils/TimeUtils.js";
+import "WorkTimer.css"
 dayjs.extend(duration);
 
 function WorkTimer({isWorking, startTime}) {

@@ -1,5 +1,5 @@
 import {useNavigate} from "react-router-dom";
-
+import "./NavigationTabs.css"
 function NavigationTabs({active}){
 
 

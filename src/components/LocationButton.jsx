@@ -1,3 +1,4 @@
+import "./LocationButton.css"
 function LocationButton({ location, setLocation }) {
 
     return (
