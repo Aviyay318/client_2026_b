@@ -46,10 +46,13 @@ function LoginForm({role}) {
         })
     }
 
-
     return (
         <div className="login-page">
             <div className="login-card">
+
+                <button className="back-btn" onClick={() => navigate("/")}>
+                    ← Back
+                </button>
 
                 <div className="login-header">
                     <div className="main-icon people-logo">
@@ -68,8 +71,10 @@ function LoginForm({role}) {
                 <form onSubmit={handleLogin}>
                     <div className="input-group">
                         <label>Username</label>
+
                         <div className="input-field">
                             <span className="field-icon">👤</span>
+
                             <input
                                 type="text"
                                 value={username}
@@ -81,8 +86,10 @@ function LoginForm({role}) {
 
                     <div className="input-group">
                         <label>Password</label>
+
                         <div className="input-field">
                             <span className="field-icon">🔒</span>
+
                             <input
                                 type="password"
                                 value={password}

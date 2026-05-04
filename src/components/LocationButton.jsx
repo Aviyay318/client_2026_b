@@ -1,27 +1,32 @@
+import "./LocationButton.css";
+
 function LocationButton({ location, setLocation }) {
-
     return (
-        <div>
-            <button
-                className={location === "home" ? "active" : ""}
-                onClick={() => setLocation("home")}
-            >
-               Home
-            </button>
+        <div className="location-section">
+            <h2 className="location-title">Choose work location</h2>
 
-            <button
-                className={location === "office" ? "active" : ""}
-                onClick={() => setLocation("office")}
-            >
-                Office
-            </button>
+            <div className="location-box">
+                <button
+                    className={`location-option ${location === "home" ? "active-location" : ""}`}
+                    onClick={() => setLocation("home")}
+                >
+                    🏠 Home
+                </button>
 
-            <button
-                className={location === "site" ? "active" : ""}
-                onClick={() => setLocation("site")}
-            >
-                Site
-            </button>
+                <button
+                    className={`location-option ${location === "office" ? "active-location" : ""}`}
+                    onClick={() => setLocation("office")}
+                >
+                    🏢 Office
+                </button>
+
+                <button
+                    className={`location-option ${location === "site" ? "active-location" : ""}`}
+                    onClick={() => setLocation("site")}
+                >
+                    📍 Site
+                </button>
+            </div>
         </div>
     );
 }
