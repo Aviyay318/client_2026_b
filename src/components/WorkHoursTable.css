@@ -1,0 +1,98 @@
+.table-area {
+    width: 100%;
+}
+
+.work-hours-table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+    overflow: hidden;
+    border-radius: 18px;
+    background: rgba(15, 23, 42, 0.42);
+    border: 1px solid rgba(148, 163, 184, 0.14);
+}
+
+.work-hours-table thead {
+    background: rgba(2, 6, 23, 0.38);
+}
+
+.work-hours-table th,
+.work-hours-table td {
+    text-align: center;
+    padding: 18px 24px;
+}
+
+.work-hours-table th {
+    color: white;
+    font-size: 20px;
+    font-weight: 900;
+    line-height: 1;
+}
+
+.work-hours-table td {
+    color: #cbd5e1;
+    font-size: 18px;
+    font-weight: 600;
+    border-top: 1px solid rgba(148, 163, 184, 0.10);
+}
+
+/* הכותרות */
+.start-head,
+.end-head,
+.total-head {
+    color: white !important;
+    white-space: nowrap;
+}
+
+/* הטקסט של Start / End / Total */
+.head-text {
+    color: white !important;
+    display: inline-block;
+    vertical-align: middle;
+    line-height: 1;
+}
+
+/* השעונים הקטנים */
+.start-icon,
+.end-icon,
+.total-icon-table {
+    font-size: 28px;
+    margin-right: 8px;
+
+    display: inline-block;
+    vertical-align: middle;
+    line-height: 1;
+
+    transform: translateY(-1px);
+}
+
+/* צבעי השעונים */
+.start-icon {
+    color: #22c55e !important;
+}
+
+.end-icon {
+    color: #ff5c7a !important;
+}
+
+.total-icon-table {
+    color: #2ea8ff !important;
+}
+
+/* צבעי השעות */
+.start-time {
+    color: #22c55e !important;
+}
+
+.end-time {
+    color: #ff5c7a !important;
+}
+
+.total-time {
+    color: #2ea8ff !important;
+}
+
+.no-data {
+    text-align: center;
+    color: #94a3b8 !important;
+}

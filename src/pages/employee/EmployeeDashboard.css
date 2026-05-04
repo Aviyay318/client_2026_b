@@ -1,0 +1,165 @@
+.employee-dashboard-page {
+    width: 100%;
+    min-height: 100vh;
+
+    padding: 24px 20px 50px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    background:
+            radial-gradient(circle at top left, rgba(124, 58, 237, 0.25), transparent 30%),
+            radial-gradient(circle at bottom right, rgba(37, 99, 235, 0.25), transparent 35%),
+            linear-gradient(135deg, #020617, #0f172a, #111827);
+
+    color: white;
+}
+.employee-dashboard-card {
+    width: 100%;
+    max-width: 500px; /* ⬅️ יותר צר */
+
+    margin-top: 40px;
+    padding: 35px 28px 40px;
+
+    border-radius: 30px;
+
+    display: flex;
+    flex-direction: column;
+    gap: 28px; /* ⬅️ יותר רווח בין אלמנטים */
+
+    background: rgba(255, 255, 255, 0.045);
+    backdrop-filter: blur(25px);
+
+    border: 1px solid rgba(255, 255, 255, 0.09);
+
+    box-shadow:
+            0 30px 70px rgba(0, 0, 0, 0.55),
+            inset 0 0 2px rgba(255, 255, 255, 0.12);
+}
+
+.enter-work-btn {
+    width: 100%;
+    margin-top: 25px;
+    padding: 16px;
+
+    border: none;
+    outline: none;
+
+    border-radius: 16px;
+
+    background: linear-gradient(135deg, #2563eb, #7c3aed);
+    color: white;
+
+    font-size: 20px;
+    font-weight: 800;
+    font-family: inherit;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+
+    cursor: pointer;
+
+    box-shadow:
+            0 15px 35px rgba(37, 99, 235, 0.35),
+            0 0 25px rgba(124, 58, 237, 0.25);
+
+    transition: all 0.3s ease;
+}
+
+.enter-work-btn:hover {
+    transform: translateY(-4px);
+    box-shadow:
+            0 20px 45px rgba(37, 99, 235, 0.45),
+            0 0 35px rgba(124, 58, 237, 0.35);
+}
+
+.enter-work-btn span {
+    font-size: 32px;
+}
+
+.absence-btn {
+    width: 100%;
+    margin-top: 10px;
+    padding: 16px;
+
+    border-radius: 18px;
+
+    border: 1px solid rgba(148, 163, 184, 0.16);
+    outline: none;
+
+    background: rgba(15, 23, 42, 0.45);
+    color: #94a3b8;
+
+    font-size: 18px;
+    font-weight: 800;
+    font-family: inherit;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.absence-btn:hover {
+    color: white;
+    background: rgba(30, 41, 59, 0.75);
+    border-color: rgba(56, 189, 248, 0.35);
+}
+
+.absence-text {
+    margin: 16px 0 0;
+    text-align: center;
+    color: #94a3b8;
+    font-size: 18px;
+}
+
+.dashboard-footer {
+    margin-top: 35px;
+    color: #94a3b8;
+    font-size: 17px;
+}
+
+@media (max-width: 600px) {
+    .employee-dashboard-card {
+        padding: 35px 20px 28px;
+    }
+
+    .timer-container {
+        width: 100%;
+        text-align: center;
+        margin-top: 40px;
+    }
+
+    .enter-work-btn,
+    .absence-btn {
+        font-size: 20px;
+    }
+    .employee-dashboard-card {
+        width: 100%;
+        max-width: 560px; /* ⬅️ היה גדול מדי */
+
+        margin-top: 30px;
+        padding: 30px 24px;
+
+        border-radius: 28px;
+
+        display: flex;
+        flex-direction: column;
+        gap: 22px; /* 🔥 זה המרווח בין כל דבר */
+
+        background: rgba(255, 255, 255, 0.045);
+        backdrop-filter: blur(25px);
+
+        border: 1px solid rgba(255, 255, 255, 0.09);
+
+        box-shadow:
+                0 25px 60px rgba(0, 0, 0, 0.5),
+                inset 0 0 2px rgba(255, 255, 255, 0.12);
+    }
+}

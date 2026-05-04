@@ -1,0 +1,43 @@
+.timer-section {
+    width: 100%;
+    text-align: center;
+    margin-top: 40px;
+}
+
+.timer-circle {
+    width: 70px;
+    height: 70px;
+
+    margin: 0 auto 12px;
+
+    border-radius: 50%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: linear-gradient(#0f172a, #0f172a) padding-box,
+    linear-gradient(135deg, #10b981, #38bdf8, #7c3aed) border-box;
+
+    border: 8px solid transparent;
+
+    box-shadow: 0 0 35px rgba(56, 189, 248, 0.25),
+    0 0 60px rgba(16, 185, 129, 0.15);
+}
+
+.timer-circle span {
+    font-size: 38px;
+}
+
+.timer-text {
+    margin-top: 25px;
+    color: white;
+    font-size: 42px;
+    font-weight: 300;
+    letter-spacing: 4px;
+}
+.timer-status {
+    margin-top: 5px;
+    color: #94a3b8;
+    font-size: 16px;
+}
