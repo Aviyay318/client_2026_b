@@ -3,6 +3,7 @@ import { calculateDuration, formatDuration } from "../utils/TimeUtils.js";
 import "./WorkHoursTable.css";
 
 function WorkHoursTable({ rows }) {
+
     return (
         <div className="table-area">
             <table className="work-hours-table">

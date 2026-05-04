@@ -6,7 +6,6 @@ import WorkHoursTable from "../../components/WorkHoursTable.jsx";
 import {getHoursReport} from "../../service/WorkApi.js";
 import "./WorkHoursPage.css";
 
-// import {all} from "axios";
 
 function WorkHoursPage() {
 
