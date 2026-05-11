@@ -46,7 +46,7 @@ function EmployeeDashboard() {
     }, [])
 
     const handleEnter = () => {
-        console.log("CLICK");
+        console.log("CLICK ");
         if (location === "site" &&  !selectedSite ) {
 
             return;
@@ -55,14 +55,14 @@ function EmployeeDashboard() {
         const now = Date.now();
         const data = {
             startTime: now,
-            location: location,
-            siteId: location === "site" ?
-                selectedSite.id:
-                null
+            ...( location === "site" ?
+                { siteId: selectedSite.id} :
+                {location: location})
         };
         console.log(data)
         enterWork(data)
             .then(response => {
+                console.log("ENTER",response.data);
                 if (response.data.success) {
                     setIsWorking(true);
                     setStartTime(now);
@@ -70,7 +70,6 @@ function EmployeeDashboard() {
             }).catch(error => {
             console.log("FULL ERROR:", error);
             console.log("RESPONSE:", error.response);
-            console.log("DATA:", error?.response?.data);
         });
     }
 
