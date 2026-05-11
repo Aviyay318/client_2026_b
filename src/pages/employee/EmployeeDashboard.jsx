@@ -1,47 +1,69 @@
 import {useEffect, useState} from "react";
-import Cookies from "js-cookie";
-import {enterWork, exitWork, getCurrentWorker} from "../../service/WorkApi.js";
+import {enterWork, exitWork, getCurrentWorker, getSites} from "../../service/workApi.js";
 import LocationButton from "../../components/LocationButton.jsx";
-import NavigationTabs from "../../components/NavigationTabs.jsx";
+import EmployeeNavbar from "../../Navbar/EmployeeNavbar.jsx";
 import WorkTimer from "../../components/WorkTimer.jsx";
 import "./EmployeeDashboard.css";
 
 function EmployeeDashboard() {
 
+    const [sites, setSites] = useState([]);
     const [location, setLocation] = useState("office");
+    const [selectedSite, setSelectedSite] = useState(null);
     const [isWorking, setIsWorking] = useState(false);
     const [startTime, setStartTime] = useState(null);
-    const token = Cookies.get("token");
 
 
-    useEffect(() => {
-        // לסנכרן עם רומן את המשתנים שהיהה אותם שמות כמו בצד שרת כלומר מה שחוזר מהשרת
-        getCurrentWorker(token)
+
+
+    const currentWorker = () => {
+        getCurrentWorker()
             .then(response => {
-                console.log("STATUS RESPONSE:", response.data);
                 if (response.data.success) {
                     setIsWorking(response.data.isWorking);
                     setStartTime(new Date(response.data.startTime));
                 }
             }).catch(() => console.log("error"))
 
+    }
+    const listOfWebsites = () => {
+        getSites()
+        .then(response => {
+            console.log("SITE",response.data);
+            if (response.data.success) {
+                setSites(response.data.workingSites );
+
+            }
+        })
+            .catch(error => console.log(error));
+    }
+
+    useEffect(() => {
+        currentWorker()
+        listOfWebsites()
+
+
     }, [])
 
     const handleEnter = () => {
-        console.log("clicked");
-        console.log("TOKEN:", token);
+        console.log("CLICK");
+        if (location === "site" &&  !selectedSite ) {
+
+            return;
+        }
 
         const now = Date.now();
         const data = {
-            token: token,
-            location: location,
             startTime: now,
+            location: location,
+            siteId: location === "site" ?
+                selectedSite.id:
+                null
         };
+        console.log(data)
         enterWork(data)
             .then(response => {
-                console.log("SERVER RESPONSE:", response.data)
                 if (response.data.success) {
-                    console.log(response.data.success);
                     setIsWorking(true);
                     setStartTime(now);
                 }
@@ -54,9 +76,10 @@ function EmployeeDashboard() {
 
 
     const handleExit = () => {
+        console.log("CLICK EXIST");
+
         const now =Date.now()
         const data = {
-            token: token,
             location: location,
             endTime: now,
         };
@@ -74,11 +97,14 @@ function EmployeeDashboard() {
 
             <div className="employee-dashboard-card">
 
-                <NavigationTabs active={"Attendance"}/>
+                <EmployeeNavbar active={"Attendance"}/>
 
                 <LocationButton
                     location={location}
                     setLocation={setLocation}
+                    selectedSite={selectedSite}
+                    setSelectedSite={setSelectedSite}
+                    sites={sites}
                 />
 
                 <WorkTimer
