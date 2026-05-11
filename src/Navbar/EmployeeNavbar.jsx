@@ -19,44 +19,42 @@ function EmployeeNavbar({active}) {
 
 
     return (
-        <nav>
+        <nav className="employee-navbar">
 
-            <div className="tabs-container">
+            <div className="nav-tabs-group">
 
-                <div className="tabs-box">
+                <Link
+                    to="/employee-dashboard"
+                    className={`tab-btn ${
+                        active === "Attendance"
+                            ? "active-tab"
+                            : ""
+                    }`}
+                >
+                    Attendance
+                </Link>
 
-                    <Link
-                        to="/employee-dashboard"
-                        className={`tab-btn ${
-                            active === "Attendance"
-                                ? "active-tab"
-                                : ""
-                        }`}
-                    >
-                        Attendance
-                    </Link>
-
-                    <Link
-                        to="/work-hours-page"
-                        className={`tab-btn ${
-                            active === "HoursReport"
-                                ? "active-tab"
-                                : ""
-                        }`}
-                    >
-                        Hours Report
-                    </Link>
-
-                    <button
-                        className="logout-btn"
-                        onClick={handleLogout}
-                    >
-                        Logout
-                    </button>
-
-                </div>
+                <Link
+                    to="/work-hours-page"
+                    className={`tab-btn ${
+                        active === "HoursReport"
+                            ? "active-tab"
+                            : ""
+                    }`}
+                >
+                    Hours Report
+                </Link>
 
             </div>
+
+            <button
+                className="logout-btn"
+                onClick={handleLogout}
+            >
+
+
+                Logout
+            </button>
 
         </nav>
     );

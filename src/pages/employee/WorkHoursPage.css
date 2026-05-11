@@ -99,3 +99,60 @@
     background: #0f172a; /* כהה */
     color: white;
 }
+.total-hours-box {
+    margin-top: 28px;
+    padding: 18px 24px;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    border-radius: 18px;
+
+    background: rgba(15, 23, 42, 0.55);
+    border: 1px solid rgba(148, 163, 184, 0.14);
+
+    box-shadow:
+            0 0 20px rgba(37, 99, 235, 0.12),
+            inset 0 0 2px rgba(255, 255, 255, 0.05);
+}
+
+.total-hours-left {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.total-hours-icon {
+    font-size: 28px;
+    color: #38bdf8;
+}
+
+.total-hours-text {
+    color: white;
+    font-size: 20px;
+    font-weight: 800;
+}
+
+.total-hours-number {
+    min-width: 120px;
+    padding: 12px 20px;
+
+    text-align: center;
+
+    border-radius: 14px;
+
+    background: linear-gradient(
+            135deg,
+            rgba(37, 99, 235, 0.35),
+            rgba(124, 58, 237, 0.35)
+    );
+
+    color: white;
+
+    font-size: 28px;
+    font-weight: 900;
+
+    box-shadow:
+            0 0 18px rgba(37, 99, 235, 0.2);
+}
