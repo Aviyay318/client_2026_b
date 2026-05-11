@@ -96,3 +96,50 @@
     text-align: center;
     color: #94a3b8 !important;
 }
+.location-head {
+    text-align: center;
+}
+
+.location-head,
+.start-head,
+.end-head,
+.total-head {
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+.location-head {
+    text-align: center;
+    white-space: nowrap;
+}
+
+.location-head,
+.start-head,
+.end-head,
+.total-head {
+    vertical-align: middle;
+}
+
+.location-head .head-text {
+    display: inline-flex;
+    align-items: center;
+    vertical-align: middle;
+}
+
+.location-icon-table {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    margin-right: 8px;
+    vertical-align: middle;
+
+    color: #ff5c7a;
+    filter: drop-shadow(0 0 6px rgba(255, 92, 122, 0.75));
+}
+
+.location-pin-svg {
+    width: 22px;
+    height: 22px;
+    display: block;
+}

@@ -1,13 +1,15 @@
 import "./LocationButton.css";
-import {useState} from "react";
+import { useState } from "react";
 
-function LocationButton({ location, setLocation, setSelectedSite, sites }) {
+function LocationButton({
+                            location,
+                            setLocation,
+                            selectedSite,
+                            setSelectedSite,
+                            sites = []
+                        }) {
 
-
-    const [isSiteOpen, setIsSiteOpen] =
-        useState(false);
-
-
+    const [isSiteOpen, setIsSiteOpen] = useState(false);
 
     return (
 
@@ -17,11 +19,10 @@ function LocationButton({ location, setLocation, setSelectedSite, sites }) {
                 Choose work location
             </h2>
 
-
-
             <div className="location-box">
 
                 <button
+                    type="button"
                     className={`location-option ${
                         location === "home"
                             ? "active-location"
@@ -39,9 +40,8 @@ function LocationButton({ location, setLocation, setSelectedSite, sites }) {
                     🏠 Home
                 </button>
 
-
-
                 <button
+                    type="button"
                     className={`location-option ${
                         location === "office"
                             ? "active-location"
@@ -59,9 +59,8 @@ function LocationButton({ location, setLocation, setSelectedSite, sites }) {
                     🏢 Office
                 </button>
 
-
-
                 <button
+                    type="button"
                     className={`location-option ${
                         location === "site"
                             ? "active-location"
@@ -79,43 +78,106 @@ function LocationButton({ location, setLocation, setSelectedSite, sites }) {
 
             </div>
 
+            {
+                location === "site" && selectedSite && (
 
+                    <div className="selected-site-preview">
+
+                        <span className="selected-site-label">
+                            Selected site:
+                        </span>
+
+                        <span className="selected-site-name">
+                            {selectedSite.name}
+                        </span>
+
+                    </div>
+                )
+            }
 
             {
-                isSiteOpen && (
+                isSiteOpen && location === "site" && (
 
-                    <div>
+                    <div className="site-dropdown">
 
-                        <button
-                            onClick={() =>
-                                setIsSiteOpen(false)
-                            }
-                        >
-                            X
-                        </button>
+                        <div className="site-dropdown-top">
 
+                            <span className="site-dropdown-title">
+                                Choose site
+                            </span>
 
+                            <button
+                                type="button"
+                                className="site-close-btn"
+                                onClick={() => setIsSiteOpen(false)}
+                            >
+                                ×
+                            </button>
 
-                        {
-                            sites.map(site => {
+                        </div>
 
-                                return (
+                        <div className="site-list">
 
-                                    <div
-                                        key={site.id}
+                            {
+                                sites.length > 0 ? (
 
-                                        onClick={() => {
+                                    sites.map(site => {
 
-                                            setSelectedSite(site);
+                                        const isSelected =
+                                            selectedSite &&
+                                            selectedSite.id === site.id;
 
-                                            setIsSiteOpen(false);
-                                        }}
-                                    >
-                                        {site.name}
+                                        return (
+
+                                            <button
+                                                key={site.id}
+                                                type="button"
+                                                className={`site-item ${
+                                                    isSelected
+                                                        ? "selected-site-item"
+                                                        : ""
+                                                }`}
+                                                onClick={() => {
+
+                                                    setSelectedSite(site);
+
+                                                    setIsSiteOpen(false);
+                                                }}
+                                            >
+                                                <span className="site-item-left">
+
+                                                    <span className="site-item-icon">
+                                                        📍
+                                                    </span>
+
+                                                    <span className="site-item-name">
+                                                        {site.name}
+                                                    </span>
+
+                                                </span>
+
+                                                {
+                                                    isSelected && (
+
+                                                        <span className="site-check">
+                                                            ✓
+                                                        </span>
+                                                    )
+                                                }
+
+                                            </button>
+                                        );
+                                    })
+
+                                ) : (
+
+                                    <div className="site-empty-message">
+                                        No sites found
                                     </div>
-                                );
-                            })
-                        }
+                                )
+                            }
+
+                        </div>
 
                     </div>
                 )

@@ -44,6 +44,7 @@ const months= [
         getHoursReport()
             .then(response => {
                 console.log("SITES",response.data);
+                console.log(response.data.workDays);
                 setRows(response.data.workDays ||[]);
             })
             .catch(err => {
@@ -71,6 +72,8 @@ const months= [
 
 
     }, []);
+
+
 
     return (
         <div className="work-hours-page">

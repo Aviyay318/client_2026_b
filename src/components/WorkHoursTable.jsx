@@ -20,7 +20,19 @@ function WorkHoursTable({ rows }) {
                         <span className="head-text">End</span>
                     </th>
 
-                    <th>📍 Location</th>
+                    <th className="location-head">
+    <span className="location-icon-table">
+        <svg
+            className="location-pin-svg"
+            viewBox="0 0 24 24"
+            fill="currentColor"
+        >
+            <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5A2.5 2.5 0 1 1 12 6a2.5 2.5 0 0 1 0 5.5z" />
+        </svg>
+    </span>
+
+                        <span className="head-text">Location</span>
+                    </th>
 
                     <th className="total-head">
                         <span className="total-icon-table">◷</span>
@@ -47,7 +59,9 @@ function WorkHoursTable({ rows }) {
                                 </td>
 
                                 <td>
-                                    {row.location}
+                                    {row.enterLocation
+                                        ?row.enterLocation
+                                        : row.enterSite?.name}
                                 </td>
 
                                 <td className="total-time">

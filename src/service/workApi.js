@@ -23,3 +23,10 @@ export const getHoursReport =() => {
     });
 //     לשנות את השם ל לנכרן כמובן עם רומן getHours
 }
+export const getTotalHours = () => {
+    return api.get("/work/total-hours", {
+    });
+}
+export const getSites = ()=>{
+    return api.get("/work/sites", {})
+}
