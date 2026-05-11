@@ -1,10 +1,11 @@
 import {useEffect, useState} from "react";
 import dayjs from "dayjs";
-import Cookies from "js-cookie";
-import NavigationTabs from "../../components/NavigationTabs.jsx";
+import EmployeeNavbar from "../../Navbar/EmployeeNavbar.jsx";
 import WorkHoursTable from "../../components/WorkHoursTable.jsx";
-import {getHoursReport} from "../../service/WorkApi.js";
+import {getHoursReport} from "../../service/workApi.js";
 import "./WorkHoursPage.css";
+import {calculateTotalHours, formatDuration} from "../../utils/timeUtils.js";
+
 
 
 function WorkHoursPage() {
@@ -28,10 +29,6 @@ const months= [
     ];
 
 
-const token=Cookies.get("token");
-
-
-
     const filteredRows =
         selectMonth ==="all"
         ? rows:
@@ -39,27 +36,57 @@ const token=Cookies.get("token");
         dayjs(row.enterTime).month()+1 ===Number(selectMonth)
         );
 
+    const totalHours = calculateTotalHours(filteredRows);
 
-    useEffect(() => {
-        getHoursReport(token)
+
+
+    const hoursReport =()=> {
+        getHoursReport()
             .then(response => {
-                setRows(response.data.workDays);
+                console.log("SITES",response.data);
+                setRows(response.data.workDays ||[]);
             })
             .catch(err => {
                 console.log("ERROR:", err);
             });
+    }
+    // לבדוק עם אביה אופציה ב של חישוב total מהשרת
+    // const getTotalHours =()=>{
+    //     getHoursReport()
+    //         .then(response => {
+    //             console.log("TOTAL",response.data);
+    //             setTotalHours(response.data);
+    //
+    //         })
+    //         .catch(err => {
+    //             console.log("ERROR:", err);
+    //         });
+    // }
+
+
+    useEffect(() => {
+        hoursReport()
+        // getTotalHours()
+
+
+
     }, []);
 
     return (
         <div className="work-hours-page">
+
             <div className="work-hours-wrapper">
 
-                <NavigationTabs active={"HoursReport"} />
+                <EmployeeNavbar active={"HoursReport"} />
 
                 <div className="work-hours-card">
-                    <h1 className="work-hours-title">Work Hours Report</h1>
+
+                    <h1 className="work-hours-title">
+                        Work Hours Report
+                    </h1>
 
                     <div className="month-filter">
+
                         <label>Select month:</label>
 
                         <select
@@ -67,20 +94,51 @@ const token=Cookies.get("token");
                             value={selectMonth}
                             onChange={(e) => setSelectMonth(e.target.value)}
                         >
-                            <option value="all">📅 All </option>
+                            <option value="all">
+                                📅 All
+                            </option>
 
                             {months.map((m) => (
-                                <option key={m.id} value={m.id}>
+                                <option
+                                    key={m.id}
+                                    value={m.id}
+                                >
                                     {m.name}
                                 </option>
                             ))}
+
                         </select>
+
                     </div>
 
                     <WorkHoursTable rows={filteredRows} />
+
+                    {/* TOTAL HOURS */}
+
+                    <div className="total-hours-box">
+
+                        <div className="total-hours-left">
+
+                        <span className="total-hours-icon">
+                            🕒
+                        </span>
+
+                            <span className="total-hours-text">
+                            Total Hours
+                        </span>
+
+                        </div>
+
+                        <div className="total-hours-number">
+                            {formatDuration(totalHours)}
+                        </div>
+
+                    </div>
+
                 </div>
 
             </div>
+
         </div>
     );
 }

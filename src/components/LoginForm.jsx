@@ -1,8 +1,7 @@
 import "./LoginForm.css";
 import {useState} from "react";
-import {loginEmployee, loginEmployer} from "../service/AuthApi.js";
+import {loginEmployee, loginEmployer} from "../service/authApi.js";
 import {useNavigate} from "react-router-dom";
-import Cookies from "js-cookie";
 
 function LoginForm({role}) {
     const [username, setUsername] = useState("");
@@ -30,7 +29,6 @@ function LoginForm({role}) {
 
         requestApi.then(response => {
             if (response.data.success) {
-                Cookies.set("token", response.data.token)
                 const path =
                     role === "employee"
                         ? "/employee-dashboard"

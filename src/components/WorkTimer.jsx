@@ -2,7 +2,7 @@ import {useEffect, useState} from "react";
 import dayjs from "dayjs";
 import duration from "dayjs/plugin/duration";
 import "./WorkTimer.css";
-import { calculateDuration, formatDuration } from "../utils/timeUtils";
+import { calculateDuration, formatDuration } from "../utils/timeUtils.js";
 
 dayjs.extend(duration);
 

@@ -15,3 +15,12 @@ export function formatDuration(ms) {
 
     return `${hours}:${minutes}:${seconds}`;
 }
+export function calculateTotalHours(rows){
+   return  rows.reduce((sum, row) => {
+       return  sum + calculateDuration(
+            row.enterTime ,
+            row.exitTime
+        )
+    },0);
+
+}
