@@ -30,3 +30,9 @@ export const getTotalHours = () => {
 export const getSites = ()=>{
     return api.get("/work/sites", {})
 }
+export const reportAbsence= (data)=>{
+    return api.post("/work/report-absence",data)
+}
+export const getAllAbsenceReasons = () => {
+    return api.get("/work/get-all-absence-response");
+}
