@@ -1,8 +1,10 @@
 import {Link, useNavigate} from "react-router-dom";
-import "./EmployeeNavbar.css";
-import {logout} from "../service/authApi.js";
+import "../NavbarEmployee.css";
+import {logout} from "../../service/authApi.js";
+import LogoutButton from "../../components/LogoutButton.jsx";
 
-function EmployeeNavbar({active}) {
+function NavbarEmployee({active}) {
+
     const navigate = useNavigate();
     const handleLogout =()=>{
         logout()
@@ -47,6 +49,10 @@ function EmployeeNavbar({active}) {
 
             </div>
 
+            {/*להגיד לשיר להעביר בscc של   employeenavbar  */}
+            {/*מה שקשור לעיצוב של logout להעביר לscc חדש ששיך  ל logout*/}
+
+            {/*<LogoutButton/>*/}
             <button
                 className="logout-btn"
                 onClick={handleLogout}
@@ -60,4 +66,4 @@ function EmployeeNavbar({active}) {
     );
 }
 
-export default EmployeeNavbar;
+export default NavbarEmployee;
