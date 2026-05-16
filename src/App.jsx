@@ -17,6 +17,7 @@ function App() {
                 <Route path="/employee-dashboard" element={<EmployeeDashboard />} />
                 <Route path="/employer-dashboard" element={<EmployerDashboard />} />
                 <Route path="/work-hours-page" element={<WorkHoursPage/>} />
+                <Route path="/employee-shifts-page" element={<EmployeeShiftsPage/>} />
 
             </Routes>
         </BrowserRouter>
