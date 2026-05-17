@@ -7,6 +7,7 @@ import EmployerDashboard from "./pages/employer/EmployerDashboard.jsx";
 import WorkHoursPage from "./pages/employee/WorkHoursPage.jsx";
 import AdminLoginPage from "./pages/admin/AdminLoginPage.jsx";
 import AdminDashboardPage from "./pages/admin/AdminDashboardPage.jsx";
+import EmployeeShiftsPage from "./pages/employee/EmployeeShiftsPage.jsx";
 
 function App() {
     return (
@@ -21,6 +22,7 @@ function App() {
                 <Route path="/employer-dashboard" element={<EmployerDashboard />} />
                 <Route path="/admin/dashboard" element={<AdminDashboardPage />} />
                 <Route path="/work-hours-page" element={<WorkHoursPage/>} />
+                <Route path="/employee-shifts-page" element={<EmployeeShiftsPage/>} />
 
             </Routes>
         </BrowserRouter>
