@@ -37,6 +37,17 @@ function NavbarEmployee({active}) {
                     Hours Report
                 </Link>
 
+                <Link
+                    to="/employee-shifts-page"
+                    classname={`tab-btn ${
+                        active === "Shifts"
+                        ?"active-tab"
+                            :""
+                    }`}
+                    >
+                    Shifts
+                </Link>
+
             </div>
 
 
