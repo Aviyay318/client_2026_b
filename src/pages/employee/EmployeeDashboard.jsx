@@ -1,7 +1,7 @@
 import {useEffect, useState} from "react";
 import {enterWork, exitWork, getCurrentWorker, getSites} from "../../service/workApi.js";
 import LocationButton from "../../components/LocationButton.jsx";
-import EmployeeNavbar from "../../Navbar/EmployeeNavbar.jsx";
+import EmployeeNavbar from "../../Navbar/navbar-employee/NavbarEmployee.jsx";
 import WorkTimer from "../../components/WorkTimer.jsx";
 import "./EmployeeDashboard.css";
 

@@ -1,6 +1,6 @@
 import "./LoginForm.css";
 import {useState} from "react";
-import {loginEmployee, loginEmployer} from "../service/authApi.js";
+import {loginAdmin, loginEmployee, loginEmployer} from "../service/authApi.js";
 import {useNavigate} from "react-router-dom";
 
 function LoginForm({role}) {
@@ -23,16 +23,24 @@ function LoginForm({role}) {
             password: password
         };
         const requestApi =
-            role === "employee" ?
-                loginEmployee(data)
-                : loginEmployer(data);
+            role === "employee"
+                ? loginEmployee(data)
+                : role === "admin"
+                    ? loginAdmin(data)
+                    : loginEmployer(data);
 
         requestApi.then(response => {
             if (response.data.success) {
+                if (role === "admin") {
+                    sessionStorage.setItem("adminLoggedIn", "true");
+                }
+
                 const path =
                     role === "employee"
                         ? "/employee-dashboard"
-                        : "/employer-dashboard";
+                        : role === "admin"
+                            ? "/admin/dashboard"
+                            : "/employer-dashboard";
                 navigate(path);
             } else {
                 setError("Wrong id or password");

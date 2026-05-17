@@ -12,6 +12,10 @@ function SelectRolePage() {
         navigate("/employee-login");
     };
 
+    const goToLoginAdmin = () => {
+        navigate("/admin/login");
+    };
+
     return (
         <div className="select-role-page">
             <div className="background-circle circle-one"></div>
@@ -60,6 +64,17 @@ function SelectRolePage() {
                         </div>
                     </div>
                     <div className="arrow">›</div>
+                </button>
+
+                <button className="role-box admin-box" onClick={goToLoginAdmin}>
+                    <div className="role-left">
+                        <div className="role-icon">A</div>
+                        <div>
+                            <h2>Admin</h2>
+                            <p>Access system administration</p>
+                        </div>
+                    </div>
+                    <div className="arrow">ג€÷</div>
                 </button>
             </div>
         </div>
