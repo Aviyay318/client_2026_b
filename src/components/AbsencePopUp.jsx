@@ -1,63 +1,102 @@
-import {useEffect, useState} from "react";
+import { useEffect, useState } from "react";
 import CustomDatePicker from "./CustomDatePicker.jsx";
-import {getAllAbsenceReasons, reportAbsence} from "../service/workApi.js";
+import { getAllAbsenceReasons, reportAbsence } from "../service/workApi.js";
 import "./AbsencePopUp.css";
 
-
-
-function AbsencePopUp({isAbsenceOpen,setAbsenceOpen}) {
+function AbsencePopUp({ isAbsenceOpen, setAbsenceOpen }) {
 
     const [absenceResponse, setAbsenceResponse] = useState([]);
     const [selectedResponse, setSelectedResponse] = useState("");
     const [selectedDate, setSelectedDate] = useState(null);
-
-
+    const [isReasonOpen, setIsReasonOpen] = useState(false);
 
     useEffect(() => {
-        getAllAbsenceReasons().
-        then(response => {
-            console.log("Absence",response.data);
-            if (response.data !== null) {
-                setAbsenceResponse(response.data.absenceReasons);
+        getAllAbsenceReasons()
+            .then(response => {
+                console.log("Absence", response.data);
 
-            }
-
-        })
+                if (response.data !== null) {
+                    setAbsenceResponse(response.data.absenceReasons || []);
+                }
+            })
             .catch(error => console.log(error));
+    }, []);
 
+    const getReasonText = (reason) => {
+        if (typeof reason === "string") {
+            return reason;
+        }
 
+        if (reason.name) {
+            return reason.name;
+        }
 
-    },[])
+        if (reason.reason) {
+            return reason.reason;
+        }
+
+        if (reason.title) {
+            return reason.title;
+        }
+
+        return "";
+    };
+
+    const getReasonValue = (reason) => {
+        if (reason.id !== undefined && reason.id !== null) {
+            return String(reason.id);
+        }
+
+        return getReasonText(reason);
+    };
+
+    const getSelectedReasonText = () => {
+        const selectedReason = absenceResponse.find(reason =>
+            getReasonValue(reason) === selectedResponse
+        );
+
+        if (selectedReason) {
+            return getReasonText(selectedReason);
+        }
+
+        return "Choose a reason";
+    };
 
     const handleAbsence = () => {
         const data = {
-            selectedDate,selectedResponse};
+            selectedDate,
+            selectedResponse
+        };
 
-        reportAbsence(data).
-        then(response => {
-            // לבדוק עם רומן מה הצד שרת מחזיר  )
-            if (response.data){
-                setAbsenceOpen(false)
-                setSelectedDate(null)
-                setSelectedResponse("")
-            }
-        })
-        .catch(error => console.log(error));
+        reportAbsence(data)
+            .then(response => {
+                if (response.data) {
+                    setAbsenceOpen(false);
+                    setSelectedDate(null);
+                    setSelectedResponse("");
+                    setIsReasonOpen(false);
+                }
+            })
+            .catch(error => console.log(error));
+    };
+
+    const validation = () => {
+        const noReason =
+            selectedResponse === "" ||
+            selectedResponse === null ||
+            selectedResponse === undefined;
+
+        const noDate =
+            selectedDate === "" ||
+            selectedDate === null ||
+            selectedDate === undefined;
+
+        return noReason || noDate;
+    };
+
+    if (!isAbsenceOpen) {
+        return null;
     }
-
-
-    const  validation =() => {
-        let  isValid = false ;
-        if(!selectedResponse||!selectedDate ){
-            isValid = true ;
-        }
-        return isValid ;
-        }
-        if (!isAbsenceOpen){
-           return null
-       }
-
-
 
     return (
         <div className="absence-popup-card">
@@ -65,7 +104,10 @@ function AbsencePopUp({isAbsenceOpen,setAbsenceOpen}) {
             <button
                 type="button"
                 className="absence-close-btn"
-                onClick={() => setAbsenceOpen(false)}
+                onClick={() => {
+                    setIsReasonOpen(false);
+                    setAbsenceOpen(false);
+                }}
             >
                 ×
             </button>
@@ -75,6 +117,10 @@ function AbsencePopUp({isAbsenceOpen,setAbsenceOpen}) {
                 <h2 className="absence-popup-title">
                     Report Absence
                 </h2>
+
+                <p className="absence-popup-subtitle">
+                    Report if you are not able to work today.
+                </p>
 
             </div>
 
@@ -102,40 +148,66 @@ function AbsencePopUp({isAbsenceOpen,setAbsenceOpen}) {
                         Select reason
                     </label>
 
-                    <div className="absence-select-wrapper">
+                    <div className="absence-reason-box">
 
-                        <select
-                            className="absence-select"
-                            value={selectedResponse}
-                            onChange={(event) =>
-                                setSelectedResponse(event.target.value)
-                            }
+                        <button
+                            type="button"
+                            className={`reason-box-title ${
+                                isReasonOpen ? "reason-box-open" : ""
+                            }`}
+                            onClick={() => setIsReasonOpen(!isReasonOpen)}
                         >
-                            <option value="">
-                                Select absence reason
-                            </option>
+                            <span>
+                                {getSelectedReasonText()}
+                            </span>
 
-                            {
-                                absenceResponse.map(response => (
+                            <span className="reason-box-arrow">
+                                ⌄
+                            </span>
+                        </button>
 
-                                    <option
-                                        key={response.id}
-                                        value={response.id}
-                                    >
-                                        {
-                                            response.name
-                                                ? response.name
-                                                : response.reason
-                                                    ? response.reason
-                                                    : response.title
-                                                        ? response.title
-                                                        : response
-                                        }
-                                    </option>
-                                ))
-                            }
+                        {
+                            isReasonOpen && (
 
-                        </select>
+                                <div className="reason-list">
+
+                                    {
+                                        absenceResponse.map((reason, index) => {
+
+                                            const reasonText = getReasonText(reason);
+                                            const reasonValue = getReasonValue(reason);
+
+                                            return (
+
+                                                <button
+                                                    key={reasonValue || index}
+                                                    type="button"
+                                                    className={`reason-row ${
+                                                        selectedResponse === reasonValue
+                                                            ? "active-reason-row"
+                                                            : ""
+                                                    }`}
+                                                    onClick={() => {
+                                                        setSelectedResponse(reasonValue);
+                                                        setIsReasonOpen(false);
+                                                    }}
+                                                >
+                                                    <span className="reason-icon">
+                                                            ✦
+                                                    </span>
+
+                                                    <span className="reason-text">
+                                                        {reasonText}
+                                                    </span>
+
+                                                </button>
+                                            );
+                                        })
+                                    }
+
+                                </div>
+                            )
+                        }
 
                     </div>
 
@@ -167,5 +239,6 @@ function AbsencePopUp({isAbsenceOpen,setAbsenceOpen}) {
 
         </div>
     );
-    }
+}
+
 export default AbsencePopUp;
