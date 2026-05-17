@@ -47,10 +47,6 @@ const months= [
                 console.log("HOURS REPORT FULL RESPONSE:", response.data);
                 console.log("WORK DAYS:", response.data.workDays);
 
-                response.data.workDays?.forEach((row, index) => {
-                    console.log("ROW", index, row.status, row.absenceReason, row);
-                });
-
                 setRows(response.data.workDays || []);
             })
             .catch(err => {

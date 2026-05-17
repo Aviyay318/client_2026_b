@@ -61,23 +61,27 @@ function AbsencePopUp({ isAbsenceOpen, setAbsenceOpen }) {
 
         return "Choose a reason";
     };
-
     const handleAbsence = () => {
         const data = {
-            selectedDate,
-            selectedResponse
+            // לבדוק עם אביה מחר
+            // selectedDate,
+           reason: selectedResponse
         };
+
+        console.log("REPORT ABSENCE DATA:", data);
 
         reportAbsence(data)
             .then(response => {
+                console.log("REPORT ABSENCE RESPONSE:", response.data);
+
                 if (response.data) {
                     setAbsenceOpen(false);
-                    setSelectedDate(null);
-                    setSelectedResponse("");
-                    setIsReasonOpen(false);
                 }
             })
-            .catch(error => console.log(error));
+            .catch(error => {
+                console.log("REPORT ABSENCE ERROR:", error);
+                console.log("REPORT ABSENCE ERROR RESPONSE:", error.response?.data);
+            });
     };
 
     const validation = () => {
