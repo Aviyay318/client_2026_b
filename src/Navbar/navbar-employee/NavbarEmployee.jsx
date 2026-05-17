@@ -6,17 +6,7 @@ import LogoutButton from "../../components/LogoutButton.jsx";
 function NavbarEmployee({active}) {
 
     const navigate = useNavigate();
-    const handleLogout =()=>{
-        logout()
-            .then(response =>{
-                if (response.data.success){
-                    console.log("LOGOUT",response.data);
-                  navigate("/");
-                }
-            })
-            .catch(error => console.log(error));
 
-    }
 
 
 
@@ -49,18 +39,8 @@ function NavbarEmployee({active}) {
 
             </div>
 
-            {/*להגיד לשיר להעביר בscc של   employeenavbar  */}
-            {/*מה שקשור לעיצוב של logout להעביר לscc חדש ששיך  ל logout*/}
 
-            {/*<LogoutButton/>*/}
-            <button
-                className="logout-btn"
-                onClick={handleLogout}
-            >
-
-
-                Logout
-            </button>
+            <LogoutButton/>
 
         </nav>
     );
