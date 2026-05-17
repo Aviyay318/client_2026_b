@@ -39,7 +39,7 @@ function NavbarEmployee({active}) {
 
                 <Link
                     to="/employee-shifts-page"
-                    classname={`tab-btn ${
+                    className={`tab-btn ${
                         active === "Shifts"
                         ?"active-tab"
                             :""
