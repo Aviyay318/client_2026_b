@@ -1,6 +1,6 @@
 import {useEffect, useState} from "react";
 import dayjs from "dayjs";
-import EmployeeNavbar from "../../Navbar/EmployeeNavbar.jsx";
+import NavbarEmployee from "../../Navbar/navbar-employee/NavbarEmployee.jsx";
 import WorkHoursTable from "../../components/WorkHoursTable.jsx";
 import {getHoursReport} from "../../service/workApi.js";
 import "./WorkHoursPage.css";
@@ -80,7 +80,7 @@ const months= [
 
             <div className="work-hours-wrapper">
 
-                <EmployeeNavbar active={"HoursReport"} />
+                <NavbarEmployee active={"HoursReport"} />
 
                 <div className="work-hours-card">
 
