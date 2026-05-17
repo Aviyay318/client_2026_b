@@ -36,16 +36,18 @@ const months= [
         dayjs(row.enterTime).month()+1 ===Number(selectMonth)
         );
 
-    const totalHours = calculateTotalHours(filteredRows);
-
+    const totalHours = calculateTotalHours(
+        filteredRows.filter(row => row.status !== "ABSENCE")
+    );
 
 
     const hoursReport =()=> {
         getHoursReport()
             .then(response => {
-                console.log("SITES",response.data);
-                console.log(response.data.workDays);
-                setRows(response.data.workDays ||[]);
+                console.log("HOURS REPORT FULL RESPONSE:", response.data);
+                console.log("WORK DAYS:", response.data.workDays);
+
+                setRows(response.data.workDays || []);
             })
             .catch(err => {
                 console.log("ERROR:", err);
@@ -80,7 +82,7 @@ const months= [
 
             <div className="work-hours-wrapper">
 
-                <EmployeeNavbar active={"HoursReport"} />
+                <NavbarEmployee active={"HoursReport"} />
 
                 <div className="work-hours-card">
 

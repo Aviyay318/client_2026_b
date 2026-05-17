@@ -11,3 +11,4 @@ export const createEmployee = (data) => {
 export const deleteEmployee = (data) => {
     return api.post("/crud-employee/delete/employee", data);
 }
+

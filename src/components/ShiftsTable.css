@@ -1,0 +1,87 @@
+.shifts-date-range-box {
+    width: 100%;
+    min-height: 92px;
+    margin: 28px auto 22px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 34px;
+
+    padding: 18px 34px;
+    border-radius: 16px;
+
+    background: rgba(15, 23, 42, 0.42);
+    border: 1px solid rgba(59, 130, 246, 0.28);
+
+    box-shadow:
+            inset 0 0 28px rgba(59, 130, 246, 0.06),
+            0 0 25px rgba(59, 130, 246, 0.08);
+}
+
+.date-range-title {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+
+    color: white;
+    font-size: 18px;
+    font-weight: 900;
+}
+
+.date-range-main-icon {
+    font-size: 34px;
+    color: #2ea8ff;
+    filter: drop-shadow(0 0 10px rgba(46, 168, 255, 0.9));
+}
+
+.date-input-card {
+    width: 270px;
+    height: 58px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    padding: 8px 18px;
+    border-radius: 12px;
+
+    background: rgba(2, 6, 23, 0.34);
+    border: 1px solid rgba(59, 130, 246, 0.72);
+
+    box-shadow: 0 0 18px rgba(59, 130, 246, 0.18);
+}
+
+.date-input-card label {
+    color: #94a3b8;
+    font-size: 13px;
+    margin-bottom: 4px;
+}
+
+.date-input-card input {
+    width: 100%;
+    cursor: pointer;
+
+    background: transparent;
+    border: none;
+    outline: none;
+
+    color: white;
+    font-size: 18px;
+    font-weight: 800;
+}
+
+.date-input-card input::-webkit-calendar-picker-indicator {
+    filter: invert(1);
+    cursor: pointer;
+}
+
+.date-arrow {
+    color: #cbd5e1;
+    font-size: 28px;
+    font-weight: 300;
+}
+
+.shifts-table-area {
+    margin-top: 0;
+}

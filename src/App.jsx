@@ -5,23 +5,21 @@ import EmployeeDashboard from "./pages/employee/EmployeeDashboard.jsx";
 import EmployerLoginPage from "./pages/employer/EmployerLoginPage.jsx";
 import EmployerDashboard from "./pages/employer/EmployerDashboard.jsx";
 import WorkHoursPage from "./pages/employee/WorkHoursPage.jsx";
+import EmployeeShiftsPage from "./pages/employee/EmployeeShiftsPage.jsx";
 
 function App() {
     return (
         <BrowserRouter>
             <Routes>
-
                 <Route path="/" element={<SelectRolePage />} />
                 <Route path="/employee-login" element={<EmployeeLoginPage />} />
                 <Route path="/employer-login" element={<EmployerLoginPage />} />
                 <Route path="/employee-dashboard" element={<EmployeeDashboard />} />
                 <Route path="/employer-dashboard" element={<EmployerDashboard />} />
-                <Route path="/work-hours-page" element={<WorkHoursPage/>} />
-
+                <Route path="/work-hours-page" element={<WorkHoursPage />} />
+                <Route path="/employee-shifts-page" element={<EmployeeShiftsPage />} />
             </Routes>
         </BrowserRouter>
-
-
     );
 }
 

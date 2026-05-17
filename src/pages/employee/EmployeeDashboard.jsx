@@ -4,6 +4,7 @@ import LocationButton from "../../components/LocationButton.jsx";
 import EmployeeNavbar from "../../Navbar/navbar-employee/NavbarEmployee.jsx";
 import WorkTimer from "../../components/WorkTimer.jsx";
 import "./EmployeeDashboard.css";
+import AbsencePopUp from "../../components/AbsencePopUp.jsx";
 
 function EmployeeDashboard() {
 
@@ -12,6 +13,11 @@ function EmployeeDashboard() {
     const [selectedSite, setSelectedSite] = useState(null);
     const [isWorking, setIsWorking] = useState(false);
     const [startTime, setStartTime] = useState(null);
+    const [isAbsenceOpen , setAbsenceOpen] = useState(false);
+
+
+
+
 
 
 
@@ -96,7 +102,7 @@ function EmployeeDashboard() {
 
             <div className="employee-dashboard-card">
 
-                <EmployeeNavbar active={"Attendance"}/>
+                <NavbarEmployee active={"Attendance"}/>
 
                 <LocationButton
                     location={location}
@@ -118,13 +124,22 @@ function EmployeeDashboard() {
                     {isWorking ? "Exit Work" : "Enter Work"}
                 </button>
 
-                <button className="absence-btn">
+                <button className="absence-btn"
+                        onClick={() => setAbsenceOpen(true)}
+
+                >
                     Report Absence
                 </button>
 
                 <p className="absence-text">
                     Report if you are not able to work today
                 </p>
+
+                <AbsencePopUp
+                    isAbsenceOpen={isAbsenceOpen}
+                    setAbsenceOpen={setAbsenceOpen}
+
+                />
 
             </div>
         </div>
