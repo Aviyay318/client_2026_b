@@ -1,7 +1,7 @@
 import {useState, useEffect} from "react";
 import NavbarEmployee from "../../Navbar/navbar-employee/NavbarEmployee.jsx";
 import {getAllShifts} from "../../service/shiftsApi.js";
-import SiftsTable from "../../components/SiftsTable.jsx";
+import ShiftsTable from "../../components/ShiftsTable.jsx";
 import CustomDatePicker from "../../components/CustomDatePicker.jsx";
 
 function EmployeeShiftsPage() {
@@ -26,7 +26,7 @@ function EmployeeShiftsPage() {
     return(
         <div>
 
-            <h1>Employee Shifts Page</h1>
+            <NavbarEmployee active="Shifts" />
 
 
             <CustomDatePicker
@@ -37,7 +37,7 @@ function EmployeeShiftsPage() {
             setEndDate={setEndDate}
             />
 
-            <SiftsTable shifts={shifts} />
+            <ShiftsTable shifts={shifts} />
         </div>
     );
 }
