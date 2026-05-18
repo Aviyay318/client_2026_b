@@ -1,16 +1,20 @@
-import AddEmployeeForm from "../../components/AddEmployeeForm.jsx";
-import DeleteEmployee from "../../components/DeleteEmployee.jsx";
+import AddEUserForm from "../../components/AddEUserForm.jsx";
+import DeleteEmployee from "../../components/DeleteUser.jsx";
+import NavbarEmployer from "../../Navbar/navbar-employer/NavbarEmployer.jsx";
 
-function EmployeeManagementPage () {
-
-
-
+function EmployeeManagementPage() {
     return (
-        <div>
-            <AddEmployeeForm/>
-                <DeleteEmployee/>
+        <div className="employee-management-page">
+            <NavbarEmployer active="AddRemoveEmployee" />
 
+            <div className="employee-management-content">
+                <h1>Employee Management</h1>
+
+                <AddEUserForm />
+                <DeleteEmployee />
+            </div>
         </div>
     );
-    }
+}
+
 export default EmployeeManagementPage;

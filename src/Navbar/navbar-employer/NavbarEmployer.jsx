@@ -1,0 +1,32 @@
+import { Link } from "react-router-dom";
+import LogoutButton from "../../components/LogoutButton.jsx";
+
+function NavbarEmployer({ active }) {
+    return (
+        <nav className="employerNavbar">
+            <div className="nav-employer-tabs">
+                <Link
+                    to="/employer-dashboard"
+                    className={`tab-btn ${
+                        active === "Dashboard" ? "employer-active-tab" : ""
+                    }`}
+                >
+                    Dashboard
+                </Link>
+
+                <Link
+                    to="/employee-management-page"
+                    className={`tab-btn ${
+                        active === "AddRemoveEmployee" ? "employer-active-tab" : ""
+                    }`}
+                >
+                    Add / Remove Employee
+                </Link>
+            </div>
+
+            <LogoutButton />
+        </nav>
+    );
+}
+
+export default NavbarEmployer;
