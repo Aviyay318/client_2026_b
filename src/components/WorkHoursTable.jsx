@@ -21,16 +21,15 @@ function WorkHoursTable({ rows }) {
                     </th>
 
                     <th className="location-head">
-    <span className="location-icon-table">
-        <svg
-            className="location-pin-svg"
-            viewBox="0 0 24 24"
-            fill="currentColor"
-        >
-            <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5A2.5 2.5 0 1 1 12 6a2.5 2.5 0 0 1 0 5.5z" />
-        </svg>
-    </span>
-
+                        <span className="location-icon-table">
+                            <svg
+                                className="location-pin-svg"
+                                viewBox="0 0 24 24"
+                                fill="currentColor"
+                            >
+                                <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5A2.5 2.5 0 1 1 12 6a2.5 2.5 0 0 1 0 5.5z" />
+                            </svg>
+                        </span>
                         <span className="head-text">Location</span>
                     </th>
 
@@ -45,27 +44,33 @@ function WorkHoursTable({ rows }) {
                 {rows.length > 0 ? (
                     rows.map((row, index) => {
                         const total = calculateDuration(row.enterTime, row.exitTime);
+                        const rowDisplay = row.status === "ABSENCE";
 
                         return (
-                            <tr key={index}>
-                                <td>📅 {dayjs(row.enterTime).format("DD/MM/YYYY")}</td>
+                            <tr key={index} className={rowDisplay ? "sick-row" : ""}>
+                                <td className="date-cell">
+                                    {rowDisplay && (
+                                        <div className="absence-badge">
+                                            {row.absenceReason || "----"}
+                                        </div>
+                                    )}
+                                    <div>📅 {dayjs(row.enterTime).format("DD/MM/YYYY")}</div>
+                                </td>
 
                                 <td className="start-time">
-                                    {dayjs(row.enterTime).format("HH:mm")}
+                                    {rowDisplay ? "-----" : dayjs(row.enterTime).format("HH:mm")}
                                 </td>
 
                                 <td className="end-time">
-                                    {dayjs(row.exitTime).format("HH:mm")}
+                                    {rowDisplay ? "-----" : (row.exitTime ? dayjs(row.exitTime).format("HH:mm") : "--:--")}
                                 </td>
 
                                 <td>
-                                    {row.enterLocation
-                                        ?row.enterLocation
-                                        : row.enterSite?.name}
+                                    {rowDisplay ? "-----" : (row.enterLocation ? row.enterLocation : (row.enterSite?.name || "----"))}
                                 </td>
 
                                 <td className="total-time">
-                                    {formatDuration(total)}
+                                    {rowDisplay ? "00:00" : formatDuration(total)}
                                 </td>
                             </tr>
                         );

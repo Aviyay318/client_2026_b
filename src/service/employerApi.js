@@ -5,7 +5,7 @@ export const getAllActiveEmployees = () => {
 }
 
 export const createEmployee = (data) => {
-    return api.post("/crud-employee/creat-employee", data);
+    return api.post("/crud-employee/create-employee", data);
 }
 
 export const deleteEmployee = (data) => {

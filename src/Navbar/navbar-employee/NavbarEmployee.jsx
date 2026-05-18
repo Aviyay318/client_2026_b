@@ -1,7 +1,6 @@
 import {Link} from "react-router-dom";
 import "../NavbarEmployee.css";
 import LogoutButton from "../../components/LogoutButton.jsx";
-
 function NavbarEmployee({active}) {
 
     return (
