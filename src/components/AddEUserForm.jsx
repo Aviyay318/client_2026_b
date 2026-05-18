@@ -3,25 +3,20 @@ import { createEmployee } from "../service/employerApi.js";
 
 function AddEUserForm() {
     const [user, setUser] = useState({
-        id: "",
-        userName: "",
+        username: "",
         firstName: "",
         lastName: "",
         password: "",
         phone: "",
         email: "",
-        userType: ""
+
     });
 
     const [message, setMessage] = useState("");
 
     const isFormValid = () => {
-        if (!/^\d{1,9}$/.test(user.id.trim())) {
-            setMessage("Id must contain up to 9 digits");
-            return false;
-        }
 
-        if (user.userName.trim() === "") {
+        if (user.username.trim() === "") {
             setMessage("Username is missing");
             return false;
         }
@@ -66,10 +61,6 @@ function AddEUserForm() {
             return false;
         }
 
-        if (user.userType.trim() === "") {
-            setMessage("Need to choose role type");
-            return false;
-        }
 
         return true;
     };
@@ -89,14 +80,12 @@ function AddEUserForm() {
                     setMessage("The employee was created successfully");
 
                     setUser({
-                        id: "",
-                        userName: "",
+                        username: "",
                         firstName: "",
                         lastName: "",
                         password: "",
                         phone: "",
                         email: "",
-                        userType: ""
                     });
                 } else {
                     setMessage("The registration failed");
@@ -112,18 +101,12 @@ function AddEUserForm() {
         <form onSubmit={register}>
             <h1>Add Employee</h1>
 
-            <input
-                type="text"
-                value={user.id}
-                placeholder="Enter id"
-                onChange={(e) => setUser({ ...user, id: e.target.value })}
-            />
 
             <input
                 type="text"
-                value={user.userName}
+                value={user.username}
                 placeholder="Enter user name"
-                onChange={(e) => setUser({ ...user, userName: e.target.value })}
+                onChange={(e) => setUser({ ...user, username: e.target.value })}
             />
 
             <input
@@ -161,14 +144,6 @@ function AddEUserForm() {
                 onChange={(e) => setUser({ ...user, email: e.target.value })}
             />
 
-            <select
-                value={user.userType}
-                onChange={(e) => setUser({ ...user, userType: e.target.value })}
-            >
-                <option value="">Choose role type</option>
-                <option value="EMPLOYEE">Employee</option>
-                <option value="EMPLOYER">Employer</option>
-            </select>
 
             <button type="submit">Add Employee</button>
 

@@ -32,7 +32,7 @@ function RealTimeEmployee({employees}) {
                             <td>{employee.location}</td>
                             <td>{employee.startTime}</td>
                             <td>{employee.Estimateddeparturetime}</td>
-                            לשאול את בתיה איך הם קראו למשתנה באובייקט של הEMPLOYEE שעת יציאה משוערת
+                            {/*לשאול את בתיה איך הם קראו למשתנה באובייקט של הEMPLOYEE שעת יציאה משוערת*/}
                         </tr>
                     ))
                 )}
