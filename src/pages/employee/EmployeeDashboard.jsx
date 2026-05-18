@@ -1,8 +1,8 @@
 import {useEffect, useState} from "react";
 import {enterWork, exitWork, getCurrentWorker, getSites} from "../../service/workApi.js";
 import LocationButton from "../../components/LocationButton.jsx";
-import EmployeeNavbar from "../../Navbar/navbar-employee/NavbarEmployee.jsx";
 import WorkTimer from "../../components/WorkTimer.jsx";
+import NavbarEmployee from "../../Navbar/navbar-employee/NavbarEmployee.jsx";
 import "./EmployeeDashboard.css";
 import AbsencePopUp from "../../components/AbsencePopUp.jsx";
 
@@ -96,49 +96,66 @@ function EmployeeDashboard() {
                 }
             }).catch(() => console.log("error"))
     }
-
     return (
         <div className="employee-dashboard-page">
 
+            <NavbarEmployee active={"Attendance"} />
+
+            <div className="attendance-page-header">
+                <h1>
+                    <span className="attendance-title-icon">⏱️</span>
+                    Attendance
+                </h1>
+
+                <p>Track your work time and daily attendance</p>
+
+                <div className="attendance-title-line"></div>
+            </div>
+
             <div className="employee-dashboard-card">
 
-                <NavbarEmployee active={"Attendance"}/>
+                <section className="attendance-section">
+                    <LocationButton
+                        location={location}
+                        setLocation={setLocation}
+                        selectedSite={selectedSite}
+                        setSelectedSite={setSelectedSite}
+                        sites={sites}
+                    />
+                </section>
 
-                <LocationButton
-                    location={location}
-                    setLocation={setLocation}
-                    selectedSite={selectedSite}
-                    setSelectedSite={setSelectedSite}
-                    sites={sites}
-                />
+                <section className="attendance-section timer-section">
+                    <WorkTimer
+                        isWorking={isWorking}
+                        startTime={startTime}
+                    />
+                </section>
 
-                <WorkTimer
-                    isWorking={isWorking}
-                    startTime={startTime}
-                />
+                <section className="attendance-actions">
+                    <button
+                        className="enter-work-btn"
+                        onClick={isWorking ? handleExit : handleEnter}
+                    >
+                        {isWorking ? "Exit Work" : "Enter Work"}
+                    </button>
+                </section>
 
-                <button
-                    className="enter-work-btn"
-                    onClick={isWorking ? handleExit : handleEnter}
-                >
-                    {isWorking ? "Exit Work" : "Enter Work"}
-                </button>
-
-                <button className="absence-btn"
+                <section className="attendance-secondary-card">
+                    <button
+                        className="absence-btn"
                         onClick={() => setAbsenceOpen(true)}
+                    >
+                        Report Absence
+                    </button>
 
-                >
-                    Report Absence
-                </button>
-
-                <p className="absence-text">
-                    Report if you are not able to work today
-                </p>
+                    <p className="absence-text">
+                        Report if you are not able to work today
+                    </p>
+                </section>
 
                 <AbsencePopUp
                     isAbsenceOpen={isAbsenceOpen}
                     setAbsenceOpen={setAbsenceOpen}
-
                 />
 
             </div>

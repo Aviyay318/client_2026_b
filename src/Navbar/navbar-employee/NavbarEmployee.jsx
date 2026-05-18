@@ -1,8 +1,6 @@
 import {Link, useNavigate} from "react-router-dom";
 import "../NavbarEmployee.css";
-import {logout} from "../../service/authApi.js";
 import LogoutButton from "../../components/LogoutButton.jsx";
-
 function NavbarEmployee({active}) {
 
     const navigate = useNavigate();

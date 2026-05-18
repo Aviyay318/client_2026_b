@@ -1,87 +1,165 @@
-.shifts-date-range-box {
-    width: 100%;
-    min-height: 92px;
-    margin: 28px auto 22px;
+.shifts-table-area {
+    margin-top: 22px;
+}
 
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 34px;
-
-    padding: 18px 34px;
-    border-radius: 16px;
-
-    background: rgba(15, 23, 42, 0.42);
-    border: 1px solid rgba(59, 130, 246, 0.28);
-
+.shifts-table {
+    border-color: rgba(59, 130, 246, 0.42);
     box-shadow:
-            inset 0 0 28px rgba(59, 130, 246, 0.06),
-            0 0 25px rgba(59, 130, 246, 0.08);
+            inset 0 0 35px rgba(59, 130, 246, 0.08),
+            0 0 28px rgba(59, 130, 246, 0.12);
 }
 
-.date-range-title {
-    display: flex;
+.shifts-table th,
+.shifts-table td {
+    border-left: 1px solid rgba(148, 163, 184, 0.10);
+}
+
+.shifts-table th:first-child,
+.shifts-table td:first-child {
+    border-left: none;
+}
+
+.shifts-table tbody tr {
+    transition: 0.25s ease;
+}
+
+.shifts-table tbody tr:hover {
+    background: rgba(59, 130, 246, 0.08);
+}
+
+.shift-day-head,
+.shift-role-head {
+    white-space: nowrap;
+}
+
+.shift-head-icon,
+.shift-date-icon,
+.shift-role-icon {
+    display: inline-flex;
     align-items: center;
-    gap: 16px;
-
-    color: white;
-    font-size: 18px;
-    font-weight: 900;
-}
-
-.date-range-main-icon {
-    font-size: 34px;
-    color: #2ea8ff;
-    filter: drop-shadow(0 0 10px rgba(46, 168, 255, 0.9));
-}
-
-.date-input-card {
-    width: 270px;
-    height: 58px;
-
-    display: flex;
-    flex-direction: column;
     justify-content: center;
 
-    padding: 8px 18px;
-    border-radius: 12px;
+    margin-right: 8px;
+    vertical-align: middle;
 
-    background: rgba(2, 6, 23, 0.34);
-    border: 1px solid rgba(59, 130, 246, 0.72);
-
-    box-shadow: 0 0 18px rgba(59, 130, 246, 0.18);
+    font-size: 22px;
 }
 
-.date-input-card label {
-    color: #94a3b8;
-    font-size: 13px;
-    margin-bottom: 4px;
+.shift-head-icon,
+.shift-date-icon {
+    color: #cbd5e1;
+    filter: drop-shadow(0 0 6px rgba(148, 163, 184, 0.65));
 }
 
-.date-input-card input {
-    width: 100%;
-    cursor: pointer;
+.shift-role-icon {
+    color: #2ea8ff;
+    filter: drop-shadow(0 0 6px rgba(46, 168, 255, 0.75));
+}
 
-    background: transparent;
-    border: none;
-    outline: none;
-
-    color: white;
-    font-size: 18px;
+.shifts-table .start-time {
+    color: #22c55e !important;
     font-weight: 800;
 }
 
-.date-input-card input::-webkit-calendar-picker-indicator {
-    filter: invert(1);
-    cursor: pointer;
+.shifts-table .end-time {
+    color: #ff5c7a !important;
+    font-weight: 800;
 }
 
-.date-arrow {
+.shifts-no-data {
+    padding: 26px !important;
+}
+
+@media (max-width: 850px) {
+    .shifts-table {
+        table-layout: auto;
+    }
+
+    .shifts-table th,
+    .shifts-table td {
+        padding: 14px 16px;
+        font-size: 14px;
+    }
+}.shifts-table-area {
+     margin-top: 22px;
+ }
+
+.shifts-table {
+    border-color: rgba(59, 130, 246, 0.42);
+    box-shadow:
+            inset 0 0 35px rgba(59, 130, 246, 0.08),
+            0 0 28px rgba(59, 130, 246, 0.12);
+}
+
+.shifts-table th,
+.shifts-table td {
+    border-left: 1px solid rgba(148, 163, 184, 0.10);
+}
+
+.shifts-table th:first-child,
+.shifts-table td:first-child {
+    border-left: none;
+}
+
+.shifts-table tbody tr {
+    transition: 0.25s ease;
+}
+
+.shifts-table tbody tr:hover {
+    background: rgba(59, 130, 246, 0.08);
+}
+
+.shift-day-head,
+.shift-role-head {
+    white-space: nowrap;
+}
+
+.shift-head-icon,
+.shift-date-icon,
+.shift-role-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    margin-right: 8px;
+    vertical-align: middle;
+
+    font-size: 22px;
+}
+
+.shift-head-icon,
+.shift-date-icon {
     color: #cbd5e1;
-    font-size: 28px;
-    font-weight: 300;
+    filter: drop-shadow(0 0 6px rgba(148, 163, 184, 0.65));
 }
 
-.shifts-table-area {
-    margin-top: 0;
+.shift-role-icon {
+    color: #2ea8ff;
+    filter: drop-shadow(0 0 6px rgba(46, 168, 255, 0.75));
+}
+
+.shifts-table .start-time {
+    color: #22c55e !important;
+    font-weight: 800;
+}
+
+.shifts-table .end-time {
+    color: #ff5c7a !important;
+    font-weight: 800;
+}
+
+.shifts-no-data {
+    padding: 26px !important;
+}
+
+@media (max-width: 850px) {
+    .shifts-table {
+        table-layout: auto;
+    }
+
+    .shifts-table th,
+    .shifts-table td {
+        padding: 14px 16px;
+        font-size: 14px;
+    }
 }
