@@ -18,13 +18,13 @@ function EmployersTable({employers, selectedEmployerId, onSelectEmployer, loadin
                 </tr>
                 </thead>
                 <tbody>
-                {employers.map((employer) => (
+                {employers.map((employer, index) => (
                     <tr
-                        key={employer.id}
-                        className={selectedEmployerId === employer.id ? "selected" : ""}
+                        key={employer.id ?? employer.employerId ?? employer.username ?? index}
+                        className={selectedEmployerId === (employer.id ?? employer.employerId) ? "selected" : ""}
                         onClick={() => onSelectEmployer(employer)}
                     >
-                        <td>{employer.businessName || employer.name || "Unknown business"}</td>
+                        <td>{employer.businessName || employer.name || employer.username || employer.userName || "Unknown business"}</td>
                         <td>{employer.phone || employer.phoneNumber || "Not available"}</td>
                         <td>{employer.workersCount ?? employer.employeeCount ?? "-"}</td>
                     </tr>

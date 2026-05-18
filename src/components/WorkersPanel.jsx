@@ -25,10 +25,10 @@ function WorkersPanel({employer, workers, loading, error, onClose}) {
                 <div className="admin-state">No workers found for this employer.</div>
             )}
 
-            {employer && !loading && !error && workers.map((worker) => (
-                <div className="worker-row" key={worker.id || worker.username || worker.name}>
+            {employer && !loading && !error && workers.map((worker, index) => (
+                <div className="worker-row" key={worker.id || worker.workerId || worker.username || worker.userName || worker.name || index}>
                     <div>
-                        <strong>{worker.name || worker.fullName || worker.username || "Worker"}</strong>
+                        <strong>{worker.name || worker.fullName || worker.username || worker.userName || "Worker"}</strong>
                         {worker.phone && <p>{worker.phone}</p>}
                     </div>
                     <span className={worker.connected || worker.isConnected ? "worker-status online" : "worker-status"}>

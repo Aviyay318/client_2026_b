@@ -24,8 +24,8 @@ const readPayload = (response) => {
 };
 
 const normalizeGeneralInfo = (payload) => ({
-    employersCount: payload?.employersCount ?? payload?.totalEmployers ?? payload?.employerCount ?? 0,
-    workersCount: payload?.workersCount ?? payload?.totalWorkers ?? payload?.employeeCount ?? 0,
+    employersCount: payload?.employersCount ?? payload?.totalEmployers ?? payload?.employerCount ?? payload?.countEmployers ?? 0,
+    workersCount: payload?.workersCount ?? payload?.totalWorkers ?? payload?.workerCount ?? payload?.employeeCount ?? payload?.employeesCount ?? 0,
 });
 
 const normalizeEmployers = (payload) => {
@@ -33,7 +33,7 @@ const normalizeEmployers = (payload) => {
         return payload;
     }
 
-    return payload?.employers || payload?.employersList || payload?.items || [];
+    return payload?.employers || payload?.employersList || payload?.users || payload?.items || [];
 };
 
 const normalizeWorkers = (payload) => {
@@ -41,14 +41,33 @@ const normalizeWorkers = (payload) => {
         return payload;
     }
 
-    return payload?.workers || payload?.employees || payload?.items || [];
+    return payload?.workers || payload?.employees || payload?.users || payload?.items || [];
 };
 
-const normalizeRealtimeInfo = (payload) => ({
-    connectedEmployers: payload?.connectedEmployers ?? payload?.onlineEmployers ?? 0,
-    connectedWorkers: payload?.connectedWorkers ?? payload?.onlineWorkers ?? 0,
-    connectedUsers: payload?.connectedUsers || payload?.users || [],
-});
+const isEmployerRole = (role) => {
+    return role?.toString().toLowerCase().includes("employer");
+};
+
+const isWorkerRole = (role) => {
+    const normalizedRole = role?.toString().toLowerCase();
+    return normalizedRole?.includes("worker") || normalizedRole?.includes("employee");
+};
+
+const normalizeRealtimeInfo = (payload) => {
+    const connectedUsers = payload?.connectedUsers || payload?.users || [];
+    const connectedEmployersFromUsers = connectedUsers.filter((user) => (
+        isEmployerRole(user.role || user.type || user.userType)
+    )).length;
+    const connectedWorkersFromUsers = connectedUsers.filter((user) => (
+        isWorkerRole(user.role || user.type || user.userType)
+    )).length;
+
+    return {
+        connectedEmployers: payload?.connectedEmployers ?? payload?.onlineEmployers ?? connectedEmployersFromUsers,
+        connectedWorkers: payload?.connectedWorkers ?? payload?.onlineWorkers ?? connectedWorkersFromUsers,
+        connectedUsers,
+    };
+};
 
 function AdminDashboardPage() {
     const navigate = useNavigate();
@@ -84,8 +103,17 @@ function AdminDashboardPage() {
 
         Promise.all([getGeneralInfo(), getEmployersList()])
             .then(([generalResponse, employersResponse]) => {
-                setGeneralInfo(normalizeGeneralInfo(readPayload(generalResponse)));
-                setEmployers(normalizeEmployers(readPayload(employersResponse)));
+                const nextGeneralInfo = normalizeGeneralInfo(readPayload(generalResponse));
+                const nextEmployers = normalizeEmployers(readPayload(employersResponse));
+                const derivedWorkersCount = nextEmployers.reduce((total, employer) => (
+                    total + Number(employer.workersCount ?? employer.employeeCount ?? employer.workers?.length ?? employer.employees?.length ?? 0)
+                ), 0);
+
+                setGeneralInfo({
+                    employersCount: nextGeneralInfo.employersCount || nextEmployers.length,
+                    workersCount: nextGeneralInfo.workersCount || derivedWorkersCount,
+                });
+                setEmployers(nextEmployers);
             })
             .catch(() => {
                 setOverviewError("Could not load admin overview. Please try again.");

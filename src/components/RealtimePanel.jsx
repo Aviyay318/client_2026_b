@@ -33,7 +33,7 @@ function RealtimePanel({realtimeInfo, loading}) {
                     <div className="connected-user" key={user.id || `${user.username}-${index}`}>
                         <span className="status-dot"></span>
                         <div>
-                            <strong>{user.name || user.username || user.businessName || "Connected user"}</strong>
+                            <strong>{user.name || user.fullName || user.username || user.userName || user.businessName || "Connected user"}</strong>
                             <p>{user.role || user.type || user.userType || "User"}</p>
                         </div>
                     </div>
