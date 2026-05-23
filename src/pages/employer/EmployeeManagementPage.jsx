@@ -1,4 +1,4 @@
-import AddEUserForm from "../../components/AddEUserForm.jsx";
+import AddUserForm from "../../components/AddUserForm.jsx";
 import DeleteEmployee from "../../components/DeleteUser.jsx";
 import NavbarEmployer from "../../Navbar/navbar-employer/NavbarEmployer.jsx";
 
@@ -10,7 +10,7 @@ function EmployeeManagementPage() {
             <div className="employee-management-content">
                 <h1>Employee Management</h1>
 
-                <AddEUserForm />
+                <AddUserForm />
                 <DeleteEmployee />
             </div>
         </div>

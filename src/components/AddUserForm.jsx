@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { createEmployee } from "../service/employerApi.js";
 
-function AddEUserForm() {
+function AddUserForm() {
     const [user, setUser] = useState({
         username: "",
         firstName: "",
@@ -152,4 +152,4 @@ function AddEUserForm() {
     );
 }
 
-export default AddEUserForm;
+export default AddUserForm;
