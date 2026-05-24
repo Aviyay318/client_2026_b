@@ -32,7 +32,7 @@ function EmployeeDetailsListPage() {
 
             <EmployeeInfo employee={employee} />
 
-            <WorkHoursTable workdays={employee.employeeWorkDays} />
+            <WorkHoursTable rows={employee.employeeWorkDays} />
 
             </>
 
