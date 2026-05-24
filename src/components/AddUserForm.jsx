@@ -3,7 +3,7 @@ import { createEmployee } from "../service/employerApi.js";
 
 function AddUserForm() {
     const [user, setUser] = useState({
-        username: "",
+        personalId: "",
         firstName: "",
         lastName: "",
         password: "",
@@ -16,8 +16,13 @@ function AddUserForm() {
 
     const isFormValid = () => {
 
-        if (user.username.trim() === "") {
-            setMessage("Username is missing");
+        if (user.personalId.trim() === "") {
+            setMessage("ID is missing");
+            return false;
+        }
+
+        if (!/^\d{1,9}$/.test(user.personalId.trim())) {
+            setMessage("ID must contain up to 9 digits only");
             return false;
         }
 
@@ -80,7 +85,7 @@ function AddUserForm() {
                     setMessage("The employee was created successfully");
 
                     setUser({
-                        username: "",
+                        personalId: "",
                         firstName: "",
                         lastName: "",
                         password: "",
@@ -104,9 +109,9 @@ function AddUserForm() {
 
             <input
                 type="text"
-                value={user.username}
-                placeholder="Enter user name"
-                onChange={(e) => setUser({ ...user, username: e.target.value })}
+                value={user.personalId}
+                placeholder="Enter id"
+                onChange={(e) => setUser({ ...user, personalId: e.target.value })}
             />
 
             <input
