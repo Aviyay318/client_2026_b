@@ -1,30 +1,55 @@
+import "./EmployeeInfo.css";
+
 function EmployeeInfo({ employee }) {
 
     return (
 
-        <div>
+        <section className="employee-info-section">
 
-            <h2>General Information</h2>
+            <div className="employee-info-header">
+                <span className="employee-info-eyebrow">Employee Profile</span>
+                <h2>General Information</h2>
+            </div>
 
-            <p>ID: {employee.id}</p>
+            <div className="employee-info-card">
+                <div className="employee-info-grid">
+                    <div className="employee-info-item">
+                        <span>ID</span>
+                        <strong>{employee.id}</strong>
+                    </div>
 
-            <p>
-                Full Name:
-                {" "}
-                {employee.firstName}
-                {" "}
-                {employee.lastName}
-            </p>
+                    <div className="employee-info-item">
+                        <span>Full Name</span>
+                        <strong>
+                            {employee.firstName}
+                            {" "}
+                            {employee.lastName}
+                        </strong>
+                    </div>
 
-            <p>Email: {employee.email}</p>
+                    <div className="employee-info-item">
+                        <span>Email</span>
+                        <strong>{employee.email}</strong>
+                    </div>
 
-            <p>Phone: {employee.phone}</p>
+                    <div className="employee-info-item">
+                        <span>Phone</span>
+                        <strong>{employee.phone}</strong>
+                    </div>
 
-            <p>Username: {employee.userName}</p>
+                    <div className="employee-info-item">
+                        <span>Username</span>
+                        <strong>{employee.userName}</strong>
+                    </div>
 
-            <p>User Type: {employee.userType}</p>
+                    <div className="employee-info-item">
+                        <span>User Type</span>
+                        <strong>{employee.userType}</strong>
+                    </div>
+                </div>
+            </div>
 
-        </div>
+        </section>
     );
 }
 

@@ -1,31 +1,43 @@
 import {Link} from "react-router-dom";
+import "./EmployeeList.css";
 
 function EmployeeList ({employees}){
 
 
     return(
 
-        <div>
+        <section className="manager-glass-panel employee-list-panel">
 
-            <h2>Employee List</h2>
+            <div className="manager-section-header">
+                <div>
+                    <span className="manager-eyebrow">Team Directory</span>
+                    <h2>All Employees</h2>
+                </div>
+
+                <div className="real-time-count">
+                    {employees.length} employees
+                </div>
+            </div>
 
 
             {employees.length === 0 ? (
-                <p>No employees found</p>
+                <p className="manager-empty-state">No employees found</p>
             ) : (
-            employees.map((employee)=> (
+            <div className="employee-directory-grid">
+                {employees.map((employee)=> (
 
-                <div key={employee.id}>
+                    <div className="employee-directory-card" key={employee.id}>
 
-                    <Link to={`/employee-details-page/${employee.id}`}>
-                    {employee.firstName} {employee.lastName}
-                    </Link>
+                        <Link to={`/employee-details-page/${employee.id}`}>
+                            {employee.firstName} {employee.lastName}
+                        </Link>
 
+                    </div>
+                    ))}
                 </div>
-                ))
                 )}
 
-        </div>
+        </section>
     );
 
 }export default EmployeeList;

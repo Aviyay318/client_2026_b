@@ -32,8 +32,6 @@ function EmployerDashboard() {
                         <h1>Employer Dashboard</h1>
                         <p>Monitor active employees and live workplace activity.</p>
                     </div>
-
-                    <div className="manager-role-chip">Manager</div>
                 </header>
 
                 <section className="manager-stat-grid">
