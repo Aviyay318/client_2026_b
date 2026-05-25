@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { deleteEmployee } from "../service/employerApi.js";
-import "./DeleteEmployee.css";
+import "./DeleteUser.css";
 
 function DeleteEmployee() {
     const [userId, setUserId] = useState("");
