@@ -1,0 +1,465 @@
+.absence-popup-card {
+    position: relative;
+    width: 100%;
+    margin-top: 22px;
+    padding: 32px 26px 24px;
+
+    border-radius: 26px;
+    border: 1px solid rgba(96, 165, 250, 0.32);
+
+    background:
+            linear-gradient(
+                    135deg,
+                    rgba(15, 23, 42, 0.96),
+                    rgba(30, 41, 59, 0.82)
+            );
+
+    box-shadow:
+            0 18px 45px rgba(0, 0, 0, 0.38),
+            0 0 26px rgba(37, 99, 235, 0.14),
+            0 0 32px rgba(124, 58, 237, 0.10),
+            inset 0 0 14px rgba(255, 255, 255, 0.04);
+
+    backdrop-filter: blur(16px);
+    overflow: visible;
+    text-align: left;
+}
+
+.absence-close-btn {
+    position: absolute;
+    top: 22px;
+    right: 22px;
+
+    width: 46px;
+    height: 46px;
+    padding: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+    border: 1px solid rgba(248, 113, 113, 0.75);
+
+    background: rgba(239, 68, 68, 0.12);
+    color: #f87171;
+
+    font-size: 30px;
+    font-weight: 800;
+    line-height: 1;
+
+    cursor: pointer;
+
+    box-shadow:
+            0 0 18px rgba(239, 68, 68, 0.30),
+            inset 0 0 6px rgba(255, 255, 255, 0.05);
+
+    transition: all 0.25s ease;
+    z-index: 50;
+
+    appearance: none;
+    -webkit-appearance: none;
+}
+
+.absence-close-btn:hover {
+    color: white;
+    background: rgba(239, 68, 68, 0.24);
+    border-color: rgba(248, 113, 113, 0.9);
+
+    box-shadow:
+            0 0 24px rgba(239, 68, 68, 0.45);
+
+    transform: rotate(90deg);
+}
+
+.absence-popup-header {
+    padding-right: 68px;
+    margin-bottom: 26px;
+}
+
+.absence-popup-title {
+    margin: 0 0 8px;
+    color: white;
+    font-size: 25px;
+    font-weight: 900;
+    letter-spacing: -0.3px;
+}
+
+.absence-popup-subtitle {
+    margin: 0;
+    color: #94a3b8;
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 1.45;
+}
+
+/* חשוב: זה תואם ל-return שלך */
+.absence-popup-content {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    margin-bottom: 24px;
+}
+
+.absence-field {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.absence-label {
+    color: #94a3b8;
+    font-size: 14px;
+    font-weight: 800;
+}
+
+.absence-date-box,
+.absence-date-box .react-datepicker-wrapper,
+.absence-date-box .react-datepicker__input-container {
+    width: 100%;
+}
+
+.absence-date-box input {
+    width: 100%;
+    height: 56px;
+
+    padding: 0 18px;
+
+    border-radius: 16px;
+    border: 1px solid rgba(96, 165, 250, 0.55);
+
+    background:
+            linear-gradient(
+                    135deg,
+                    rgba(15, 23, 42, 0.96),
+                    rgba(30, 41, 59, 0.78)
+            );
+
+    color: #e2e8f0;
+
+    font-size: 15px;
+    font-weight: 800;
+    font-family: inherit;
+
+    outline: none;
+
+    box-shadow:
+            0 0 18px rgba(37, 99, 235, 0.14),
+            inset 0 0 8px rgba(255, 255, 255, 0.04);
+
+    transition: all 0.25s ease;
+}
+
+.absence-date-box input:hover,
+.absence-date-box input:focus {
+    border-color: rgba(56, 189, 248, 0.9);
+
+    box-shadow:
+            0 0 22px rgba(56, 189, 248, 0.24),
+            inset 0 0 8px rgba(255, 255, 255, 0.05);
+}
+
+.absence-reason-box {
+    width: 100%;
+
+    border-radius: 16px;
+    border: 1px solid rgba(96, 165, 250, 0.48);
+
+    background:
+            linear-gradient(
+                    135deg,
+                    rgba(15, 23, 42, 0.96),
+                    rgba(30, 41, 59, 0.78)
+            );
+
+    box-shadow:
+            0 0 16px rgba(37, 99, 235, 0.12),
+            inset 0 0 8px rgba(255, 255, 255, 0.03);
+
+    overflow: hidden;
+}
+
+.reason-box-title {
+    width: 100%;
+    height: 56px;
+
+    padding: 0 18px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    border: none;
+    border-radius: 16px;
+
+    background: transparent;
+    color: #e2e8f0;
+
+    font-size: 15px;
+    font-weight: 850;
+    font-family: inherit;
+    text-align: left;
+
+    cursor: pointer;
+
+    transition: all 0.25s ease;
+}
+
+.reason-box-title:hover,
+.reason-box-open {
+    color: white;
+    background: rgba(56, 189, 248, 0.06);
+}
+
+.reason-box-arrow {
+    color: #cbd5e1;
+    font-size: 22px;
+    font-weight: 900;
+    line-height: 1;
+    transition: transform 0.25s ease;
+}
+
+.reason-box-open .reason-box-arrow {
+    transform: rotate(180deg);
+}
+
+.reason-list {
+    padding: 8px 10px 10px;
+
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+
+    border-top: 1px solid rgba(96, 165, 250, 0.28);
+
+    background:
+            linear-gradient(
+                    135deg,
+                    rgba(15, 23, 42, 0.98),
+                    rgba(30, 41, 59, 0.92)
+            );
+
+    position: relative;
+    z-index: 2;
+}
+
+.reason-row {
+    width: 100%;
+    min-height: 46px;
+
+    padding: 0 14px;
+
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    border: none;
+    border-radius: 12px;
+
+    background:
+            linear-gradient(
+                    135deg,
+                    rgba(37, 99, 235, 0.28),
+                    rgba(124, 58, 237, 0.22)
+            );
+
+    color: #e2e8f0;
+
+    font-size: 14px;
+    font-weight: 800;
+    font-family: inherit;
+    text-align: left;
+
+    cursor: pointer;
+    transition: all 0.22s ease;
+}
+
+.reason-row:hover {
+    background:
+            linear-gradient(
+                    135deg,
+                    rgba(37, 99, 235, 0.42),
+                    rgba(124, 58, 237, 0.34)
+            );
+    color: white;
+
+    box-shadow:
+            0 0 14px rgba(37, 99, 235, 0.20);
+}
+
+.active-reason-row {
+    color: white;
+    outline: 1px solid rgba(147, 197, 253, 0.55);
+
+    box-shadow:
+            0 0 16px rgba(37, 99, 235, 0.26),
+            inset 0 0 8px rgba(255, 255, 255, 0.05);
+}
+
+.reason-icon {
+    width: 24px;
+    color: #bfdbfe;
+    font-size: 17px;
+    text-align: center;
+}
+
+.reason-text {
+    flex: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* הכפתור נשאר לחיץ */
+.send-absence-btn {
+    width: 100%;
+    height: 58px;
+
+    margin-top: 8px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    position: relative;
+    z-index: 1;
+
+    border: none;
+    border-radius: 18px;
+
+    background: linear-gradient(135deg, #2563eb, #7c3aed);
+    color: white;
+
+    font-size: 17px;
+    font-weight: 900;
+    font-family: inherit;
+
+    cursor: pointer;
+
+    box-shadow:
+            0 0 22px rgba(124, 58, 237, 0.35),
+            0 0 34px rgba(37, 99, 235, 0.22),
+            inset 0 0 8px rgba(255, 255, 255, 0.16);
+
+    transition: all 0.3s ease;
+}
+
+.send-absence-btn:hover:not(:disabled) {
+    transform: translateY(-2px);
+
+    box-shadow:
+            0 0 28px rgba(124, 58, 237, 0.52),
+            0 0 42px rgba(37, 99, 235, 0.30),
+            inset 0 0 8px rgba(255, 255, 255, 0.20);
+}
+
+.send-absence-btn:active:not(:disabled) {
+    transform: scale(0.98);
+}
+
+.send-absence-btn:disabled,
+.disabled-send-btn {
+    background: rgba(148, 163, 184, 0.16);
+    color: rgba(203, 213, 225, 0.45);
+
+    cursor: not-allowed;
+
+    box-shadow:
+            inset 0 0 8px rgba(255, 255, 255, 0.03);
+}
+
+.absence-help-text {
+    margin: 14px 0 0;
+
+    color: #cbd5e1;
+    font-size: 14px;
+    font-weight: 600;
+    text-align: center;
+}
+
+/* DatePicker dark mode */
+.react-datepicker-popper {
+    z-index: 9999 !important;
+}
+
+.react-datepicker {
+    border: 1px solid rgba(96, 165, 250, 0.35) !important;
+    border-radius: 18px !important;
+
+    background:
+            linear-gradient(
+                    135deg,
+                    rgba(15, 23, 42, 0.98),
+                    rgba(30, 41, 59, 0.95)
+            ) !important;
+
+    color: white !important;
+
+    box-shadow:
+            0 18px 45px rgba(0, 0, 0, 0.45),
+            0 0 26px rgba(37, 99, 235, 0.25) !important;
+
+    font-family: inherit !important;
+    overflow: hidden;
+}
+
+.react-datepicker__header {
+    background: rgba(2, 6, 23, 0.70) !important;
+    border-bottom: 1px solid rgba(148, 163, 184, 0.18) !important;
+}
+
+.react-datepicker__current-month {
+    color: white !important;
+    font-weight: 900 !important;
+}
+
+.react-datepicker__day-name,
+.react-datepicker__day {
+    color: #cbd5e1 !important;
+}
+
+.react-datepicker__day:hover {
+    border-radius: 10px !important;
+    background: rgba(56, 189, 248, 0.18) !important;
+    color: white !important;
+}
+
+.react-datepicker__day--selected,
+.react-datepicker__day--keyboard-selected {
+    border-radius: 10px !important;
+    background: linear-gradient(135deg, #2563eb, #7c3aed) !important;
+    color: white !important;
+}
+
+.react-datepicker__day--outside-month {
+    color: #64748b !important;
+}
+
+.react-datepicker__navigation-icon::before {
+    border-color: #cbd5e1 !important;
+}
+
+.react-datepicker__triangle {
+    display: none;
+}
+
+@media (max-width: 650px) {
+    .absence-popup-card {
+        padding: 28px 18px 22px;
+    }
+
+    .absence-close-btn {
+        width: 40px;
+        height: 40px;
+        font-size: 27px;
+    }
+
+    .absence-popup-title {
+        font-size: 22px;
+    }
+
+    .absence-popup-subtitle {
+        font-size: 14px;
+    }
+}

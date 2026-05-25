@@ -1,19 +1,42 @@
-function CustomDatePicker ({
-    mode,
-    startDate,
-    endDate,
-    setStartDate,
-    setEndDate
-}) {
-    return (
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
-        <div>
+function CustomDatePicker({
+                              mode,
+                              selectedDate,
+                              setSelectedDate,
+                              startDate,
+                              setStartDate,
+                              endDate,
+                              setEndDate
+                          }) {
 
-        </div>
+    if (mode === "single") {
+        return (
+            <DatePicker
+                selected={selectedDate}
+                onChange={(newDate) => setSelectedDate(newDate)}
+                dateFormat="dd/MM/yyyy"
+            />
+        );
+    }
 
-    )
+    if (mode === "range") {
+        return (
+            <DatePicker
+                selectsRange={true}
+                startDate={startDate}
+                endDate={endDate}
+                onChange={(update) => {
+                    setStartDate(update[0]);
+                    setEndDate(update[1]);
+                }}
+                dateFormat="dd/MM/yyyy"
+            />
+        );
+    }
 
-
-
+    return null;
 }
-export default CustomDatePicker;
+
+export default CustomDatePicker

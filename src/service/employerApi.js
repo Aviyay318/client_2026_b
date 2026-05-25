@@ -5,9 +5,16 @@ export const getAllActiveEmployees = () => {
 }
 
 export const createEmployee = (data) => {
-    return api.post("/crud-employee/creat-employee", data);
+    return api.post("/crud-employee/create-employee", data);
 }
 
 export const deleteEmployee = (data) => {
-    return api.post("/crud-employee/delete/employee", data);
+    return api.post("/crud-employee/delete-employee", data);
 }
+export const getAllEmployees = () => {
+    return api.get("/crud-employee/all-employees");
+}
+export const getEmployeeById = (data) => {
+    return api.post("/crud-employee/employee-by-id", data);
+}
+

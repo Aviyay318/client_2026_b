@@ -93,10 +93,6 @@
     box-shadow: 0 0 22px rgba(239, 68, 68, 0.25);
 }
 
-.logout-btn:active {
-    transform: scale(0.97);
-}
-
 @media (max-width: 650px) {
     .employee-navbar {
         flex-direction: column;
@@ -110,51 +106,12 @@
     .logout-btn {
         width: 100%;
     }
-    .logout-btn {
-        height: 48px;
-        min-width: 120px;
-
-        padding: 0 18px;
-
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 10px;
-
-        border-radius: 14px;
-
-        border: 1px solid rgba(248, 113, 113, 0.35);
-
-        background: rgba(127, 29, 29, 0.12);
-
-        color: #f87171;
-
-        font-size: 14px;
-        font-weight: 800;
-        font-family: inherit;
-
-        cursor: pointer;
-
-        transition: all 0.3s ease;
-    }
-
     .logout-icon {
         font-size: 20px;
         margin-right: 6px;
     }
 
-    .logout-btn:hover {
-        color: white;
 
-        background: rgba(239, 68, 68, 0.20);
-
-        border-color: rgba(248, 113, 113, 0.65);
-
-        box-shadow:
-                0 0 22px rgba(239, 68, 68, 0.25);
-
-        transform: translateY(-2px);
-    }
     .logout-btn {
         display: flex;
         align-items: center;

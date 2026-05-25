@@ -1,24 +1,7 @@
-import {Link, useNavigate} from "react-router-dom";
+import {Link} from "react-router-dom";
 import "../NavbarEmployee.css";
-import {logout} from "../../service/authApi.js";
 import LogoutButton from "../../components/LogoutButton.jsx";
-
 function NavbarEmployee({active}) {
-
-    const navigate = useNavigate();
-    const handleLogout =()=>{
-        logout()
-            .then(response =>{
-                if (response.data.success){
-                    console.log("LOGOUT",response.data);
-                  navigate("/");
-                }
-            })
-            .catch(error => console.log(error));
-
-    }
-
-
 
     return (
         <nav className="employee-navbar">
@@ -49,7 +32,7 @@ function NavbarEmployee({active}) {
 
                 <Link
                     to="/employee-shifts-page"
-                    classname={`tab-btn ${
+                    className={`tab-btn ${
                         active === "Shifts"
                         ?"active-tab"
                             :""
@@ -60,18 +43,8 @@ function NavbarEmployee({active}) {
 
             </div>
 
-            {/*להגיד לשיר להעביר בscc של   employeenavbar  */}
-            {/*מה שקשור לעיצוב של logout להעביר לscc חדש ששיך  ל logout*/}
 
-            {/*<LogoutButton/>*/}
-            <button
-                className="logout-btn"
-                onClick={handleLogout}
-            >
-
-
-                Logout
-            </button>
+            <LogoutButton/>
 
         </nav>
     );

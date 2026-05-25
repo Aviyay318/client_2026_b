@@ -1,41 +1,52 @@
 import "./LoginForm.css";
 import {useState} from "react";
-import {loginEmployee, loginEmployer} from "../service/authApi.js";
+import {loginAdmin, loginEmployee, loginEmployer} from "../service/authApi.js";
 import {useNavigate} from "react-router-dom";
 
 function LoginForm({role}) {
-    const [username, setUsername] = useState("");
+    const [personalId, setPersonalId] = useState("");
     const [password, setPassword] = useState("");
     const navigate = useNavigate();
     const [error, setError] = useState("");
 
     const isValid = () => {
-        return username.trim() === "" || password.trim() === "";
+        return (
+            personalId.trim() === "" ||
+            !/^\d{1,9}$/.test(personalId.trim()) ||
+            password.trim() === ""
+        );
     };
-
 
     const handleLogin = (e) => {
         e.preventDefault();
         setError("");
 
         const data = {
-            username: username,
+            personalId: personalId,
             password: password
         };
         const requestApi =
-            role === "employee" ?
-                loginEmployee(data)
-                : loginEmployer(data);
+            role === "employee"
+                ? loginEmployee(data)
+                : role === "admin"
+                    ? loginAdmin(data)
+                    : loginEmployer(data);
 
         requestApi.then(response => {
             if (response.data.success) {
+                if (role === "admin") {
+                    sessionStorage.setItem("adminLoggedIn", "true");
+                }
+
                 const path =
                     role === "employee"
                         ? "/employee-dashboard"
-                        : "/employer-dashboard";
+                        : role === "admin"
+                            ? "/admin/dashboard"
+                            : "/employer-dashboard";
                 navigate(path);
             } else {
-                setError("Wrong id or password");
+                setError("Wrong ID or password");
             }
 
 
@@ -68,16 +79,16 @@ function LoginForm({role}) {
 
                 <form onSubmit={handleLogin}>
                     <div className="input-group">
-                        <label>Username</label>
+                        <label>ID</label>
 
                         <div className="input-field">
                             <span className="field-icon">👤</span>
 
                             <input
                                 type="text"
-                                value={username}
-                                placeholder="Enter your username"
-                                onChange={(e) => setUsername(e.target.value)}
+                                value={personalId}
+                                placeholder="Enter your ID"
+                                onChange={(e) => setPersonalId(e.target.value)}
                             />
                         </div>
                     </div>

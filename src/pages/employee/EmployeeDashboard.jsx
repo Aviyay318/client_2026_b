@@ -1,9 +1,10 @@
 import {useEffect, useState} from "react";
 import {enterWork, exitWork, getCurrentWorker, getSites} from "../../service/workApi.js";
 import LocationButton from "../../components/LocationButton.jsx";
-import EmployeeNavbar from "../../Navbar/EmployeeNavbar.jsx";
 import WorkTimer from "../../components/WorkTimer.jsx";
+import NavbarEmployee from "../../Navbar/navbar-employee/NavbarEmployee.jsx";
 import "./EmployeeDashboard.css";
+import AbsencePopUp from "../../components/AbsencePopUp.jsx";
 
 function EmployeeDashboard() {
 
@@ -12,6 +13,11 @@ function EmployeeDashboard() {
     const [selectedSite, setSelectedSite] = useState(null);
     const [isWorking, setIsWorking] = useState(false);
     const [startTime, setStartTime] = useState(null);
+    const [isAbsenceOpen , setAbsenceOpen] = useState(false);
+
+
+
+
 
 
 
@@ -90,41 +96,67 @@ function EmployeeDashboard() {
                 }
             }).catch(() => console.log("error"))
     }
-
     return (
         <div className="employee-dashboard-page">
 
+            <NavbarEmployee active={"Attendance"} />
+
+            <div className="attendance-page-header">
+                <h1>
+                    <span className="attendance-title-icon">⏱️</span>
+                    Attendance
+                </h1>
+
+                <p>Track your work time and daily attendance</p>
+
+                <div className="attendance-title-line"></div>
+            </div>
+
             <div className="employee-dashboard-card">
 
-                <EmployeeNavbar active={"Attendance"}/>
+                <section className="attendance-section">
+                    <LocationButton
+                        location={location}
+                        setLocation={setLocation}
+                        selectedSite={selectedSite}
+                        setSelectedSite={setSelectedSite}
+                        sites={sites}
+                    />
+                </section>
 
-                <LocationButton
-                    location={location}
-                    setLocation={setLocation}
-                    selectedSite={selectedSite}
-                    setSelectedSite={setSelectedSite}
-                    sites={sites}
+                <section className="attendance-section timer-section">
+                    <WorkTimer
+                        isWorking={isWorking}
+                        startTime={startTime}
+                    />
+                </section>
+
+                <section className="attendance-actions">
+                    <button
+                        className="enter-work-btn"
+                        onClick={isWorking ? handleExit : handleEnter}
+                    >
+                        {isWorking ? "Exit Work" : "Enter Work"}
+                    </button>
+                </section>
+
+                <section className="attendance-secondary-card">
+                    <button
+                        className="absence-btn"
+                        onClick={() => setAbsenceOpen(true)}
+                    >
+                        Report Absence
+                    </button>
+
+                    <p className="absence-text">
+                        Report if you are not able to work today
+                    </p>
+                </section>
+
+                <AbsencePopUp
+                    isAbsenceOpen={isAbsenceOpen}
+                    setAbsenceOpen={setAbsenceOpen}
                 />
-
-                <WorkTimer
-                    isWorking={isWorking}
-                    startTime={startTime}
-                />
-
-                <button
-                    className="enter-work-btn"
-                    onClick={isWorking ? handleExit : handleEnter}
-                >
-                    {isWorking ? "Exit Work" : "Enter Work"}
-                </button>
-
-                <button className="absence-btn">
-                    Report Absence
-                </button>
-
-                <p className="absence-text">
-                    Report if you are not able to work today
-                </p>
 
             </div>
         </div>
