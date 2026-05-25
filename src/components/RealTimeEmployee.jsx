@@ -16,13 +16,6 @@ function RealTimeEmployee({employees}) {
                 </div>
             </div>
 
-            <div className="manager-search-row">
-                <div className="manager-search-box">
-                    <span>Search</span>
-                    <input type="text" placeholder="Search employee" disabled />
-                </div>
-            </div>
-
             <div className="table-area manager-table-area">
                 <table className="work-hours-table employees-table manager-table">
                     <thead>
