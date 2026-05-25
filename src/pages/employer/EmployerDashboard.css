@@ -1,0 +1,271 @@
+:root {
+    --manager-bg: #08111f;
+    --manager-panel: rgba(15, 23, 42, 0.74);
+    --manager-panel-soft: rgba(15, 23, 42, 0.52);
+    --manager-border: rgba(125, 211, 252, 0.18);
+    --manager-border-strong: rgba(96, 165, 250, 0.42);
+    --manager-text: #f8fafc;
+    --manager-muted: #94a3b8;
+    --manager-cyan: #22d3ee;
+    --manager-blue: #3b82f6;
+    --manager-purple: #8b5cf6;
+    --manager-danger: #fb7185;
+}
+
+.manager-dashboard-shell {
+    min-height: 100svh;
+    width: 100%;
+    display: grid;
+    grid-template-columns: 250px minmax(0, 1fr);
+    gap: 24px;
+    padding: 24px;
+    box-sizing: border-box;
+    background:
+            radial-gradient(circle at 14% 12%, rgba(34, 211, 238, 0.18), transparent 30%),
+            radial-gradient(circle at 88% 10%, rgba(139, 92, 246, 0.18), transparent 28%),
+            linear-gradient(135deg, #06111f 0%, #0f172a 48%, #111827 100%);
+    color: var(--manager-text);
+    text-align: left;
+}
+
+.manager-dashboard-shell * {
+    box-sizing: border-box;
+}
+
+.employerNavbar {
+    position: sticky;
+    top: 24px;
+    min-height: calc(100svh - 48px);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 28px;
+    padding: 20px;
+    border-radius: 26px;
+    background: rgba(8, 17, 31, 0.78);
+    border: 1px solid var(--manager-border);
+    backdrop-filter: blur(18px);
+    box-shadow:
+            0 24px 70px rgba(0, 0, 0, 0.36),
+            inset 0 0 28px rgba(59, 130, 246, 0.08);
+}
+
+.manager-nav-brand {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid rgba(148, 163, 184, 0.14);
+}
+
+.manager-nav-logo {
+    width: 46px;
+    height: 46px;
+    display: inline-block;
+    flex: 0 0 46px;
+    border-radius: 16px;
+    color: white;
+    font-size: 15px;
+    font-weight: 900;
+    line-height: 46px;
+    letter-spacing: 0;
+    text-align: center;
+    background: linear-gradient(135deg, var(--manager-blue), var(--manager-purple));
+    box-shadow: 0 0 28px rgba(59, 130, 246, 0.36);
+}
+
+.manager-nav-brand strong,
+.manager-nav-brand span {
+    display: block;
+}
+
+.manager-nav-brand strong {
+    color: white;
+    font-size: 20px;
+    line-height: 1.1;
+}
+
+.manager-nav-brand div > span {
+    margin-top: 4px;
+    color: var(--manager-muted);
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+}
+
+.nav-employer-tabs {
+    display: grid;
+    gap: 12px;
+}
+
+.employerNavbar .tab-btn {
+    width: 100%;
+    min-height: 54px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding: 0 16px;
+    border-radius: 16px;
+    color: #cbd5e1;
+    text-decoration: none;
+    font-size: 15px;
+    font-weight: 800;
+    background: rgba(15, 23, 42, 0.46);
+    border: 1px solid rgba(148, 163, 184, 0.12);
+    transition: transform 0.22s ease, border-color 0.22s ease, background 0.22s ease, color 0.22s ease;
+}
+
+.employerNavbar .tab-btn:hover,
+.employerNavbar .employer-active-tab {
+    color: white;
+    transform: translateX(4px);
+    border-color: rgba(125, 211, 252, 0.38);
+    background: linear-gradient(135deg, rgba(37, 99, 235, 0.32), rgba(124, 58, 237, 0.26));
+    box-shadow: 0 0 26px rgba(59, 130, 246, 0.18);
+}
+
+.manager-nav-footer .logout-btn {
+    width: 100%;
+    min-height: 50px;
+    border-radius: 16px;
+    border: 1px solid rgba(251, 113, 133, 0.34);
+    background: rgba(127, 29, 29, 0.18);
+    color: #fecdd3;
+    font-weight: 900;
+    cursor: pointer;
+}
+
+.manager-dashboard-content {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+}
+
+.manager-topbar,
+.manager-glass-panel,
+.manager-stat-card,
+.manager-form-card {
+    border: 1px solid var(--manager-border);
+    background: var(--manager-panel);
+    backdrop-filter: blur(18px);
+    box-shadow:
+            0 24px 70px rgba(0, 0, 0, 0.28),
+            inset 0 0 32px rgba(59, 130, 246, 0.07);
+}
+
+.manager-topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 24px;
+    padding: 28px;
+    border-radius: 28px;
+}
+
+.manager-eyebrow {
+    display: inline-flex;
+    margin-bottom: 8px;
+    color: var(--manager-cyan);
+    font-size: 12px;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+}
+
+.manager-topbar h1 {
+    margin: 0;
+    color: white;
+    font-size: clamp(32px, 5vw, 54px);
+    line-height: 1;
+    letter-spacing: 0;
+}
+
+.manager-topbar p {
+    margin-top: 12px;
+    color: var(--manager-muted);
+    font-size: 16px;
+}
+
+.manager-stat-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 16px;
+}
+
+.manager-stat-card {
+    min-height: 140px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 22px;
+    border-radius: 24px;
+    overflow: hidden;
+}
+
+.manager-stat-card-accent {
+    border-color: var(--manager-border-strong);
+    background:
+            linear-gradient(135deg, rgba(37, 99, 235, 0.26), rgba(139, 92, 246, 0.22)),
+            var(--manager-panel);
+}
+
+.manager-stat-label,
+.manager-stat-note {
+    color: var(--manager-muted);
+    font-size: 13px;
+    font-weight: 800;
+}
+
+.manager-stat-card strong {
+    margin: 14px 0;
+    color: white;
+    font-size: 42px;
+    line-height: 1;
+}
+
+.employee-management-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.4fr) minmax(280px, 0.8fr);
+    gap: 22px;
+    align-items: start;
+}
+
+@media (max-width: 980px) {
+    .manager-dashboard-shell {
+        grid-template-columns: 1fr;
+    }
+
+    .employerNavbar {
+        position: static;
+        min-height: auto;
+    }
+
+    .manager-stat-grid,
+    .employee-management-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 680px) {
+    .manager-dashboard-shell {
+        padding: 14px;
+        gap: 16px;
+    }
+
+    .manager-topbar {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 22px;
+    }
+
+    .manager-stat-grid,
+    .employee-management-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .manager-stat-card {
+        min-height: 120px;
+    }
+}
