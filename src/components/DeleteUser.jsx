@@ -17,7 +17,7 @@ function DeleteEmployee() {
         }
 
         const data = {
-            id: cleanId
+            employeeId: cleanId
         };
 
         deleteEmployee(data)

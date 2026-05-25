@@ -9,7 +9,7 @@ export const createEmployee = (data) => {
 }
 
 export const deleteEmployee = (data) => {
-    return api.post("/crud-employee/delete-employee", data);
+   return api.delete(`/crud-employee/delete-employee?employeeId=${data.employeeId}`)
 }
 export const getAllEmployees = () => {
     return api.get("/crud-employee/all-employees");
