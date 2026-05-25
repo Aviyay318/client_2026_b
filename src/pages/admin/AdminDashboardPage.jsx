@@ -1,10 +1,18 @@
 import {useEffect, useState} from "react";
 import {useNavigate} from "react-router-dom";
 import AdminCards from "../../components/AdminCards.jsx";
+import AdminEmployerForm from "../../components/AdminEmployerForm.jsx";
 import EmployersTable from "../../components/EmployersTable.jsx";
 import RealtimePanel from "../../components/RealtimePanel.jsx";
 import WorkersPanel from "../../components/WorkersPanel.jsx";
-import {getEmployerWorkers, getEmployersList, getGeneralInfo, getRealtimeInfo} from "../../service/adminApi.js";
+import {
+    createEmployer,
+    deleteEmployer,
+    getEmployerWorkers,
+    getEmployersList,
+    getGeneralInfo,
+    getRealtimeInfo
+} from "../../service/adminApi.js";
 import {logout} from "../../service/authApi.js";
 import "./AdminDashboardPage.css";
 
@@ -22,11 +30,6 @@ const emptyRealtimeInfo = {
 const readPayload = (response) => {
     return response.data?.data || response.data?.result || response.data;
 };
-
-const normalizeGeneralInfo = (payload) => ({
-    employersCount: payload?.employersCount ?? payload?.totalEmployers ?? payload?.employerCount ?? payload?.countEmployers ?? 0,
-    workersCount: payload?.workersCount ?? payload?.totalWorkers ?? payload?.workerCount ?? payload?.employeeCount ?? payload?.employeesCount ?? 0,
-});
 
 const normalizeEmployers = (payload) => {
     if (Array.isArray(payload)) {
@@ -51,6 +54,21 @@ const isEmployerRole = (role) => {
 const isWorkerRole = (role) => {
     const normalizedRole = role?.toString().toLowerCase();
     return normalizedRole?.includes("worker") || normalizedRole?.includes("employee");
+};
+
+const normalizeGeneralInfo = (payload) => {
+    const users = payload?.users || payload?.items || [];
+    const employersCountFromUsers = users.filter((user) => (
+        isEmployerRole(user.role || user.type || user.userType)
+    )).length;
+    const workersCountFromUsers = users.filter((user) => (
+        isWorkerRole(user.role || user.type || user.userType)
+    )).length;
+
+    return {
+        employersCount: payload?.employersCount ?? payload?.totalEmployers ?? payload?.employerCount ?? payload?.countEmployers ?? employersCountFromUsers,
+        workersCount: payload?.workersCount ?? payload?.totalWorkers ?? payload?.workerCount ?? payload?.employeeCount ?? payload?.employeesCount ?? workersCountFromUsers,
+    };
 };
 
 const normalizeRealtimeInfo = (payload) => {
@@ -79,8 +97,48 @@ function AdminDashboardPage() {
     const [loadingOverview, setLoadingOverview] = useState(true);
     const [loadingRealtime, setLoadingRealtime] = useState(false);
     const [loadingWorkers, setLoadingWorkers] = useState(false);
+    const [creatingEmployer, setCreatingEmployer] = useState(false);
+    const [deletingEmployerId, setDeletingEmployerId] = useState(null);
+    const [isCreateEmployerOpen, setCreateEmployerOpen] = useState(false);
     const [overviewError, setOverviewError] = useState("");
     const [workersError, setWorkersError] = useState("");
+
+    const updateOverview = (generalResponse, employersResponse) => {
+        const nextGeneralInfo = normalizeGeneralInfo(readPayload(generalResponse));
+        const nextEmployers = normalizeEmployers(readPayload(employersResponse));
+
+        return Promise.all(nextEmployers.map((employer) => {
+            const employerId = employer.id ?? employer.employerId ?? employer.userId;
+
+            if (!employerId) {
+                return Promise.resolve(employer);
+            }
+
+            return getEmployerWorkers(employerId)
+                .then((response) => ({
+                    ...employer,
+                    workersCount: normalizeWorkers(readPayload(response)).length,
+                }))
+                .catch(() => employer);
+        })).then((employersWithWorkersCount) => {
+            const derivedWorkersCount = employersWithWorkersCount.reduce((total, employer) => (
+                total + Number(employer.workersCount ?? employer.employeeCount ?? employer.workers?.length ?? employer.employees?.length ?? 0)
+            ), 0);
+
+            setGeneralInfo({
+                employersCount: nextGeneralInfo.employersCount || employersWithWorkersCount.length,
+                workersCount: nextGeneralInfo.workersCount || derivedWorkersCount,
+            });
+            setEmployers(employersWithWorkersCount);
+        });
+    };
+
+    const refreshOverview = () => {
+        return Promise.all([getGeneralInfo(), getEmployersList()])
+            .then(([generalResponse, employersResponse]) => {
+                return updateOverview(generalResponse, employersResponse);
+            });
+    };
 
     const fetchRealtimeInfo = () => {
         setLoadingRealtime(true);
@@ -103,17 +161,7 @@ function AdminDashboardPage() {
 
         Promise.all([getGeneralInfo(), getEmployersList()])
             .then(([generalResponse, employersResponse]) => {
-                const nextGeneralInfo = normalizeGeneralInfo(readPayload(generalResponse));
-                const nextEmployers = normalizeEmployers(readPayload(employersResponse));
-                const derivedWorkersCount = nextEmployers.reduce((total, employer) => (
-                    total + Number(employer.workersCount ?? employer.employeeCount ?? employer.workers?.length ?? employer.employees?.length ?? 0)
-                ), 0);
-
-                setGeneralInfo({
-                    employersCount: nextGeneralInfo.employersCount || nextEmployers.length,
-                    workersCount: nextGeneralInfo.workersCount || derivedWorkersCount,
-                });
-                setEmployers(nextEmployers);
+                return updateOverview(generalResponse, employersResponse);
             })
             .catch(() => {
                 setOverviewError("Could not load admin overview. Please try again.");
@@ -121,16 +169,12 @@ function AdminDashboardPage() {
             .finally(() => setLoadingOverview(false));
 
         const realtimeTimeoutId = setTimeout(fetchRealtimeInfo, 0);
-        const intervalId = setInterval(fetchRealtimeInfo, 5000);
 
-        return () => {
-            clearTimeout(realtimeTimeoutId);
-            clearInterval(intervalId);
-        };
+        return () => clearTimeout(realtimeTimeoutId);
     }, [navigate]);
 
     const handleSelectEmployer = (employer) => {
-        const employerId = employer.id ?? employer.employerId;
+        const employerId = employer.id ?? employer.employerId ?? employer.userId;
 
         if (!employerId) {
             setWorkersError("Employer id is missing.");
@@ -152,6 +196,56 @@ function AdminDashboardPage() {
                 setWorkersError("Could not load workers for this employer.");
             })
             .finally(() => setLoadingWorkers(false));
+    };
+
+    const handleCreateEmployer = (employerData) => {
+        setCreatingEmployer(true);
+
+        return createEmployer(employerData)
+            .then((response) => {
+                if (response.data?.success === false) {
+                    return Promise.reject(response);
+                }
+
+                return refreshOverview();
+            })
+            .catch((error) => {
+                console.log("CREATE EMPLOYER REQUEST FAILED:", error.response?.data || error.data || error);
+                return Promise.reject(error);
+            })
+            .finally(() => setCreatingEmployer(false));
+    };
+
+    const handleDeleteEmployer = (employer) => {
+        const employerId = employer.id ?? employer.employerId ?? employer.userId;
+
+        if (!employerId) {
+            setOverviewError("Employer id is missing.");
+            return;
+        }
+
+        setDeletingEmployerId(employerId);
+        setOverviewError("");
+
+        deleteEmployer(employerId)
+            .then((response) => {
+                if (response.data?.success === false) {
+                    setOverviewError("Employer deletion failed.");
+                    return;
+                }
+
+                if ((selectedEmployer?.id ?? selectedEmployer?.employerId ?? selectedEmployer?.userId) === employerId) {
+                    setSelectedEmployer(null);
+                    setWorkers([]);
+                    setWorkersError("");
+                }
+
+                return refreshOverview();
+            })
+            .catch(() => {
+                setOverviewError("Employer deletion failed.");
+            })
+            .finally(() => setDeletingEmployerId(null));
     };
 
     const handleLogout = () => {
@@ -179,22 +273,43 @@ function AdminDashboardPage() {
             <AdminCards generalInfo={generalInfo} realtimeInfo={realtimeInfo} />
 
             <main className="admin-dashboard-grid">
+                {isCreateEmployerOpen && (
+                    <AdminEmployerForm
+                        loading={creatingEmployer}
+                        onCreateEmployer={handleCreateEmployer}
+                        onClose={() => setCreateEmployerOpen(false)}
+                    />
+                )}
+
                 <section className="admin-panel employers-panel">
                     <div className="admin-section-header">
                         <div>
                             <p>General overview</p>
                             <h2>Employers</h2>
                         </div>
+                        <button
+                            className="admin-primary-btn"
+                            type="button"
+                            onClick={() => setCreateEmployerOpen(true)}
+                        >
+                            Add employer
+                        </button>
                     </div>
                     <EmployersTable
                         employers={employers}
                         loading={loadingOverview}
-                        selectedEmployerId={selectedEmployer?.id ?? selectedEmployer?.employerId}
+                        selectedEmployerId={selectedEmployer?.id ?? selectedEmployer?.employerId ?? selectedEmployer?.userId}
                         onSelectEmployer={handleSelectEmployer}
+                        onDeleteEmployer={handleDeleteEmployer}
+                        deletingEmployerId={deletingEmployerId}
                     />
                 </section>
 
-                <RealtimePanel realtimeInfo={realtimeInfo} loading={loadingRealtime} />
+                <RealtimePanel
+                    realtimeInfo={realtimeInfo}
+                    loading={loadingRealtime}
+                    onRefresh={fetchRealtimeInfo}
+                />
 
                 <WorkersPanel
                     employer={selectedEmployer}

@@ -4,22 +4,25 @@ import {loginAdmin, loginEmployee, loginEmployer} from "../service/authApi.js";
 import {useNavigate} from "react-router-dom";
 
 function LoginForm({role}) {
-    const [username, setUsername] = useState("");
+    const [personalId, setPersonalId] = useState("");
     const [password, setPassword] = useState("");
     const navigate = useNavigate();
     const [error, setError] = useState("");
 
     const isValid = () => {
-        return username.trim() === "" || password.trim() === "";
+        return (
+            personalId.trim() === "" ||
+            !/^\d{1,9}$/.test(personalId.trim()) ||
+            password.trim() === ""
+        );
     };
-
 
     const handleLogin = (e) => {
         e.preventDefault();
         setError("");
 
         const data = {
-            username: username,
+            personalId: personalId,
             password: password
         };
         const requestApi =
@@ -43,7 +46,7 @@ function LoginForm({role}) {
                             : "/employer-dashboard";
                 navigate(path);
             } else {
-                setError("Wrong id or password");
+                setError("Wrong ID or password");
             }
 
 
@@ -76,16 +79,16 @@ function LoginForm({role}) {
 
                 <form onSubmit={handleLogin}>
                     <div className="input-group">
-                        <label>Username</label>
+                        <label>ID</label>
 
                         <div className="input-field">
                             <span className="field-icon">👤</span>
 
                             <input
                                 type="text"
-                                value={username}
-                                placeholder="Enter your username"
-                                onChange={(e) => setUsername(e.target.value)}
+                                value={personalId}
+                                placeholder="Enter your ID"
+                                onChange={(e) => setPersonalId(e.target.value)}
                             />
                         </div>
                     </div>

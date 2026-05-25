@@ -1,4 +1,15 @@
-function RealtimePanel({realtimeInfo, loading}) {
+const getDisplayName = (user) => {
+    const fullName = `${user.firstName || ""} ${user.lastName || ""}`.trim();
+
+    return user.name ||
+        user.fullName ||
+        user.businessName ||
+        fullName ||
+        user.personalId ||
+        "Connected user";
+};
+
+function RealtimePanel({realtimeInfo, loading, onRefresh}) {
     const connectedUsers = realtimeInfo.connectedUsers || [];
 
     return (
@@ -8,18 +19,14 @@ function RealtimePanel({realtimeInfo, loading}) {
                     <p>Live status</p>
                     <h2>Realtime Information</h2>
                 </div>
-                {loading && <span className="admin-refreshing">Refreshing...</span>}
-            </div>
-
-            <div className="realtime-summary">
-                <div>
-                    <span>Connected employers</span>
-                    <strong>{realtimeInfo.connectedEmployers ?? 0}</strong>
-                </div>
-                <div>
-                    <span>Connected workers</span>
-                    <strong>{realtimeInfo.connectedWorkers ?? 0}</strong>
-                </div>
+                <button
+                    className="admin-refresh-btn"
+                    type="button"
+                    onClick={onRefresh}
+                    disabled={loading}
+                >
+                    {loading ? "Refreshing..." : "Refresh"}
+                </button>
             </div>
 
             <div className="connected-users-list">
@@ -30,10 +37,10 @@ function RealtimePanel({realtimeInfo, loading}) {
                 )}
 
                 {connectedUsers.map((user, index) => (
-                    <div className="connected-user" key={user.id || `${user.username}-${index}`}>
+                    <div className="connected-user" key={user.id || user.personalId || user.userName || user.username || index}>
                         <span className="status-dot"></span>
                         <div>
-                            <strong>{user.name || user.fullName || user.username || user.userName || user.businessName || "Connected user"}</strong>
+                            <strong>{getDisplayName(user)}</strong>
                             <p>{user.role || user.type || user.userType || "User"}</p>
                         </div>
                     </div>

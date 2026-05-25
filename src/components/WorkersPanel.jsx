@@ -1,10 +1,22 @@
+const getDisplayName = (user) => {
+    const fullName = `${user.firstName || ""} ${user.lastName || ""}`.trim();
+
+    return user.name ||
+        user.fullName ||
+        fullName ||
+        user.personalId ||
+        "Worker";
+};
+
 function WorkersPanel({employer, workers, loading, error, onClose}) {
+    const employerName = employer ? getDisplayName(employer) : "Select employer";
+
     return (
         <aside className="admin-panel workers-panel">
             <div className="admin-section-header">
                 <div>
                     <p>Employer workers</p>
-                    <h2>{employer ? employer.businessName || employer.name || "Selected employer" : "Select employer"}</h2>
+                    <h2>{employerName}</h2>
                 </div>
                 {employer && (
                     <button className="admin-close-btn" onClick={onClose} type="button">
@@ -26,9 +38,9 @@ function WorkersPanel({employer, workers, loading, error, onClose}) {
             )}
 
             {employer && !loading && !error && workers.map((worker, index) => (
-                <div className="worker-row" key={worker.id || worker.workerId || worker.username || worker.userName || worker.name || index}>
+                <div className="worker-row" key={worker.id || worker.workerId || worker.personalId || worker.userName || worker.username || worker.name || index}>
                     <div>
-                        <strong>{worker.name || worker.fullName || worker.username || worker.userName || "Worker"}</strong>
+                        <strong>{getDisplayName(worker)}</strong>
                         {worker.phone && <p>{worker.phone}</p>}
                     </div>
                     <span className={worker.connected || worker.isConnected ? "worker-status online" : "worker-status"}>

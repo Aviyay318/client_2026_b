@@ -30,6 +30,15 @@ function NavbarEmployer({ active }) {
                 >
                     Add / Remove Employee
                 </Link>
+
+                <Link
+                    to="/employee-list-page"
+                    className={`tab-btn ${
+                        active === "EmployeeList" ? "employer-active-tab" : ""
+                    }`}
+                >
+                    Employee List
+                </Link>
             </div>
 
             <div className="manager-nav-footer">

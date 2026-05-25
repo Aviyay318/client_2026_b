@@ -9,6 +9,8 @@ import AdminLoginPage from "./pages/admin/AdminLoginPage.jsx";
 import AdminDashboardPage from "./pages/admin/AdminDashboardPage.jsx";
 import EmployeeShiftsPage from "./pages/employee/EmployeeShiftsPage.jsx";
 import EmployeeManagementPage from "./pages/employer/EmployeeManagementPage.jsx";
+import EmployeeListPage from "./pages/employer/EmployeeListPage.jsx";
+import EmployeeDetailsListPage from "./pages/employer/EmployeeDetailsListPage.jsx";
 
 function App() {
     return (
@@ -28,6 +30,13 @@ function App() {
                 <Route path="/employee-shifts-page" element={<EmployeeShiftsPage />} />
 
                 <Route path="/employee-management-page" element={<EmployeeManagementPage />} />
+                <Route path="/employee-list-page" element={<EmployeeListPage />} />
+                <Route path="/employee-details-page/:id" element={<EmployeeDetailsListPage />}/>
+
+
+
+
+
             </Routes>
         </BrowserRouter>
     );

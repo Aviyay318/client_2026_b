@@ -39,7 +39,8 @@
 }
 
 .admin-logout-btn,
-.admin-close-btn {
+.admin-close-btn,
+.admin-refresh-btn {
     border: 1px solid rgba(148, 163, 184, 0.24);
     border-radius: 12px;
     background: rgba(15, 23, 42, 0.72);
@@ -53,9 +54,15 @@
 }
 
 .admin-logout-btn:hover,
-.admin-close-btn:hover {
+.admin-close-btn:hover,
+.admin-refresh-btn:hover:not(:disabled) {
     border-color: rgba(56, 189, 248, 0.45);
     color: white;
+}
+
+.admin-refresh-btn:disabled {
+    cursor: not-allowed;
+    opacity: 0.55;
 }
 
 .admin-cards,
@@ -163,6 +170,88 @@
 .admin-table tbody tr:hover,
 .admin-table tbody tr.selected {
     background: rgba(56, 189, 248, 0.1);
+}
+
+.admin-delete-btn,
+.admin-primary-btn {
+    border: 0;
+    border-radius: 12px;
+    color: white;
+    font: inherit;
+    font-size: 13px;
+    font-weight: 800;
+    cursor: pointer;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.admin-delete-btn {
+    padding: 8px 12px;
+    background: rgba(239, 68, 68, 0.82);
+}
+
+.admin-primary-btn {
+    padding: 13px 16px;
+    background: linear-gradient(135deg, #2563eb, #7c3aed);
+}
+
+.admin-delete-btn:hover:not(:disabled),
+.admin-primary-btn:hover:not(:disabled) {
+    transform: translateY(-1px);
+}
+
+.admin-delete-btn:disabled,
+.admin-primary-btn:disabled {
+    cursor: not-allowed;
+    opacity: 0.45;
+}
+
+.admin-employer-form {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+}
+
+.admin-employer-form input {
+    width: 100%;
+    min-width: 0;
+    padding: 13px 14px;
+    border: 1px solid rgba(148, 163, 184, 0.16);
+    border-radius: 12px;
+    outline: none;
+    background: rgba(2, 6, 23, 0.42);
+    color: white;
+    font: inherit;
+    font-size: 14px;
+}
+
+.admin-employer-form input:focus {
+    border-color: rgba(56, 189, 248, 0.45);
+    box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.1);
+}
+
+.admin-form-message {
+    margin-top: 12px;
+    color: #cbd5e1;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.admin-modal-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background: rgba(2, 6, 23, 0.72);
+    backdrop-filter: blur(10px);
+}
+
+.admin-employer-modal {
+    width: min(760px, 100%);
+    max-height: calc(100vh - 40px);
+    overflow-y: auto;
 }
 
 .realtime-summary {
@@ -295,6 +384,10 @@
         grid-template-columns: 1fr;
     }
 
+    .admin-employer-form {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
     .employers-panel {
         grid-row: auto;
     }
@@ -302,7 +395,8 @@
 
 @media (max-width: 520px) {
     .admin-cards,
-    .realtime-summary {
+    .realtime-summary,
+    .admin-employer-form {
         grid-template-columns: 1fr;
     }
 

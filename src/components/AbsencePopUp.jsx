@@ -63,8 +63,7 @@ function AbsencePopUp({ isAbsenceOpen, setAbsenceOpen }) {
     };
     const handleAbsence = () => {
         const data = {
-            // לבדוק עם אביה מחר
-            // selectedDate,
+            date:selectedDate,
            reason: selectedResponse
         };
 
