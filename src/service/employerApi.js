@@ -14,10 +14,7 @@ export const deleteEmployee = (data) => {
 export const getAllEmployees = () => {
     return api.get("/crud-employee/all-employees");
 }
-export const getEmployeeById = (employeeId) => {
-    return api.get("/crud-employee/employee-by-id", {
-        params: {
-            employeeId: employeeId
-        }
-    });
-}
+
+    export const getEmployeeById = (employeeId) => {
+        return api.get(`/crud-employee/employee-by-id?employeeId=${employeeId}`);
+    }

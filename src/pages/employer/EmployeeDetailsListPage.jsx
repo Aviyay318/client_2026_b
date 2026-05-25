@@ -15,6 +15,8 @@ function EmployeeDetailsListPage() {
 
         getEmployeeById(id)
             .then(response => {
+                console.log("user",response.data)
+
                 if(response.data !== null) {
                     setEmployee(response.data);
                 }
@@ -29,9 +31,9 @@ function EmployeeDetailsListPage() {
             {employee && (
                 <>
 
-            <EmployeeInfo employee={employee} />
+            <EmployeeInfo employee={employee.employee} />
 
-            <WorkHoursTable rows={employee.employeeWorkDays || []} />
+            <WorkHoursTable rows={employee.workDayList||[]} />
 
             </>
 
