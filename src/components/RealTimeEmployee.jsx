@@ -41,7 +41,7 @@ function RealTimeEmployee({employees}) {
                                 <td>
                                     <span className="employee-name-cell">
                                         <span className="employee-status-dot"></span>
-                                        {employee.name}
+                                        {employee.firstName } -  {employee.lastName}
                                     </span>
                                 </td>
                                 <td>{employee.phone}</td>
