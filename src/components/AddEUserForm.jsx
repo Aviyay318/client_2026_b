@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { createEmployee } from "../service/employerApi.js";
+import "./AddEmployeeForm.css";
 
 function AddEUserForm() {
     const [user, setUser] = useState({
@@ -98,56 +99,80 @@ function AddEUserForm() {
     };
 
     return (
-        <form onSubmit={register}>
-            <h1>Add Employee</h1>
+        <form className="manager-form-card add-employee-form" onSubmit={register}>
+            <div className="manager-form-header">
+                <span className="manager-eyebrow">New Employee</span>
+                <h2>Add Employee</h2>
+                <p>Create a profile for a new WorkSync team member.</p>
+            </div>
 
+            <div className="manager-form-grid">
+                <label>
+                    <span>Username</span>
+                    <input
+                        type="text"
+                        value={user.username}
+                        placeholder="Enter user name"
+                        onChange={(e) => setUser({ ...user, username: e.target.value })}
+                    />
+                </label>
 
-            <input
-                type="text"
-                value={user.username}
-                placeholder="Enter user name"
-                onChange={(e) => setUser({ ...user, username: e.target.value })}
-            />
+                <label>
+                    <span>First name</span>
+                    <input
+                        type="text"
+                        value={user.firstName}
+                        placeholder="Enter first name"
+                        onChange={(e) => setUser({ ...user, firstName: e.target.value })}
+                    />
+                </label>
 
-            <input
-                type="text"
-                value={user.firstName}
-                placeholder="Enter first name"
-                onChange={(e) => setUser({ ...user, firstName: e.target.value })}
-            />
+                <label>
+                    <span>Last name</span>
+                    <input
+                        type="text"
+                        value={user.lastName}
+                        placeholder="Enter last name"
+                        onChange={(e) => setUser({ ...user, lastName: e.target.value })}
+                    />
+                </label>
 
-            <input
-                type="text"
-                value={user.lastName}
-                placeholder="Enter last name"
-                onChange={(e) => setUser({ ...user, lastName: e.target.value })}
-            />
+                <label>
+                    <span>Password</span>
+                    <input
+                        type="password"
+                        value={user.password}
+                        placeholder="Enter password"
+                        onChange={(e) => setUser({ ...user, password: e.target.value })}
+                    />
+                </label>
 
-            <input
-                type="password"
-                value={user.password}
-                placeholder="Enter password"
-                onChange={(e) => setUser({ ...user, password: e.target.value })}
-            />
+                <label>
+                    <span>Phone</span>
+                    <input
+                        type="text"
+                        value={user.phone}
+                        placeholder="Enter phone number"
+                        onChange={(e) => setUser({ ...user, phone: e.target.value })}
+                    />
+                </label>
 
-            <input
-                type="text"
-                value={user.phone}
-                placeholder="Enter phone number"
-                onChange={(e) => setUser({ ...user, phone: e.target.value })}
-            />
+                <label>
+                    <span>Email</span>
+                    <input
+                        type="email"
+                        value={user.email}
+                        placeholder="Enter email"
+                        onChange={(e) => setUser({ ...user, email: e.target.value })}
+                    />
+                </label>
+            </div>
 
-            <input
-                type="email"
-                value={user.email}
-                placeholder="Enter email"
-                onChange={(e) => setUser({ ...user, email: e.target.value })}
-            />
+            <div className="manager-form-actions">
+                <button type="submit">Add Employee</button>
+            </div>
 
-
-            <button type="submit">Add Employee</button>
-
-            <p>{message}</p>
+            <p className="manager-form-message">{message}</p>
         </form>
     );
 }

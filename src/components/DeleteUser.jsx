@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { deleteEmployee } from "../service/employerApi.js";
+import "./DeleteEmployee.css";
 
 function DeleteEmployee() {
     const [userId, setUserId] = useState("");
@@ -37,21 +38,30 @@ function DeleteEmployee() {
     };
 
     return (
-        <form onSubmit={removeUser}>
-            <h2>Delete user</h2>
+        <form className="manager-form-card delete-employee-form" onSubmit={removeUser}>
+            <div className="manager-form-header">
+                <span className="manager-eyebrow danger-eyebrow">Access Control</span>
+                <h2>Delete user</h2>
+                <p>Remove an employee profile by entering the existing user id.</p>
+            </div>
 
-            <input
-                type="text"
-                value={userId}
-                placeholder="Enter user id"
-                onChange={(e) => setUserId(e.target.value)}
-            />
+            <label>
+                <span>User id</span>
+                <input
+                    type="text"
+                    value={userId}
+                    placeholder="Enter user id"
+                    onChange={(e) => setUserId(e.target.value)}
+                />
+            </label>
 
-            <button type="submit">
-                Delete user
-            </button>
+            <div className="manager-form-actions">
+                <button className="delete-employee-button" type="submit">
+                    Delete user
+                </button>
+            </div>
 
-            <p>{message}</p>
+            <p className="manager-form-message">{message}</p>
         </form>
     );
 }
