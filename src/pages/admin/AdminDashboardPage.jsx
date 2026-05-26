@@ -2,6 +2,7 @@ import {useEffect, useState} from "react";
 import {useNavigate} from "react-router-dom";
 import AdminCards from "../../components/AdminCards.jsx";
 import AdminEmployerForm from "../../components/AdminEmployerForm.jsx";
+import ConfirmationPopUp from "../../components/ConfirmationPopUp.jsx";
 import EmployersTable from "../../components/EmployersTable.jsx";
 import RealtimePanel from "../../components/RealtimePanel.jsx";
 import WorkersPanel from "../../components/WorkersPanel.jsx";
@@ -100,6 +101,7 @@ function AdminDashboardPage() {
     const [creatingEmployer, setCreatingEmployer] = useState(false);
     const [deletingEmployerId, setDeletingEmployerId] = useState(null);
     const [isCreateEmployerOpen, setCreateEmployerOpen] = useState(false);
+    const [employerPendingDelete, setEmployerPendingDelete] = useState(null);
     const [overviewError, setOverviewError] = useState("");
     const [workersError, setWorkersError] = useState("");
 
@@ -216,11 +218,16 @@ function AdminDashboardPage() {
             .finally(() => setCreatingEmployer(false));
     };
 
-    const handleDeleteEmployer = (employer) => {
-        const employerId = employer.id ?? employer.employerId ?? employer.userId;
+    const requestDeleteEmployer = (employer) => {
+        setEmployerPendingDelete(employer);
+    };
+
+    const confirmDeleteEmployer = () => {
+        const employerId = employerPendingDelete?.id ?? employerPendingDelete?.employerId ?? employerPendingDelete?.userId;
 
         if (!employerId) {
             setOverviewError("Employer id is missing.");
+            setEmployerPendingDelete(null);
             return;
         }
 
@@ -240,6 +247,7 @@ function AdminDashboardPage() {
                     setWorkersError("");
                 }
 
+                setEmployerPendingDelete(null);
                 return refreshOverview();
             })
             .catch(() => {
@@ -300,7 +308,7 @@ function AdminDashboardPage() {
                         loading={loadingOverview}
                         selectedEmployerId={selectedEmployer?.id ?? selectedEmployer?.employerId ?? selectedEmployer?.userId}
                         onSelectEmployer={handleSelectEmployer}
-                        onDeleteEmployer={handleDeleteEmployer}
+                        onDeleteEmployer={requestDeleteEmployer}
                         deletingEmployerId={deletingEmployerId}
                     />
                 </section>
@@ -323,6 +331,16 @@ function AdminDashboardPage() {
                     }}
                 />
             </main>
+
+            <ConfirmationPopUp
+                isOpen={Boolean(employerPendingDelete)}
+                title="Delete employer?"
+                message="This will remove the employer and all employer-worker relations. This action cannot be undone."
+                confirmLabel="Delete employer"
+                loading={Boolean(deletingEmployerId)}
+                onCancel={() => setEmployerPendingDelete(null)}
+                onConfirm={confirmDeleteEmployer}
+            />
         </div>
     );
 }
