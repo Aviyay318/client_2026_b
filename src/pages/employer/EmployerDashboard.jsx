@@ -1,25 +1,80 @@
 import { useState, useEffect } from "react";
 import RealTimeEmployee from "../../components/RealTimeEmployee.jsx";
 import NavbarEmployer from "../../Navbar/navbar-employer/NavbarEmployer.jsx";
-import { getAllActiveEmployees } from "../../service/employerApi.js";
 import "./EmployerDashboard.css";
+import DashboardCard from "../../components/DashboardCard.jsx";
+import {getAllActiveEmployees, getAllEmployees} from "../../service/employerApi.js";
+
 
 function EmployerDashboard() {
-    const [employeeList, setEmployeeList] = useState([]);
+    const [activeEmployees, setactiveEmployees] = useState([]);
+    const [totalEmployees, setTotalEmployees] = useState([]);
+    const [leftEmployees, setLeftEmployees] = useState([]);
+    const [absentEmployees,setAbsentEmployees] = useState([]);
 
-    useEffect(() => {
+    const AllActiveEmployees = () => {
         getAllActiveEmployees()
             .then((response) => {
                 console.log("ACTIVE EMPLOYEES RESPONSE:", response.data);
-
                 if (response.data !== null) {
-                    setEmployeeList(response.data.employees || []);
+                    setactiveEmployees(response.data.employees || []);
                 }
             })
             .catch((error) => {
                 console.log("Error loading active employees", error.response?.data || error);
             });
+    }
+
+   const TotalEmployees = () =>{
+       getAllEmployees ()
+   .then((response) => {
+           console.log("TOTAL EMPLOYYES RESPONSE:" , response.data);
+           if(response.data !== null){
+               setTotalEmployees(response.data.employees || [])
+           }
+       })
+           .catch((error) => {
+               console.log("Error loading total employees", error.response?.data || error);
+           });
+   }
+
+    const LeftEmployees = () => {
+        leftEmployees ()
+    .then((response) => {
+            console.log("LEFT EMPLOYYES RESPONSE:" , response.data);
+            if(response.data !== null){
+                setLeftEmployees(response.data.employees || [])
+            }
+        })
+            .catch((error) => {
+                console.log("Error loading left employees", error.response?.data || error);
+            });
+    }
+
+    const AbsentEmployees = () => {
+       absentEmployees ()
+           .then((response) =>{
+               console.log("ABSENT EMPLOYEES RESPONSE:" , response.data);
+               if(response.data !== null) {
+                   setAbsentEmployees(response.data.employees || [])
+               }
+               })
+           .catch((error) => {
+               console.log("Error loading absent employees", error.response?.data || error);
+           });
+    }
+
+
+
+    useEffect(() => {
+     AllActiveEmployees();
+        AbsentEmployees();
+        LeftEmployees();
+        TotalEmployees();
     }, []);
+
+
+
 
     return (
         <div className="manager-dashboard-shell">
@@ -34,33 +89,11 @@ function EmployerDashboard() {
                     </div>
                 </header>
 
-                <section className="manager-stat-grid">
-                    <div className="manager-stat-card">
-                        <span className="manager-stat-label">Total Employees</span>
-                        <strong>{employeeList.length}</strong>
-                        <span className="manager-stat-note">Currently loaded</span>
-                    </div>
+               <DashboardCard title={"Total"} count={totalEmployees.length}/>
+                <DashboardCard title={"Absent Employees"} count={absentEmployees.length}/>
+                <DashboardCard title={"Left Employees"} count={leftEmployees.length}/>
 
-                    <div className="manager-stat-card manager-stat-card-accent">
-                        <span className="manager-stat-label">Active Now</span>
-                        <strong>{employeeList.length}</strong>
-                        <span className="manager-stat-note">Live presence</span>
-                    </div>
-
-                    <div className="manager-stat-card">
-                        <span className="manager-stat-label">On Leave</span>
-                        <strong>--</strong>
-                        <span className="manager-stat-note">No source connected</span>
-                    </div>
-
-                    <div className="manager-stat-card">
-                        <span className="manager-stat-label">Absent</span>
-                        <strong>--</strong>
-                        <span className="manager-stat-note">No source connected</span>
-                    </div>
-                </section>
-
-                <RealTimeEmployee employees={employeeList} />
+                <RealTimeEmployee employees={activeEmployees} />
             </div>
         </div>
     );

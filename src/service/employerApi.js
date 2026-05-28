@@ -18,3 +18,11 @@ export const getAllEmployees = () => {
     export const getEmployeeById = (employeeId) => {
         return api.get(`/crud-employee/employee-by-id?employeeId=${employeeId}`);
     }
+
+    export const leftEmployees = (data) => {
+    return api.post("/crud-employee/exited-employees", data);
+}
+
+export const absentEmployees = (data) => {
+    return api.post("/crud-employee/ansenced-employees", data);
+}
