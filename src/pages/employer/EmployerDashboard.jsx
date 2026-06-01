@@ -3,7 +3,12 @@ import RealTimeEmployee from "../../components/RealTimeEmployee.jsx";
 import NavbarEmployer from "../../Navbar/navbar-employer/NavbarEmployer.jsx";
 import "./EmployerDashboard.css";
 import DashboardCard from "../../components/DashboardCard.jsx";
-import {getAllActiveEmployees, getAllEmployees} from "../../service/employerApi.js";
+import {
+    getAbsentEmployees,
+    getAllActiveEmployees,
+    getAllEmployees,
+    getLeftEmployees
+} from "../../service/employerApi.js";
 
 
 function EmployerDashboard() {
@@ -39,7 +44,7 @@ function EmployerDashboard() {
    }
 
     const LeftEmployees = () => {
-        leftEmployees ()
+        getLeftEmployees ()
     .then((response) => {
             console.log("LEFT EMPLOYYES RESPONSE:" , response.data);
             if(response.data !== null){
@@ -52,7 +57,7 @@ function EmployerDashboard() {
     }
 
     const AbsentEmployees = () => {
-       absentEmployees ()
+        getAbsentEmployees ()
            .then((response) =>{
                console.log("ABSENT EMPLOYEES RESPONSE:" , response.data);
                if(response.data !== null) {

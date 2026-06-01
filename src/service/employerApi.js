@@ -19,10 +19,10 @@ export const getAllEmployees = () => {
         return api.get(`/crud-employee/employee-by-id?employeeId=${employeeId}`);
     }
 
-    export const leftEmployees = (data) => {
+    export const getLeftEmployees = (data) => {
     return api.post("/crud-employee/exited-employees", data);
 }
 
-export const absentEmployees = (data) => {
-    return api.post("/crud-employee/ansenced-employees", data);
+export const getAbsentEmployees = (data) => {
+    return api.post("/crud-employee/absenced-employees", data);
 }
