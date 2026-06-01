@@ -1,6 +1,9 @@
 import "./RealTimeEmployee.css";
+import dayjs from "dayjs";
 
 function RealTimeEmployee({employees}) {
+    console.log("EMPLOYEEE", employees);
+    console.log("FIrstEmployee", employees[0]);
 
 
     return (
@@ -41,12 +44,12 @@ function RealTimeEmployee({employees}) {
                                 <td>
                                     <span className="employee-name-cell">
                                         <span className="employee-status-dot"></span>
-                                        {employee.firstName } -  {employee.lastName}
+                                        {employee.employee.firstName } -  {employee.employee.lastName}
                                     </span>
                                 </td>
-                                <td>{employee.phone}</td>
+                                <td>{employee.employee.phone}</td>
                                 <td>{employee.location}</td>
-                                <td className="manager-start-time">{employee.startTime}</td>
+                                <td className="manager-start-time">{dayjs(employee.startTime).format("DD/MM/YYYY")}</td>
                                 <td>{employee.Estimateddeparturetime}</td>
                             </tr>
                         ))

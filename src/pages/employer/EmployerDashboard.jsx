@@ -9,20 +9,27 @@ import {
     getAllEmployees,
     getLeftEmployees
 } from "../../service/employerApi.js";
+import {refreshToken} from "../../service/authApi.js";
+import RefreshButton from "../../components/RefreshButton.jsx";
 
 
 function EmployerDashboard() {
-    const [activeEmployees, setactiveEmployees] = useState([]);
+    const [activeEmployees, setActiveEmployees] = useState([]);
     const [totalEmployees, setTotalEmployees] = useState([]);
     const [leftEmployees, setLeftEmployees] = useState([]);
     const [absentEmployees,setAbsentEmployees] = useState([]);
+
+
+    const data = {
+        date: Date.now()
+    };
 
     const AllActiveEmployees = () => {
         getAllActiveEmployees()
             .then((response) => {
                 console.log("ACTIVE EMPLOYEES RESPONSE:", response.data);
                 if (response.data !== null) {
-                    setactiveEmployees(response.data.employees || []);
+                    setActiveEmployees(response.data.employees || []);
                 }
             })
             .catch((error) => {
@@ -44,7 +51,7 @@ function EmployerDashboard() {
    }
 
     const LeftEmployees = () => {
-        getLeftEmployees ()
+        getLeftEmployees (data)
     .then((response) => {
             console.log("LEFT EMPLOYYES RESPONSE:" , response.data);
             if(response.data !== null){
@@ -57,7 +64,7 @@ function EmployerDashboard() {
     }
 
     const AbsentEmployees = () => {
-        getAbsentEmployees ()
+        getAbsentEmployees (data)
            .then((response) =>{
                console.log("ABSENT EMPLOYEES RESPONSE:" , response.data);
                if(response.data !== null) {
@@ -68,11 +75,20 @@ function EmployerDashboard() {
                console.log("Error loading absent employees", error.response?.data || error);
            });
     }
+    const Refreshing =()=>{
+        refreshToken ()
+            .then(response =>{
+                if (response.data !== null){
+                    setActiveEmployees(response.data.employees || [])
+                }
+            })
+    }
 
 
 
     useEffect(() => {
      AllActiveEmployees();
+        Refreshing();
         AbsentEmployees();
         LeftEmployees();
         TotalEmployees();
@@ -94,10 +110,23 @@ function EmployerDashboard() {
                     </div>
                 </header>
 
-               <DashboardCard title={"Total"} count={totalEmployees.length}/>
-                <DashboardCard title={"Absent Employees"} count={absentEmployees.length}/>
-                <DashboardCard title={"Left Employees"} count={leftEmployees.length}/>
+                <DashboardCard title={"Total"} count={totalEmployees.length}/>
+                <DashboardCard title={"Active Employee"} count={activeEmployees.length}/>
 
+
+                <DashboardCard
+                    title={"Absent Employees"}
+                    count={absentEmployees.length}
+                    employees={absentEmployees}
+                />
+
+
+                <DashboardCard
+                    title={"Left Employees"}
+                    count={leftEmployees.length}
+                    employees={leftEmployees}
+                />
+                <RefreshButton onRefresh={AllActiveEmployees}/>
                 <RealTimeEmployee employees={activeEmployees} />
             </div>
         </div>

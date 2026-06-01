@@ -2,6 +2,7 @@ import "./DashboardCard.css";
 
 function DashboardCard({title, count, employees}){
 
+
     return(
         <div className="dashboard-card">
 
