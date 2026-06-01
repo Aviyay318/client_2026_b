@@ -1,0 +1,62 @@
+.manager-refresh-button {
+    min-height: 48px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 0 18px;
+    border: 1px solid rgba(34, 211, 238, 0.42);
+    border-radius: 14px;
+    color: #f8fafc;
+    font: inherit;
+    font-size: 14px;
+    font-weight: 850;
+    letter-spacing: 0;
+    cursor: pointer;
+    background:
+            linear-gradient(135deg, rgba(37, 99, 235, 0.26), rgba(20, 184, 166, 0.18)),
+            rgba(8, 17, 31, 0.68);
+    box-shadow:
+            0 0 24px rgba(34, 211, 238, 0.18),
+            0 14px 32px rgba(0, 0, 0, 0.22),
+            inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(16px);
+    transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+}
+
+.manager-refresh-button:hover {
+    transform: translateY(-1px);
+    border-color: rgba(45, 212, 191, 0.7);
+    background:
+            linear-gradient(135deg, rgba(37, 99, 235, 0.32), rgba(20, 184, 166, 0.26)),
+            rgba(8, 17, 31, 0.74);
+    box-shadow:
+            0 0 30px rgba(34, 211, 238, 0.22),
+            0 18px 38px rgba(0, 0, 0, 0.26),
+            inset 0 1px 0 rgba(255, 255, 255, 0.12);
+}
+
+.manager-refresh-button:focus-visible {
+    outline: 2px solid rgba(125, 211, 252, 0.72);
+    outline-offset: 3px;
+}
+
+.manager-refresh-icon,
+.manager-refresh-icon svg {
+    width: 18px;
+    height: 18px;
+}
+
+.manager-refresh-icon {
+    display: inline-flex;
+    color: #bae6fd;
+}
+
+.manager-refresh-icon svg {
+    display: block;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
