@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import {useCallback, useEffect, useState} from "react";
 import RealTimeEmployee from "../../components/RealTimeEmployee.jsx";
 import NavbarEmployer from "../../Navbar/navbar-employer/NavbarEmployer.jsx";
 import "./EmployerDashboard.css";
@@ -20,11 +20,7 @@ function EmployerDashboard() {
     const [absentEmployees,setAbsentEmployees] = useState([]);
 
 
-    const data = {
-        date: Date.now()
-    };
-
-    const AllActiveEmployees = () => {
+    const AllActiveEmployees = useCallback(() => {
         getAllActiveEmployees()
             .then((response) => {
                 console.log("ACTIVE EMPLOYEES RESPONSE:", response.data);
@@ -35,9 +31,9 @@ function EmployerDashboard() {
             .catch((error) => {
                 console.log("Error loading active employees", error.response?.data || error);
             });
-    }
+    }, []);
 
-   const TotalEmployees = () =>{
+   const TotalEmployees = useCallback(() =>{
        getAllEmployees ()
    .then((response) => {
            console.log("TOTAL EMPLOYYES RESPONSE:" , response.data);
@@ -48,10 +44,10 @@ function EmployerDashboard() {
            .catch((error) => {
                console.log("Error loading total employees", error.response?.data || error);
            });
-   }
+   }, []);
 
-    const LeftEmployees = () => {
-        getLeftEmployees (data)
+    const LeftEmployees = useCallback(() => {
+        getLeftEmployees ({date: Date.now()})
     .then((response) => {
             console.log("LEFT EMPLOYYES RESPONSE:" , response.data);
             if(response.data !== null){
@@ -61,10 +57,10 @@ function EmployerDashboard() {
             .catch((error) => {
                 console.log("Error loading left employees", error.response?.data || error);
             });
-    }
+    }, []);
 
-    const AbsentEmployees = () => {
-        getAbsentEmployees (data)
+    const AbsentEmployees = useCallback(() => {
+        getAbsentEmployees ({date: Date.now()})
            .then((response) =>{
                console.log("ABSENT EMPLOYEES RESPONSE:" , response.data);
                if(response.data !== null) {
@@ -74,15 +70,15 @@ function EmployerDashboard() {
            .catch((error) => {
                console.log("Error loading absent employees", error.response?.data || error);
            });
-    }
-    const Refreshing =()=>{
+    }, []);
+    const Refreshing = useCallback(() => {
         refreshToken ()
             .then(response =>{
                 if (response.data !== null){
                     setActiveEmployees(response.data.employees || [])
                 }
             })
-    }
+    }, []);
 
 
 
@@ -92,7 +88,7 @@ function EmployerDashboard() {
         AbsentEmployees();
         LeftEmployees();
         TotalEmployees();
-    }, []);
+    }, [AbsentEmployees, AllActiveEmployees, LeftEmployees, Refreshing, TotalEmployees]);
 
 
 
