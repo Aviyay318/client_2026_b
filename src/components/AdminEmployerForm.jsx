@@ -1,4 +1,5 @@
 import {useState} from "react";
+import AdminIcon from "./AdminIcon.jsx";
 
 const emptyEmployer = {
     personalId: "",
@@ -98,6 +99,7 @@ function AdminEmployerForm({onCreateEmployer, onClose, loading}) {
                     <h2>Create Employer</h2>
                 </div>
                 <button className="admin-close-btn" type="button" onClick={onClose}>
+                    <AdminIcon name="close" />
                     Close
                 </button>
             </div>
@@ -141,6 +143,7 @@ function AdminEmployerForm({onCreateEmployer, onClose, loading}) {
                 />
 
                 <button className="admin-primary-btn" type="submit" disabled={loading}>
+                    <AdminIcon name="add" />
                     {loading ? "Creating..." : "Create employer"}
                 </button>
             </form>

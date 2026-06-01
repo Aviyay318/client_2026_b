@@ -1,7 +1,8 @@
-import {useEffect, useState} from "react";
+import {useCallback, useEffect, useRef, useState} from "react";
 import {useNavigate} from "react-router-dom";
 import AdminCards from "../../components/AdminCards.jsx";
 import AdminEmployerForm from "../../components/AdminEmployerForm.jsx";
+import AdminIcon from "../../components/AdminIcon.jsx";
 import ConfirmationPopUp from "../../components/ConfirmationPopUp.jsx";
 import EmployersTable from "../../components/EmployersTable.jsx";
 import RealtimePanel from "../../components/RealtimePanel.jsx";
@@ -88,6 +89,21 @@ const normalizeRealtimeInfo = (payload) => {
     };
 };
 
+const getUserDisplayName = (user, fallback = "user") => {
+    const fullName = `${user?.firstName || ""} ${user?.lastName || ""}`.trim();
+
+    return user?.businessName ||
+        user?.name ||
+        user?.fullName ||
+        fullName ||
+        user?.personalId ||
+        fallback;
+};
+
+const getUserId = (user) => {
+    return user?.id ?? user?.employerId ?? user?.userId;
+};
+
 function AdminDashboardPage() {
     const navigate = useNavigate();
     const [generalInfo, setGeneralInfo] = useState(emptyGeneralInfo);
@@ -96,16 +112,25 @@ function AdminDashboardPage() {
     const [selectedEmployer, setSelectedEmployer] = useState(null);
     const [workers, setWorkers] = useState([]);
     const [loadingOverview, setLoadingOverview] = useState(true);
+    const [refreshingOverview, setRefreshingOverview] = useState(false);
     const [loadingRealtime, setLoadingRealtime] = useState(false);
     const [loadingWorkers, setLoadingWorkers] = useState(false);
     const [creatingEmployer, setCreatingEmployer] = useState(false);
     const [deletingEmployerId, setDeletingEmployerId] = useState(null);
     const [isCreateEmployerOpen, setCreateEmployerOpen] = useState(false);
     const [employerPendingDelete, setEmployerPendingDelete] = useState(null);
+    const [isLogoutPending, setLogoutPending] = useState(false);
     const [overviewError, setOverviewError] = useState("");
     const [workersError, setWorkersError] = useState("");
+    const [toast, setToast] = useState(null);
+    const [lastRealtimeRefresh, setLastRealtimeRefresh] = useState(null);
+    const workersRequestIdRef = useRef(0);
 
-    const updateOverview = (generalResponse, employersResponse) => {
+    const showToast = useCallback((message, type = "success") => {
+        setToast({message, type});
+    }, []);
+
+    const updateOverview = useCallback((generalResponse, employersResponse) => {
         const nextGeneralInfo = normalizeGeneralInfo(readPayload(generalResponse));
         const nextEmployers = normalizeEmployers(readPayload(employersResponse));
 
@@ -132,28 +157,46 @@ function AdminDashboardPage() {
                 workersCount: nextGeneralInfo.workersCount || derivedWorkersCount,
             });
             setEmployers(employersWithWorkersCount);
-        });
-    };
 
-    const refreshOverview = () => {
+            setSelectedEmployer((currentSelectedEmployer) => {
+                const selectedEmployerId = getUserId(currentSelectedEmployer);
+
+                if (selectedEmployerId && !employersWithWorkersCount.some((employer) => getUserId(employer) === selectedEmployerId)) {
+                    setWorkers([]);
+                    setWorkersError("");
+                    return null;
+                }
+
+                return currentSelectedEmployer;
+            });
+        });
+    }, []);
+
+    const refreshOverview = useCallback(() => {
         return Promise.all([getGeneralInfo(), getEmployersList()])
             .then(([generalResponse, employersResponse]) => {
                 return updateOverview(generalResponse, employersResponse);
             });
-    };
+    }, [updateOverview]);
 
-    const fetchRealtimeInfo = () => {
+    const fetchRealtimeInfo = useCallback((showSuccessToast = false) => {
         setLoadingRealtime(true);
 
-        getRealtimeInfo()
+        return getRealtimeInfo()
             .then((response) => {
                 setRealtimeInfo(normalizeRealtimeInfo(readPayload(response)));
+                setLastRealtimeRefresh(new Date());
+
+                if (showSuccessToast) {
+                    showToast("Realtime information refreshed.");
+                }
             })
             .catch(() => {
                 setRealtimeInfo(emptyRealtimeInfo);
+                showToast("Could not refresh realtime information.", "error");
             })
             .finally(() => setLoadingRealtime(false));
-    };
+    }, [showToast]);
 
     useEffect(() => {
         if (sessionStorage.getItem("adminLoggedIn") !== "true") {
@@ -161,22 +204,32 @@ function AdminDashboardPage() {
             return;
         }
 
-        Promise.all([getGeneralInfo(), getEmployersList()])
-            .then(([generalResponse, employersResponse]) => {
-                return updateOverview(generalResponse, employersResponse);
-            })
+        refreshOverview()
             .catch(() => {
                 setOverviewError("Could not load admin overview. Please try again.");
             })
             .finally(() => setLoadingOverview(false));
 
-        const realtimeTimeoutId = setTimeout(fetchRealtimeInfo, 0);
+        const realtimeTimeoutId = setTimeout(() => fetchRealtimeInfo(false), 0);
 
         return () => clearTimeout(realtimeTimeoutId);
-    }, [navigate]);
+    }, [navigate, refreshOverview, fetchRealtimeInfo]);
+
+    useEffect(() => {
+        if (!toast) {
+            return undefined;
+        }
+
+        const timeoutId = setTimeout(() => setToast(null), 3000);
+
+        return () => clearTimeout(timeoutId);
+    }, [toast]);
 
     const handleSelectEmployer = (employer) => {
-        const employerId = employer.id ?? employer.employerId ?? employer.userId;
+        const employerId = getUserId(employer);
+        const workersRequestId = workersRequestIdRef.current + 1;
+
+        workersRequestIdRef.current = workersRequestId;
 
         if (!employerId) {
             setWorkersError("Employer id is missing.");
@@ -192,12 +245,32 @@ function AdminDashboardPage() {
 
         getEmployerWorkers(employerId)
             .then((response) => {
+                if (workersRequestIdRef.current !== workersRequestId) {
+                    return;
+                }
+
                 setWorkers(normalizeWorkers(readPayload(response)));
             })
             .catch(() => {
+                if (workersRequestIdRef.current !== workersRequestId) {
+                    return;
+                }
+
                 setWorkersError("Could not load workers for this employer.");
             })
-            .finally(() => setLoadingWorkers(false));
+            .finally(() => {
+                if (workersRequestIdRef.current === workersRequestId) {
+                    setLoadingWorkers(false);
+                }
+            });
+    };
+
+    const closeWorkersPopup = () => {
+        workersRequestIdRef.current += 1;
+        setSelectedEmployer(null);
+        setWorkers([]);
+        setWorkersError("");
+        setLoadingWorkers(false);
     };
 
     const handleCreateEmployer = (employerData) => {
@@ -209,7 +282,9 @@ function AdminDashboardPage() {
                     return Promise.reject(response);
                 }
 
-                return refreshOverview();
+                return refreshOverview().then(() => {
+                    showToast("Employer created successfully.");
+                });
             })
             .catch((error) => {
                 console.log("CREATE EMPLOYER REQUEST FAILED:", error.response?.data || error.data || error);
@@ -218,12 +293,38 @@ function AdminDashboardPage() {
             .finally(() => setCreatingEmployer(false));
     };
 
+    const handleRefreshOverview = () => {
+        setRefreshingOverview(true);
+        setOverviewError("");
+
+        refreshOverview()
+            .then(() => {
+                showToast("General overview refreshed.");
+            })
+            .catch(() => {
+                setOverviewError("Could not refresh admin overview.");
+                showToast("Could not refresh admin overview.", "error");
+            })
+            .finally(() => setRefreshingOverview(false));
+    };
+
+    const handleCopyValue = (value, label = "Value") => {
+        if (!value) {
+            showToast(`${label} is not available.`, "error");
+            return;
+        }
+
+        navigator.clipboard.writeText(value.toString())
+            .then(() => showToast(`${label} copied.`))
+            .catch(() => showToast(`Could not copy ${label.toLowerCase()}.`, "error"));
+    };
+
     const requestDeleteEmployer = (employer) => {
         setEmployerPendingDelete(employer);
     };
 
     const confirmDeleteEmployer = () => {
-        const employerId = employerPendingDelete?.id ?? employerPendingDelete?.employerId ?? employerPendingDelete?.userId;
+        const employerId = getUserId(employerPendingDelete);
 
         if (!employerId) {
             setOverviewError("Employer id is missing.");
@@ -238,30 +339,38 @@ function AdminDashboardPage() {
             .then((response) => {
                 if (response.data?.success === false) {
                     setOverviewError("Employer deletion failed.");
+                    showToast("Employer deletion failed.", "error");
                     return;
                 }
 
-                if ((selectedEmployer?.id ?? selectedEmployer?.employerId ?? selectedEmployer?.userId) === employerId) {
+                if (getUserId(selectedEmployer) === employerId) {
                     setSelectedEmployer(null);
                     setWorkers([]);
                     setWorkersError("");
                 }
 
                 setEmployerPendingDelete(null);
-                return refreshOverview();
+                return refreshOverview().then(() => {
+                    showToast("Employer deleted successfully.");
+                });
             })
             .catch(() => {
                 setOverviewError("Employer deletion failed.");
+                showToast("Employer deletion failed.", "error");
             })
             .finally(() => setDeletingEmployerId(null));
     };
 
-    const handleLogout = () => {
+    const confirmLogout = () => {
         logout()
             .finally(() => {
                 sessionStorage.removeItem("adminLoggedIn");
                 navigate("/");
             });
+    };
+
+    const handleLogout = () => {
+        setLogoutPending(true);
     };
 
     return (
@@ -272,11 +381,18 @@ function AdminDashboardPage() {
                     <h1>Dashboard</h1>
                 </div>
                 <button className="admin-logout-btn" onClick={handleLogout} type="button">
+                    <AdminIcon name="logout" />
                     Logout
                 </button>
             </header>
 
             {overviewError && <div className="admin-error">{overviewError}</div>}
+
+            {toast && (
+                <div className={`admin-toast ${toast.type}`} role="status">
+                    {toast.message}
+                </div>
+            )}
 
             <AdminCards generalInfo={generalInfo} realtimeInfo={realtimeInfo} />
 
@@ -295,51 +411,76 @@ function AdminDashboardPage() {
                             <p>General overview</p>
                             <h2>Employers</h2>
                         </div>
-                        <button
-                            className="admin-primary-btn"
-                            type="button"
-                            onClick={() => setCreateEmployerOpen(true)}
-                        >
-                            Add employer
-                        </button>
+                        <div className="admin-section-actions">
+                            <button
+                                className="admin-primary-btn"
+                                type="button"
+                                onClick={() => setCreateEmployerOpen(true)}
+                            >
+                                <AdminIcon name="add" />
+                                Add employer
+                            </button>
+                            <button
+                                className="admin-refresh-btn"
+                                type="button"
+                                onClick={handleRefreshOverview}
+                                disabled={refreshingOverview || loadingOverview}
+                            >
+                                <AdminIcon name="refresh" />
+                                {refreshingOverview ? "Refreshing..." : "Refresh"}
+                            </button>
+                        </div>
                     </div>
                     <EmployersTable
                         employers={employers}
                         loading={loadingOverview}
-                        selectedEmployerId={selectedEmployer?.id ?? selectedEmployer?.employerId ?? selectedEmployer?.userId}
+                        selectedEmployerId={getUserId(selectedEmployer)}
                         onSelectEmployer={handleSelectEmployer}
                         onDeleteEmployer={requestDeleteEmployer}
                         deletingEmployerId={deletingEmployerId}
+                        disabledDeleteEmployerId={loadingWorkers ? getUserId(selectedEmployer) : null}
+                        onAddEmployer={() => setCreateEmployerOpen(true)}
+                        onCopyValue={handleCopyValue}
                     />
                 </section>
 
                 <RealtimePanel
                     realtimeInfo={realtimeInfo}
                     loading={loadingRealtime}
-                    onRefresh={fetchRealtimeInfo}
+                    lastRefreshed={lastRealtimeRefresh}
+                    onRefresh={() => fetchRealtimeInfo(true)}
                 />
 
-                <WorkersPanel
-                    employer={selectedEmployer}
-                    workers={workers}
-                    loading={loadingWorkers}
-                    error={workersError}
-                    onClose={() => {
-                        setSelectedEmployer(null);
-                        setWorkers([]);
-                        setWorkersError("");
-                    }}
-                />
             </main>
+
+            <WorkersPanel
+                key={getUserId(selectedEmployer) || "workers-popup"}
+                employer={selectedEmployer}
+                workers={workers}
+                loading={loadingWorkers}
+                error={workersError}
+                onCopyValue={handleCopyValue}
+                onClose={closeWorkersPopup}
+            />
 
             <ConfirmationPopUp
                 isOpen={Boolean(employerPendingDelete)}
-                title="Delete employer?"
-                message="This will remove the employer and all employer-worker relations. This action cannot be undone."
+                title={`Delete ${getUserDisplayName(employerPendingDelete, "employer")}?`}
+                message={`${getUserDisplayName(employerPendingDelete, "This employer")} and all employer-worker relations will be removed. This action cannot be undone.`}
                 confirmLabel="Delete employer"
                 loading={Boolean(deletingEmployerId)}
                 onCancel={() => setEmployerPendingDelete(null)}
                 onConfirm={confirmDeleteEmployer}
+            />
+
+            <ConfirmationPopUp
+                isOpen={isLogoutPending}
+                title="Logout from admin?"
+                message="You will need to log in again to access the admin dashboard."
+                confirmLabel="Logout"
+                danger={false}
+                onCancel={() => setLogoutPending(false)}
+                onConfirm={confirmLogout}
             />
         </div>
     );
