@@ -138,9 +138,21 @@
 
 .manager-dashboard-content {
     min-width: 0;
-    display: flex;
-    flex-direction: column;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
     gap: 22px;
+}
+
+.manager-dashboard-content > :not(.dashboard-card) {
+    grid-column: 1 / -1;
+}
+
+.manager-dashboard-content > .manager-refresh-button {
+    grid-column: 4;
+    grid-row: 1;
+    justify-self: end;
+    align-self: center;
+    z-index: 2;
 }
 
 .manager-topbar,
@@ -242,9 +254,14 @@
         min-height: auto;
     }
 
+    .manager-dashboard-content,
     .manager-stat-grid,
     .employee-management-grid {
         grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .manager-dashboard-content > .manager-refresh-button {
+        grid-column: 2;
     }
 }
 
@@ -258,11 +275,20 @@
         flex-direction: column;
         align-items: flex-start;
         padding: 22px;
+        padding-bottom: 86px;
     }
 
+    .manager-dashboard-content,
     .manager-stat-grid,
     .employee-management-grid {
         grid-template-columns: 1fr;
+    }
+
+    .manager-dashboard-content > .manager-refresh-button {
+        grid-column: 1;
+        justify-self: start;
+        align-self: end;
+        margin: 0 0 22px 22px;
     }
 
     .manager-stat-card {
