@@ -11,6 +11,7 @@ import EmployeeShiftsPage from "./pages/employee/EmployeeShiftsPage.jsx";
 import EmployeeManagementPage from "./pages/employer/EmployeeManagementPage.jsx";
 import EmployeeListPage from "./pages/employer/EmployeeListPage.jsx";
 import EmployeeDetailsListPage from "./pages/employer/EmployeeDetailsListPage.jsx";
+import EmployerRequestsPage from "./pages/employer/EmployerRequestsPage.jsx";
 
 function App() {
     return (
@@ -31,6 +32,7 @@ function App() {
 
                 <Route path="/employee-management-page" element={<EmployeeManagementPage />} />
                 <Route path="/employee-list-page" element={<EmployeeListPage />} />
+                <Route path="/employer-requests" element={<EmployerRequestsPage />} />
                 <Route path="/employee-details-page/:id" element={<EmployeeDetailsListPage />}/>
 
 

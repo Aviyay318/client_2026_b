@@ -136,6 +136,31 @@
     cursor: pointer;
 }
 
+.manager-secondary-btn {
+    min-height: 48px;
+    padding: 0 18px;
+    border: 1px solid rgba(148, 163, 184, 0.18);
+    border-radius: 16px;
+    background: rgba(15, 23, 42, 0.6);
+    color: #e2e8f0;
+    font: inherit;
+    font-size: 14px;
+    font-weight: 900;
+    cursor: pointer;
+    transition: transform 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+
+.manager-secondary-btn:hover:not(:disabled) {
+    transform: translateY(-1px);
+    border-color: rgba(125, 211, 252, 0.38);
+    color: white;
+}
+
+.manager-secondary-btn:disabled {
+    cursor: not-allowed;
+    opacity: 0.58;
+}
+
 .manager-dashboard-content {
     min-width: 0;
     display: grid;
@@ -244,6 +269,155 @@
     align-items: start;
 }
 
+.employer-requests-panel {
+    padding: 24px;
+    border-radius: 26px;
+}
+
+.manager-section-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 18px;
+}
+
+.manager-section-header h2 {
+    margin: 0;
+    color: white;
+    font-size: 24px;
+}
+
+.requests-count {
+    min-width: 112px;
+    padding: 10px 12px;
+    border: 1px solid rgba(125, 211, 252, 0.18);
+    border-radius: 999px;
+    background: rgba(34, 211, 238, 0.1);
+    color: #bae6fd;
+    font-size: 13px;
+    font-weight: 900;
+    text-align: center;
+}
+
+.requests-list {
+    display: grid;
+    gap: 12px;
+}
+
+.request-row {
+    display: grid;
+    grid-template-columns: minmax(160px, 0.9fr) minmax(120px, 0.55fr) minmax(220px, 1.4fr) auto;
+    align-items: center;
+    gap: 16px;
+    padding: 16px;
+    border: 1px solid rgba(148, 163, 184, 0.13);
+    border-radius: 18px;
+    background: rgba(8, 17, 31, 0.44);
+}
+
+.request-person,
+.request-detail,
+.request-reason {
+    min-width: 0;
+    display: grid;
+    gap: 6px;
+}
+
+.request-person strong,
+.request-detail strong,
+.request-reason strong {
+    min-width: 0;
+    color: white;
+    font-size: 15px;
+    line-height: 1.25;
+}
+
+.request-employee-meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.request-reason strong {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.request-person span,
+.request-employee-meta span,
+.request-detail span,
+.request-reason span {
+    color: var(--manager-muted);
+    font-size: 12px;
+    font-weight: 900;
+    text-transform: uppercase;
+}
+
+.request-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+}
+
+.request-accept-btn,
+.request-deny-btn {
+    min-height: 40px;
+    padding: 0 14px;
+    border: 0;
+    border-radius: 13px;
+    color: white;
+    font: inherit;
+    font-size: 13px;
+    font-weight: 900;
+    cursor: pointer;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.request-accept-btn {
+    background: rgba(34, 197, 94, 0.88);
+}
+
+.request-deny-btn {
+    background: rgba(244, 63, 94, 0.88);
+}
+
+.request-accept-btn:hover:not(:disabled),
+.request-deny-btn:hover:not(:disabled) {
+    transform: translateY(-1px);
+}
+
+.request-accept-btn:disabled,
+.request-deny-btn:disabled {
+    cursor: not-allowed;
+    opacity: 0.52;
+}
+
+.manager-state,
+.manager-error,
+.manager-toast {
+    border-radius: 16px;
+    padding: 16px;
+    background: rgba(8, 17, 31, 0.48);
+    color: #cbd5e1;
+    text-align: center;
+    font-weight: 800;
+}
+
+.manager-error {
+    border: 1px solid rgba(248, 113, 113, 0.28);
+    background: rgba(127, 29, 29, 0.3);
+    color: #fecaca;
+}
+
+.manager-toast {
+    border: 1px solid rgba(34, 197, 94, 0.26);
+    background: rgba(20, 83, 45, 0.72);
+    color: #dcfce7;
+}
+
 @media (max-width: 980px) {
     .manager-dashboard-shell {
         grid-template-columns: 1fr;
@@ -262,6 +436,14 @@
 
     .manager-dashboard-content > .manager-refresh-button {
         grid-column: 2;
+    }
+
+    .request-row {
+        grid-template-columns: minmax(0, 1fr) minmax(160px, 0.7fr);
+    }
+
+    .request-actions {
+        justify-content: flex-start;
     }
 }
 
@@ -293,5 +475,21 @@
 
     .manager-stat-card {
         min-height: 120px;
+    }
+
+    .manager-section-header,
+    .request-row {
+        grid-template-columns: 1fr;
+    }
+
+    .manager-section-header,
+    .request-actions {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .request-actions {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 }

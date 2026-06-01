@@ -39,6 +39,15 @@ function NavbarEmployer({ active }) {
                 >
                     Employee List
                 </Link>
+
+                <Link
+                    to="/employer-requests"
+                    className={`tab-btn ${
+                        active === "Requests" ? "employer-active-tab" : ""
+                    }`}
+                >
+                    Requests
+                </Link>
             </div>
 
             <div className="manager-nav-footer">
