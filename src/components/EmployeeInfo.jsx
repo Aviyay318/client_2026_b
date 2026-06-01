@@ -15,7 +15,7 @@ function EmployeeInfo({ employee }) {
                 <div className="employee-info-grid">
                     <div className="employee-info-item">
                         <span>ID</span>
-                        <strong>{employee.id}</strong>
+                        <strong>{employee.personalId}</strong>
                     </div>
 
                     <div className="employee-info-item">
@@ -37,10 +37,7 @@ function EmployeeInfo({ employee }) {
                         <strong>{employee.phone}</strong>
                     </div>
 
-                    <div className="employee-info-item">
-                        <span>Username</span>
-                        <strong>{employee.userName}</strong>
-                    </div>
+
 
                     <div className="employee-info-item">
                         <span>User Type</span>
