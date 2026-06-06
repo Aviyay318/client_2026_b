@@ -12,6 +12,7 @@ import EmployeeManagementPage from "./pages/employer/EmployeeManagementPage.jsx"
 import EmployeeListPage from "./pages/employer/EmployeeListPage.jsx";
 import EmployeeDetailsListPage from "./pages/employer/EmployeeDetailsListPage.jsx";
 import EmployerRequestsPage from "./pages/employer/EmployerRequestsPage.jsx";
+import EmployerGeneralSettingsPage from "./pages/employer/EmployerGeneralSettingsPage.jsx";
 
 function App() {
     return (
@@ -34,6 +35,7 @@ function App() {
                 <Route path="/employee-list-page" element={<EmployeeListPage />} />
                 <Route path="/employer-requests" element={<EmployerRequestsPage />} />
                 <Route path="/employee-details-page/:id" element={<EmployeeDetailsListPage />}/>
+                <Route path="/employer-settings" element={<EmployerGeneralSettingsPage />}/>
 
 
 

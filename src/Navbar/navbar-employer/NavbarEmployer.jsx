@@ -48,6 +48,15 @@ function NavbarEmployer({ active }) {
                 >
                     Requests
                 </Link>
+
+                <Link
+                    to="/employer-settings"
+                    className={`tab-btn ${
+                        active === "GeneralSettings" ? "employer-active-tab" : ""
+                    }`}
+                >
+                    General Settings
+                </Link>
             </div>
 
             <div className="manager-nav-footer">
