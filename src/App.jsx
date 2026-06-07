@@ -13,6 +13,7 @@ import EmployeeListPage from "./pages/employer/EmployeeListPage.jsx";
 import EmployeeDetailsListPage from "./pages/employer/EmployeeDetailsListPage.jsx";
 import EmployerRequestsPage from "./pages/employer/EmployerRequestsPage.jsx";
 import WeeklyShiftSettingsPage from "./pages/employer/WeeklyShiftSettingsPage.jsx";
+import EmployerPlacementBuilder from "./pages/employer/EmployerPlacementBuilder.jsx";
 
 function App() {
     return (
@@ -37,7 +38,7 @@ function App() {
                 <Route path="/employee-details-page/:id" element={<EmployeeDetailsListPage />}/>
                 <Route path="/employer-weekly-shift" element={<WeeklyShiftSettingsPage/>}/>
 
-
+                <Route path="/employer-placement-builder" element={<EmployerPlacementBuilder />} />
 
 
             </Routes>
