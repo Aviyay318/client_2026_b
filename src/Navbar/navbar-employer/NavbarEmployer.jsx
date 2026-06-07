@@ -48,6 +48,18 @@ function NavbarEmployer({ active }) {
                 >
                     Requests
                 </Link>
+
+                <Link
+                    to="/employer-weekly-shift"
+                >
+                    setting shift
+                </Link>
+
+
+
+
+
+
             </div>
 
             <div className="manager-nav-footer">
