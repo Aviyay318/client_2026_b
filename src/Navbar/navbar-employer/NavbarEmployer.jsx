@@ -31,9 +31,21 @@ function NavbarEmployer({ active }) {
                 >
                     Employee List
                 </Link>
+
+
+                <Link
+                    to="/employer-constraints"
+                    className={`tab-btn ${
+                        active === "EmployeeConstraints" ? "employer-active-tab" : ""
+                    }`}
+                >
+                    Employee Constraints
+                </Link>
+
             </div>
 
             <LogoutButton />
+
         </nav>
     );
 }

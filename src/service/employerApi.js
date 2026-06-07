@@ -18,3 +18,6 @@ export const getAllEmployees = () => {
     export const getEmployeeById = (employeeId) => {
         return api.get(`/crud-employee/employee-by-id?employeeId=${employeeId}`);
     }
+export const getEmployeeConstraints= ()=>{
+    return api.get("/employee-constraints/get-all");
+}

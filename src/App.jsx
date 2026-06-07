@@ -11,6 +11,7 @@ import EmployeeShiftsPage from "./pages/employee/EmployeeShiftsPage.jsx";
 import EmployeeManagementPage from "./pages/employer/EmployeeManagementPage.jsx";
 import EmployeeListPage from "./pages/employer/EmployeeListPage.jsx";
 import EmployeeDetailsListPage from "./pages/employer/EmployeeDetailsListPage.jsx";
+import EmployerConstraintsView from "./pages/employer/EmployerConstraintsView.jsx";
 
 function App() {
     return (
@@ -33,6 +34,9 @@ function App() {
                 <Route path="/employee-list-page" element={<EmployeeListPage />} />
                 <Route path="/employee-details-page/:id" element={<EmployeeDetailsListPage />}/>
 
+                <Route
+                    path="/employer-constraints"  element={<EmployerConstraintsView />}
+                />
 
 
 
