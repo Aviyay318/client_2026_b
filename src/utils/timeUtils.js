@@ -33,3 +33,12 @@ export function formatTimeForServer(time) {
         .second(0)
         .format("YYYY-MM-DD HH:mm:ss");
 }
+
+export function formatTimeForInput(time) {
+    if (!time) {
+        return "";
+    }
+
+    const timeMatch = time.match(/(?:T|^)(\d{2}:\d{2})/);
+    return timeMatch?.[1] ?? "";
+}

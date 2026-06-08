@@ -55,7 +55,11 @@ function NavbarEmployer({ active }) {
                     setting shift
                 </Link>
 
-
+                <Link
+                    to="/employer-placement-builder"
+                >
+                    Shift assignment
+                </Link>
 
 
 

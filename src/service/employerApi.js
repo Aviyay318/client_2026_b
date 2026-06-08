@@ -37,14 +37,14 @@ export const setShifts = (data) => {
     return api.post("/employer-settings/set-shifts", data);
 }
 
-export const saveShifts = setShifts;
-
 export const updateShifts = (data) => {
     return api.post("/employer-settings/update-shift", data);
 }
 
 export const deleteShift = (id) => {
-    return api.delete(`/employer-settings/delete-shift/${id}`);
+    return api.delete("/employer-settings/delete-shift", {
+        params: {id}
+    });
 }
 export const postShifts = () => {
     return api.post("/employer-settings/post-shifts");

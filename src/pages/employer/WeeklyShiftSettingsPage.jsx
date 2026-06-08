@@ -1,10 +1,15 @@
 import { useEffect, useRef, useState } from "react";
-import { formatTimeForServer } from "../../utils/timeUtils.js";
+import {
+    formatTimeForInput,
+    formatTimeForServer
+} from "../../utils/timeUtils.js";
 import ShiftSettingsTable from "../../components/ShiftSettingsTable.jsx";
 import {
+    deleteShift,
     getEmployerShifts,
     postShifts,
-    setShifts
+    setShifts,
+    updateShifts
 } from "../../service/employerApi.js";
 
 const weekDays = [
@@ -17,23 +22,41 @@ const weekDays = [
     { value: 7, label: "Saturday" }
 ];
 
-const createDefaultShifts = () => weekDays.map(({ value }, index) => ({
-    id: index + 1,
-    weekDay: value,
+const createDefaultShift = (weekDay) => ({
+    id: `default-${weekDay}`,
+    weekDay,
     startTime: "",
     endTime: "",
     employeeAmount: "",
-    isExtra: false
-}));
+    isExtra: false,
+    isPlaceholder: true,
+    isNew: true
+});
 
-const formatTimeForInput = (time) => {
-    if (!time) {
-        return "";
+const mergeShiftsWithWeekDays = (currentShifts) => weekDays.flatMap(({ value }) => {
+    const dayShifts = currentShifts.filter((shift) => shift.weekDay === value);
+
+    if (dayShifts.length === 0) {
+        return [createDefaultShift(value)];
     }
 
-    const timeMatch = time.match(/(?:T|^)(\d{2}:\d{2})/);
-    return timeMatch?.[1] ?? "";
-};
+    return dayShifts.map((shift, index) => ({
+        ...shift,
+        isExtra: index > 0,
+        isPlaceholder: shift.isPlaceholder ?? false
+    }));
+});
+
+const createNewShift = (weekDay) => ({
+    id: Date.now(),
+    weekDay,
+    startTime: "",
+    endTime: "",
+    employeeAmount: "",
+    isExtra: true,
+    isPlaceholder: false,
+    isNew: true
+});
 
 const addExtraFlags = (loadedShifts) => {
     const seenDays = new Set();
@@ -48,9 +71,38 @@ const addExtraFlags = (loadedShifts) => {
             startTime: formatTimeForInput(shift.startTime),
             endTime: formatTimeForInput(shift.endTime),
             employeeAmount: shift.employeeAmount ?? "",
-            isExtra
+            isExtra,
+            isPlaceholder: false,
+            isNew: false
         };
     });
+};
+
+const fetchEmployerShiftRows = async () => {
+    const response = await getEmployerShifts();
+
+    console.log("GET SHIFTS RESPONSE:", response);
+    console.log("GET SHIFTS DATA:", response.data);
+
+    if (!response.data.success) {
+        throw new Error("Failed to load shift settings.");
+    }
+
+    const loadedShifts = response.data.shifts;
+
+    console.log("LOADED SHIFTS:", loadedShifts);
+    console.log("LOADED SHIFTS LENGTH:", loadedShifts?.length);
+
+    const normalizedShifts = Array.isArray(loadedShifts)
+        ? addExtraFlags(loadedShifts)
+        : [];
+
+    console.log(
+        "EXISTING SHIFT IDS:",
+        normalizedShifts.map((shift) => shift.id)
+    );
+
+    return normalizedShifts;
 };
 
 const isFieldEmpty = (value) => value === null
@@ -69,7 +121,9 @@ const isCompleteShift = (shift) => (
     && !isFieldEmpty(shift.employeeAmount)
 );
 
-const hasInvalidTimeRange = (shift) => shift.endTime <= shift.startTime;
+const hasInvalidTimeRange = (shift) => (
+    !isEmptyShift(shift) && shift.endTime <= shift.startTime
+);
 
 const createShiftsPayload = (shifts) => shifts
     .filter((shift) => !isEmptyShift(shift))
@@ -80,41 +134,37 @@ const createShiftsPayload = (shifts) => shifts
         employeeAmount
     }));
 
+const createUpdatePayload = ({
+    id,
+    weekDay,
+    startTime,
+    endTime,
+    employeeAmount
+}) => ({
+    id,
+    weekDay,
+    startTime: formatTimeForServer(startTime),
+    endTime: formatTimeForServer(endTime),
+    employeeAmount
+});
+
 function WeeklyShiftSettingsPage() {
-    const [shifts, setShiftRows] = useState(createDefaultShifts);
+    const [shifts, setShiftRows] = useState([]);
+    const [savedShifts, setSavedShifts] = useState([]);
+    const [isUpdateMode, setIsUpdateMode] = useState(false);
     const [message, setMessage] = useState("");
     const [isSaving, setIsSaving] = useState(false);
     const saveLockRef = useRef(false);
     const lastSavedPayloadRef = useRef(null);
 
-
     useEffect(() => {
         const loadShifts = async () => {
             try {
-                const response = await getEmployerShifts();
-
-                console.log("GET SHIFTS RESPONSE:", response);
-                console.log("GET SHIFTS DATA:", response.data);
-
-                if (!response.data.success) {
-                    setMessage("Failed to load shift settings.");
-                    return;
-                }
-
-                const loadedShifts = response.data.shifts;
-
-                console.log("LOADED SHIFTS:", loadedShifts);
-                console.log("LOADED SHIFTS LENGTH:", loadedShifts?.length);
-
-                setShiftRows(
-                    Array.isArray(loadedShifts) && loadedShifts.length > 0
-                        ? addExtraFlags(loadedShifts)
-                        : createDefaultShifts()
-                );
+                const normalizedShifts = await fetchEmployerShiftRows();
+                setSavedShifts(normalizedShifts);
+                setShiftRows(normalizedShifts);
             } catch (error) {
-
                 console.log("GET SHIFTS ERROR:", error);
-
                 setMessage("Failed to load shift settings.");
             }
         };
@@ -148,23 +198,55 @@ function WeeklyShiftSettingsPage() {
                 (shift) => shift.weekDay === selectedShift.weekDay
             );
 
-            updatedShifts.splice(lastDayIndex + 1, 0, {
-                id: Date.now(),
-                weekDay: selectedShift.weekDay,
-                startTime: "",
-                endTime: "",
-                employeeAmount: "",
-                isExtra: true
-            });
+            const newShift = createNewShift(selectedShift.weekDay);
+
+            console.log("NEW SHIFT ID:", newShift.id);
+
+            updatedShifts.splice(
+                lastDayIndex + 1,
+                0,
+                newShift
+            );
 
             return updatedShifts;
         });
     };
 
-    const handleDeleteShift = (shiftId) => {
-        setShiftRows((currentShifts) => currentShifts.filter(
-            (shift) => shift.id !== shiftId || !shift.isExtra
+    const handleDeleteShift = async (shiftId) => {
+        const selectedShift = shifts.find((shift) => shift.id === shiftId);
+
+        if (!selectedShift) {
+            return;
+        }
+
+        if (!selectedShift.isNew) {
+            try {
+                console.log("DELETE SHIFT ID:", shiftId);
+                const response = await deleteShift(shiftId);
+
+                if (response.data?.success === false) {
+                    setMessage("Failed to delete shift.");
+                    return;
+                }
+
+                setSavedShifts((currentShifts) => currentShifts.filter(
+                    (shift) => shift.id !== shiftId
+                ));
+            } catch (error) {
+                console.log("DELETE SHIFT ERROR:", error.response?.data || error);
+                setMessage("Failed to delete shift.");
+                return;
+            }
+        }
+
+        setShiftRows((currentShifts) => mergeShiftsWithWeekDays(
+            currentShifts.filter((shift) => shift.id !== shiftId)
         ));
+    };
+
+    const handleUpdateMode = () => {
+        setShiftRows(mergeShiftsWithWeekDays(savedShifts));
+        setIsUpdateMode(true);
     };
 
     const handleSave = async () => {
@@ -174,6 +256,28 @@ function WeeklyShiftSettingsPage() {
         }
 
         const filledShifts = shifts.filter((shift) => !isEmptyShift(shift));
+
+        console.log("FILLED SHIFTS", filledShifts);
+        console.log(
+            "PARTIAL CHECK",
+            filledShifts.some((shift) => !isCompleteShift(shift))
+        );
+        console.log(
+            "INVALID TIME CHECK",
+            filledShifts.some(hasInvalidTimeRange)
+        );
+        filledShifts.forEach((shift) => {
+            console.log(
+                "SHIFT:",
+                shift.id,
+                "START:",
+                shift.startTime,
+                "END:",
+                shift.endTime,
+                "INVALID:",
+                hasInvalidTimeRange(shift)
+            );
+        });
 
         if (filledShifts.length === 0) {
             setMessage("No shifts to save.");
@@ -204,22 +308,55 @@ function WeeklyShiftSettingsPage() {
         console.log("LOCKED");
 
         try {
+            const existingShiftPayloads = filledShifts
+                .filter((shift) => !shift.isNew)
+                .map(createUpdatePayload);
+            const newShiftPayload = {
+                shifts: createShiftsPayload(
+                    filledShifts.filter((shift) => shift.isNew)
+                )
+            };
+
+            console.log(
+                "EXISTING SHIFT IDS:",
+                existingShiftPayloads.map((shift) => shift.id)
+            );
+            console.log(
+                "NEW SHIFT IDS:",
+                filledShifts
+                    .filter((shift) => shift.isNew)
+                    .map((shift) => shift.id)
+            );
+
             console.log(
                 "PAYLOAD STRING:",
                 JSON.stringify(payload, null, 2)
             );
 
-            const response = await setShifts(payload);
+            const updateRequests = existingShiftPayloads.map((updatePayload) => {
+                console.log("UPDATE SHIFTS PAYLOAD:", updatePayload);
+                return updateShifts(updatePayload);
+            });
 
-            console.log("SAVE RESPONSE:", response.data);
+            const requests = [...updateRequests];
 
-            if (response.data.success) {
-                lastSavedPayloadRef.current = payload;
-                setMessage("Shift settings saved successfully.");
-            } else {
-                setMessage("Failed to save shift settings.");
+            if (newShiftPayload.shifts.length > 0) {
+                console.log("SET SHIFTS PAYLOAD:", newShiftPayload);
+                requests.push(setShifts(newShiftPayload));
             }
 
+            const responses = await Promise.all(requests);
+
+            if (responses.some((response) => response.data?.success === false)) {
+                setMessage("Failed to save shift settings.");
+                return;
+            }
+
+            lastSavedPayloadRef.current = payload;
+            const refreshedShifts = await fetchEmployerShiftRows();
+            setSavedShifts(refreshedShifts);
+            setShiftRows(mergeShiftsWithWeekDays(refreshedShifts));
+            setMessage("Shift settings saved successfully.");
         } catch (error) {
 
             console.log("STATUS:", error.response?.status);
@@ -256,14 +393,19 @@ function WeeklyShiftSettingsPage() {
             <ShiftSettingsTable
                 shifts={shifts}
                 weekDays={weekDays}
+                mode={isUpdateMode ? "update" : "readonly"}
                 onChangeShift={handleShiftChange}
                 onAddShift={handleAddShift}
                 onDeleteShift={handleDeleteShift}
             />
 
-            <button type="button" onClick={handleSave} disabled={isSaving}>
-                {isSaving ? "Saving..." : "Save"}
-            </button>
+            {isUpdateMode ? (
+                <button type="button" onClick={handleSave} disabled={isSaving}>
+                    {isSaving ? "Saving..." : "Save"}
+                </button>
+            ) : (
+                <button type="button" onClick={handleUpdateMode}>Update</button>
+            )}
             <button type="button" onClick={handlePublish}>Publish Shifts</button>
 
             {message && <p>{message}</p>}
