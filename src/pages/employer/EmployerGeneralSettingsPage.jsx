@@ -1,10 +1,13 @@
 import { useEffect, useState } from "react";
 import NavbarEmployer from "../../Navbar/navbar-employer/NavbarEmployer.jsx";
-import { getEmployerSettings, setEmployerSettings } from "../../service/employerSettingsApi.js";
+import {
+    getEmployerSettings,
+    setEmployerSettings
+} from "../../service/employerSettingsApi.js";
 
 function EmployerGeneralSettingsPage() {
     const [settings, setSettings] = useState({
-        submitionExparation: "",
+        submissionExpiration: "",
     });
 
     const [loading, setLoading] = useState(true);
@@ -16,24 +19,39 @@ function EmployerGeneralSettingsPage() {
     useEffect(() => {
         getEmployerSettings()
             .then((response) => {
-                const serverSettings = response.data?.settings || response.data;
 
-                if (serverSettings && serverSettings.submitionExparation) {
+                console.log("GET SETTINGS RESPONSE:", response);
+                console.log("GET SETTINGS DATA:", response.data);
+
+                const serverSettings =
+                    response.data?.settings || response.data;
+
+                console.log("SERVER SETTINGS:", serverSettings);
+
+                if (
+                    serverSettings &&
+                    serverSettings.submissionExpiration
+                ) {
                     setSettings({
-                        submitionExparation: serverSettings.submitionExparation,
+                        submissionExpiration:
+                        serverSettings.submissionExpiration,
                     });
 
                     setIsEditMode(false);
                 } else {
                     setSettings({
-                        submitionExparation: "",
+                        submissionExpiration: "",
                     });
 
                     setIsEditMode(true);
                 }
             })
             .catch((error) => {
+
                 console.log("GET SETTINGS ERROR:", error);
+                console.log("GET STATUS:", error.response?.status);
+                console.log("GET DATA:", error.response?.data);
+
                 setError("Failed to load settings");
             })
             .finally(() => {
@@ -42,7 +60,7 @@ function EmployerGeneralSettingsPage() {
     }, []);
 
     const isFormValid = () => {
-        if (settings.submitionExparation.trim() === "") {
+        if (settings.submissionExpiration.trim() === "") {
             setError("Please choose date and time");
             return false;
         }
@@ -60,10 +78,17 @@ function EmployerGeneralSettingsPage() {
             return;
         }
 
+        console.log("SETTINGS TO SAVE:", settings);
+        console.log("REQUEST BODY:", settings);
+
         setSaving(true);
 
         setEmployerSettings(settings)
             .then((response) => {
+
+                console.log("SAVE RESPONSE:", response);
+                console.log("SAVE RESPONSE DATA:", response.data);
+
                 if (response.data?.success === false) {
                     setError("Failed to save settings");
                     return;
@@ -73,7 +98,19 @@ function EmployerGeneralSettingsPage() {
                 setIsEditMode(false);
             })
             .catch((error) => {
+
                 console.log("SET SETTINGS ERROR:", error);
+                console.log("STATUS:", error.response?.status);
+                console.log("DATA:", error.response?.data);
+                console.log(
+                    "DATA STRING:",
+                    JSON.stringify(
+                        error.response?.data,
+                        null,
+                        2
+                    )
+                );
+
                 setError("Failed to save settings");
             })
             .finally(() => {
@@ -101,24 +138,32 @@ function EmployerGeneralSettingsPage() {
 
                         <input
                             type="datetime-local"
-                            value={settings.submitionExparation}
+                            value={settings.submissionExpiration}
                             disabled={!isEditMode}
                             onChange={(e) =>
                                 setSettings({
                                     ...settings,
-                                    submitionExparation: e.target.value,
+                                    submissionExpiration:
+                                    e.target.value,
                                 })
                             }
                         />
 
                         {isEditMode ? (
-                            <button type="submit" disabled={saving}>
-                                {saving ? "Saving..." : "Save"}
+                            <button
+                                type="submit"
+                                disabled={saving}
+                            >
+                                {saving
+                                    ? "Saving..."
+                                    : "Save"}
                             </button>
                         ) : (
                             <button
                                 type="button"
-                                onClick={() => setIsEditMode(true)}
+                                onClick={() =>
+                                    setIsEditMode(true)
+                                }
                             >
                                 Edit
                             </button>
