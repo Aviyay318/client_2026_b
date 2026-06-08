@@ -1,0 +1,349 @@
+.employer-placement-page {
+    grid-template-columns: 280px minmax(0, 1fr);
+    gap: 24px;
+    overflow-x: hidden;
+    background:
+        radial-gradient(circle at 18% 10%, rgba(37, 99, 235, 0.18), transparent 30rem),
+        radial-gradient(circle at 92% 0%, rgba(79, 70, 229, 0.16), transparent 32rem),
+        linear-gradient(135deg, #06111f 0%, #081426 48%, #030b16 100%);
+}
+
+.employer-placement-page * {
+    box-sizing: border-box;
+}
+
+.employer-placement-page .employerNavbar {
+    border-radius: 22px;
+    background:
+        linear-gradient(180deg, rgba(12, 26, 48, 0.9), rgba(7, 18, 35, 0.92)),
+        rgba(8, 17, 31, 0.86);
+}
+
+.employer-placement-content {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.employer-placement-hero,
+.employer-placement-table-card {
+    border: 1px solid rgba(96, 165, 250, 0.22);
+    background:
+        linear-gradient(180deg, rgba(13, 29, 53, 0.9), rgba(7, 18, 35, 0.9)),
+        rgba(8, 18, 34, 0.86);
+    box-shadow:
+        0 28px 74px rgba(0, 0, 0, 0.32),
+        0 0 48px rgba(37, 99, 235, 0.08),
+        inset 0 1px 0 rgba(255, 255, 255, 0.04);
+    backdrop-filter: blur(18px);
+}
+
+.employer-placement-hero {
+    min-height: 172px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    padding: 28px;
+    border-radius: 22px;
+}
+
+.employer-placement-hero-copy {
+    min-width: 0;
+}
+
+.employer-placement-back {
+    display: inline-flex;
+    margin-bottom: 22px;
+    color: #93a4be;
+    font-size: 1.85rem;
+    line-height: 1;
+}
+
+.employer-placement-eyebrow {
+    display: block;
+    margin-bottom: 10px;
+    color: #22d3ee;
+    font-size: 0.78rem;
+    font-weight: 900;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+}
+
+.employer-placement-hero h1 {
+    margin: 0;
+    color: #f8fbff;
+    font-size: clamp(2rem, 4vw, 3rem);
+    line-height: 1.05;
+    letter-spacing: 0;
+}
+
+.employer-placement-hero p {
+    margin: 12px 0 0;
+    color: #bfcbda;
+    font-size: 1.05rem;
+}
+
+.employer-placement-save-button {
+    min-width: 184px;
+    height: 56px;
+    padding: 0 22px;
+    border: 1px solid rgba(125, 183, 255, 0.34);
+    border-radius: 10px;
+    color: #eef5ff;
+    background: linear-gradient(135deg, #2563eb, #1d4ed8);
+    box-shadow:
+        0 18px 36px rgba(37, 99, 235, 0.32),
+        inset 0 1px 0 rgba(255, 255, 255, 0.16);
+    cursor: pointer;
+    font: inherit;
+    font-weight: 900;
+    transition: transform 160ms ease, box-shadow 160ms ease;
+}
+
+.employer-placement-save-button:hover {
+    transform: translateY(-1px);
+    box-shadow:
+        0 22px 42px rgba(37, 99, 235, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.employer-placement-message {
+    padding: 14px 16px;
+    border-radius: 14px;
+    text-align: center;
+    font-weight: 800;
+}
+
+.employer-placement-error {
+    border: 1px solid rgba(248, 113, 113, 0.28);
+    color: #fecaca;
+    background: rgba(127, 29, 29, 0.28);
+}
+
+.employer-placement-success {
+    border: 1px solid rgba(34, 197, 94, 0.26);
+    color: #dcfce7;
+    background: rgba(20, 83, 45, 0.62);
+}
+
+.employer-placement-table-card {
+    padding: 22px;
+    border-radius: 22px;
+    overflow: hidden;
+}
+
+.employer-placement-table-card .shift-settings-table-shell {
+    border-radius: 12px;
+    border-color: rgba(96, 165, 250, 0.2);
+    background: rgba(3, 12, 25, 0.34);
+}
+
+.employer-placement-table-card .shift-settings-table {
+    min-width: 1120px;
+    table-layout: fixed;
+}
+
+.employer-placement-table-card .shift-settings-table th,
+.employer-placement-table-card .shift-settings-table td {
+    padding: 18px 24px;
+}
+
+.employer-placement-table-card .shift-settings-table td {
+    height: auto;
+    min-height: 86px;
+}
+
+.employer-placement-table-card .shift-settings-table th:first-child,
+.employer-placement-table-card .shift-settings-table td:first-child {
+    width: 18%;
+    text-align: left;
+}
+
+.employer-placement-table-card .shift-settings-table th:nth-child(2),
+.employer-placement-table-card .shift-settings-table td:nth-child(2),
+.employer-placement-table-card .shift-settings-table th:nth-child(3),
+.employer-placement-table-card .shift-settings-table td:nth-child(3) {
+    width: 18%;
+    text-align: center;
+}
+
+.employer-placement-table-card .shift-settings-table th:nth-child(4),
+.employer-placement-table-card .shift-settings-table td:nth-child(4) {
+    width: 46%;
+    text-align: left;
+}
+
+.employer-placement-table-card .shift-settings-table th:nth-child(4) {
+    text-align: center;
+}
+
+.employer-placement-table-card .shift-settings-table td:nth-child(2),
+.employer-placement-table-card .shift-settings-table td:nth-child(3) {
+    color: #dce8f8;
+    font-weight: 800;
+}
+
+.placement-employee-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(150px, 1fr));
+    gap: 10px 14px;
+    align-items: start;
+}
+
+.placement-employee-select-wrap {
+    min-width: 0;
+    display: grid;
+    gap: 5px;
+}
+
+.placement-employee-select-wrap select {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 100%;
+    min-width: 0;
+    height: 42px;
+    padding: 0 38px 0 14px;
+    border: 1px solid rgba(96, 165, 250, 0.34);
+    border-radius: 10px;
+    color: #f2f7ff;
+    background:
+        linear-gradient(45deg, transparent 50%, #9fb7d7 50%) calc(100% - 18px) 50% / 7px 7px no-repeat,
+        linear-gradient(135deg, #9fb7d7 50%, transparent 50%) calc(100% - 13px) 50% / 7px 7px no-repeat,
+        linear-gradient(180deg, rgba(13, 31, 57, 0.96), rgba(5, 16, 32, 0.98));
+    outline: none;
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.055),
+        0 12px 24px rgba(0, 0, 0, 0.18);
+    font: inherit;
+    font-size: 0.9rem;
+    font-weight: 700;
+    transition: border-color 160ms ease, box-shadow 160ms ease, background-color 160ms ease, color 160ms ease;
+}
+
+.placement-employee-select-wrap select:hover {
+    border-color: rgba(147, 197, 253, 0.58);
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.06),
+        0 14px 26px rgba(0, 0, 0, 0.22);
+}
+
+.placement-employee-select-wrap select:focus {
+    border-color: rgba(96, 165, 250, 0.86);
+    box-shadow:
+        0 0 0 3px rgba(59, 130, 246, 0.16),
+        0 12px 24px rgba(0, 0, 0, 0.18);
+}
+
+.placement-employee-select-wrap select.placement-select-required {
+    border-color: rgba(251, 191, 36, 0.38);
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.045),
+        0 0 0 1px rgba(251, 191, 36, 0.08),
+        0 10px 22px rgba(0, 0, 0, 0.16);
+}
+
+.placement-employee-select-wrap select.placement-select-required:focus {
+    border-color: rgba(251, 191, 36, 0.6);
+    box-shadow:
+        0 0 0 3px rgba(251, 191, 36, 0.12),
+        0 12px 24px rgba(0, 0, 0, 0.18);
+}
+
+.placement-employee-select-wrap select option {
+    color: #eaf2ff;
+    background: #071426;
+}
+
+.placement-employee-select-wrap select option[value=""] {
+    color: #9fb0c8;
+}
+
+.placement-required-text,
+.placement-employee-select-wrap span {
+    justify-self: start;
+    color: #facc15 !important;
+    font-size: 0.72rem !important;
+    font-weight: 800;
+    line-height: 1;
+}
+
+.employer-placement-info-card {
+    display: flex;
+    gap: 18px;
+    margin-top: 22px;
+    padding: 22px;
+    border: 1px solid rgba(96, 165, 250, 0.16);
+    border-radius: 16px;
+    background:
+        linear-gradient(180deg, rgba(10, 23, 43, 0.72), rgba(6, 16, 31, 0.78)),
+        rgba(3, 12, 25, 0.46);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.035);
+}
+
+.employer-placement-info-icon {
+    width: 50px;
+    height: 50px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 50px;
+    border-radius: 14px;
+    color: #bfdbfe;
+    background: linear-gradient(135deg, rgba(37, 99, 235, 0.72), rgba(30, 64, 175, 0.72));
+    box-shadow: 0 16px 32px rgba(37, 99, 235, 0.18);
+    font-size: 1.35rem;
+    font-weight: 900;
+}
+
+.employer-placement-info-card h2 {
+    margin: 0;
+    color: #f8fbff;
+    font-size: 1.1rem;
+}
+
+.employer-placement-info-card p {
+    margin: 9px 0 0;
+    color: #bfcbda;
+    line-height: 1.55;
+}
+
+@media (max-width: 1180px) {
+    .placement-employee-grid {
+        grid-template-columns: repeat(2, minmax(150px, 1fr));
+    }
+}
+
+@media (max-width: 980px) {
+    .employer-placement-page {
+        grid-template-columns: 1fr;
+    }
+
+    .employer-placement-hero {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+}
+
+@media (max-width: 680px) {
+    .employer-placement-table-card {
+        padding: 14px;
+    }
+
+    .employer-placement-hero {
+        padding: 22px;
+    }
+
+    .employer-placement-save-button {
+        width: 100%;
+    }
+
+    .placement-employee-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .employer-placement-info-card {
+        flex-direction: column;
+    }
+}

@@ -4,6 +4,7 @@ import {
     formatTimeForServer
 } from "../../utils/timeUtils.js";
 import ShiftSettingsTable from "../../components/ShiftSettingsTable.jsx";
+import "./WeeklyShiftSettingsPage.css";
 import {
     deleteShift,
     getEmployerShifts,
@@ -386,29 +387,52 @@ function WeeklyShiftSettingsPage() {
     };
 
     return (
-        <div>
+        <div className="weekly-shift-settings-page">
 
-            <h1>Weekly Shift Settings</h1>
+            <div className="weekly-shift-settings-header">
+                <h1>Weekly Shift Settings</h1>
+            </div>
 
-            <ShiftSettingsTable
-                shifts={shifts}
-                weekDays={weekDays}
-                mode={isUpdateMode ? "update" : "readonly"}
-                onChangeShift={handleShiftChange}
-                onAddShift={handleAddShift}
-                onDeleteShift={handleDeleteShift}
-            />
+            <section className="weekly-shift-settings-card">
+                <ShiftSettingsTable
+                    shifts={shifts}
+                    weekDays={weekDays}
+                    mode={isUpdateMode ? "update" : "readonly"}
+                    onChangeShift={handleShiftChange}
+                    onAddShift={handleAddShift}
+                    onDeleteShift={handleDeleteShift}
+                />
 
-            {isUpdateMode ? (
-                <button type="button" onClick={handleSave} disabled={isSaving}>
-                    {isSaving ? "Saving..." : "Save"}
-                </button>
-            ) : (
-                <button type="button" onClick={handleUpdateMode}>Update</button>
-            )}
-            <button type="button" onClick={handlePublish}>Publish Shifts</button>
+                <div className="weekly-shift-settings-actions">
+                    {isUpdateMode ? (
+                        <button
+                            className="weekly-shift-settings-button weekly-shift-settings-button-secondary"
+                            type="button"
+                            onClick={handleSave}
+                            disabled={isSaving}
+                        >
+                            {isSaving ? "Saving..." : "Save"}
+                        </button>
+                    ) : (
+                        <button
+                            className="weekly-shift-settings-button weekly-shift-settings-button-secondary"
+                            type="button"
+                            onClick={handleUpdateMode}
+                        >
+                            Update
+                        </button>
+                    )}
+                    <button
+                        className="weekly-shift-settings-button weekly-shift-settings-button-primary"
+                        type="button"
+                        onClick={handlePublish}
+                    >
+                        Publish Shifts
+                    </button>
+                </div>
 
-            {message && <p>{message}</p>}
+                {message && <p className="weekly-shift-settings-message">{message}</p>}
+            </section>
         </div>
     );
 }

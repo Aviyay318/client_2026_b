@@ -1,3 +1,5 @@
+import "./ShiftSettingsTable.css";
+
 function ShiftSettingsTable({
     shifts,
     weekDays,
@@ -16,7 +18,8 @@ function ShiftSettingsTable({
     const showActions = isEditableMode;
 
     return (
-        <table>
+        <div className="shift-settings-table-shell">
+            <table className="shift-settings-table">
 
             <thead>
             <tr>
@@ -32,19 +35,22 @@ function ShiftSettingsTable({
 
             {(isPlacementMode || isReadOnlyMode) && shifts.length === 0 ? (
                 <tr>
-                    <td colSpan="4">{emptyMessage}</td>
+                    <td className="shift-settings-empty" colSpan="4">{emptyMessage}</td>
                 </tr>
             ) : shifts.map((shift, shiftIndex) => (
                 <tr key={getShiftId(shift, shiftIndex)}>
 
-                    <td>
-                        {weekDays.find(
-                            (weekDayOption) => weekDayOption.value === shift.weekDay
-                        )?.label || (
-                            isPlacementMode
-                                ? shift.day || shift.date || "Not available"
-                                : undefined
-                        )}
+                    <td className="shift-settings-day-cell">
+                        <span className="shift-settings-day-icon" aria-hidden="true"></span>
+                        <span>
+                            {weekDays.find(
+                                (weekDayOption) => weekDayOption.value === shift.weekDay
+                            )?.label || (
+                                isPlacementMode
+                                    ? shift.day || shift.date || "Not available"
+                                    : undefined
+                            )}
+                        </span>
                     </td>
 
                     <td>
@@ -91,39 +97,47 @@ function ShiftSettingsTable({
                         )}
                     </td>
 
-                    {showActions && <td>
-                        {isUpdateMode ? (
-                            <>
+                    {showActions && <td className="shift-settings-actions-cell">
+                        <div className="shift-settings-actions-group">
+                            {isUpdateMode ? (
+                                <>
+                                    <button
+                                        className="shift-settings-icon-button shift-settings-add-button"
+                                        type="button"
+                                        aria-label="Add shift"
+                                        onClick={() => onAddShift(shift.id)}
+                                    >
+                                        +
+                                    </button>
+                                    {!shift.isPlaceholder && (
+                                        <button
+                                            className="shift-settings-delete-button"
+                                            type="button"
+                                            onClick={() => onDeleteShift(shift.id)}
+                                        >
+                                            Delete
+                                        </button>
+                                    )}
+                                </>
+                            ) : shift.isExtra ? (
                                 <button
+                                    className="shift-settings-delete-button"
                                     type="button"
+                                    onClick={() => onDeleteShift(shift.id)}
+                                >
+                                    Delete
+                                </button>
+                            ) : (
+                                <button
+                                    className="shift-settings-icon-button shift-settings-add-button"
+                                    type="button"
+                                    aria-label="Add shift"
                                     onClick={() => onAddShift(shift.id)}
                                 >
                                     +
                                 </button>
-                                {!shift.isPlaceholder && (
-                                    <button
-                                        type="button"
-                                        onClick={() => onDeleteShift(shift.id)}
-                                    >
-                                        Delete
-                                    </button>
-                                )}
-                            </>
-                        ) : shift.isExtra ? (
-                            <button
-                                type="button"
-                                onClick={() => onDeleteShift(shift.id)}
-                            >
-                                Delete
-                            </button>
-                        ) : (
-                            <button
-                                type="button"
-                                onClick={() => onAddShift(shift.id)}
-                            >
-                                +
-                            </button>
-                        )}
+                            )}
+                        </div>
                     </td>}
 
                 </tr>
@@ -132,6 +146,7 @@ function ShiftSettingsTable({
             </tbody>
 
         </table>
+        </div>
     );
 }
 

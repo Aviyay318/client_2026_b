@@ -1,0 +1,291 @@
+.shift-settings-table-shell {
+    width: 100%;
+    overflow-x: auto;
+    padding: 0;
+    border: 1px solid rgba(88, 111, 145, 0.42);
+    border-radius: 12px;
+    background: rgba(3, 12, 25, 0.42);
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.035),
+        inset 0 -1px 0 rgba(0, 0, 0, 0.22);
+}
+
+.shift-settings-table {
+    width: 100%;
+    min-width: 940px;
+    table-layout: fixed;
+    border-collapse: collapse;
+    border-spacing: 0;
+    color: #e5edf8;
+    font-size: 1.02rem;
+}
+
+.shift-settings-table thead {
+    background: linear-gradient(180deg, rgba(17, 32, 55, 0.72), rgba(11, 24, 43, 0.62));
+}
+
+.shift-settings-table th {
+    padding: 20px 26px 18px;
+    color: #aebbd0;
+    font-size: 0.94rem;
+    font-weight: 700;
+    letter-spacing: 0;
+    text-align: left;
+    border-bottom: 1px solid rgba(95, 118, 151, 0.34);
+    white-space: nowrap;
+}
+
+.shift-settings-table td {
+    height: 72px;
+    padding: 14px 26px;
+    vertical-align: middle;
+    border-bottom: 1px solid rgba(95, 118, 151, 0.23);
+}
+
+.shift-settings-table th:nth-child(n + 2),
+.shift-settings-table td:nth-child(n + 2) {
+    text-align: center;
+}
+
+.shift-settings-table th:first-child,
+.shift-settings-table td:first-child {
+    text-align: left;
+}
+
+.shift-settings-table th:nth-child(1),
+.shift-settings-table td:nth-child(1) {
+    width: 18%;
+}
+
+.shift-settings-table th:nth-child(2),
+.shift-settings-table td:nth-child(2),
+.shift-settings-table th:nth-child(3),
+.shift-settings-table td:nth-child(3) {
+    width: 21%;
+}
+
+.shift-settings-table th:nth-child(4),
+.shift-settings-table td:nth-child(4) {
+    width: 25%;
+}
+
+.shift-settings-table th:nth-child(5),
+.shift-settings-table td:nth-child(5) {
+    width: 15%;
+}
+
+.shift-settings-table tbody tr {
+    background: linear-gradient(180deg, rgba(6, 18, 35, 0.62), rgba(5, 15, 30, 0.72));
+    transition: background-color 180ms ease, box-shadow 180ms ease, transform 180ms ease;
+}
+
+.shift-settings-table tbody tr:hover {
+    background: linear-gradient(180deg, rgba(12, 29, 52, 0.76), rgba(7, 19, 37, 0.8));
+    box-shadow: inset 3px 0 0 rgba(59, 130, 246, 0.34);
+}
+
+.shift-settings-table tbody tr:last-child td {
+    border-bottom: 0;
+}
+
+.shift-settings-day-cell {
+    color: #f3f7fc;
+    font-weight: 800;
+    min-width: 190px;
+    white-space: nowrap;
+}
+
+.shift-settings-day-icon {
+    position: relative;
+    display: inline-flex;
+    width: 18px;
+    height: 18px;
+    flex: 0 0 18px;
+    margin-right: 16px;
+    vertical-align: middle;
+    border: 2px solid #4e9bff;
+    border-radius: 4px;
+    box-shadow: 0 0 14px rgba(59, 130, 246, 0.28);
+}
+
+.shift-settings-day-cell > span:last-child {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.shift-settings-day-icon::before,
+.shift-settings-day-icon::after {
+    content: "";
+    position: absolute;
+    top: -5px;
+    width: 3px;
+    height: 7px;
+    border-radius: 999px;
+    background: #4e9bff;
+}
+
+.shift-settings-day-icon::before {
+    left: 3px;
+}
+
+.shift-settings-day-icon::after {
+    right: 3px;
+}
+
+.shift-settings-table tbody tr:nth-child(1) .shift-settings-day-icon,
+.shift-settings-table tbody tr:nth-child(2) .shift-settings-day-icon,
+.shift-settings-table tbody tr:nth-child(8) .shift-settings-day-icon {
+    border-color: #fbbf24;
+    border-radius: 999px;
+    box-shadow: 0 0 16px rgba(251, 191, 36, 0.24);
+}
+
+.shift-settings-table tbody tr:nth-child(1) .shift-settings-day-icon::before,
+.shift-settings-table tbody tr:nth-child(1) .shift-settings-day-icon::after,
+.shift-settings-table tbody tr:nth-child(2) .shift-settings-day-icon::before,
+.shift-settings-table tbody tr:nth-child(2) .shift-settings-day-icon::after,
+.shift-settings-table tbody tr:nth-child(8) .shift-settings-day-icon::before,
+.shift-settings-table tbody tr:nth-child(8) .shift-settings-day-icon::after {
+    top: 6px;
+    width: 5px;
+    height: 2px;
+    background: #fbbf24;
+}
+
+.shift-settings-table tbody tr:nth-child(1) .shift-settings-day-icon::before,
+.shift-settings-table tbody tr:nth-child(2) .shift-settings-day-icon::before,
+.shift-settings-table tbody tr:nth-child(8) .shift-settings-day-icon::before {
+    left: -7px;
+}
+
+.shift-settings-table tbody tr:nth-child(1) .shift-settings-day-icon::after,
+.shift-settings-table tbody tr:nth-child(2) .shift-settings-day-icon::after,
+.shift-settings-table tbody tr:nth-child(8) .shift-settings-day-icon::after {
+    right: -7px;
+}
+
+.shift-settings-table input {
+    width: 100%;
+    min-width: 150px;
+    height: 48px;
+    padding: 0 16px;
+    color: #edf4ff;
+    background:
+        linear-gradient(180deg, rgba(14, 27, 48, 0.88), rgba(6, 16, 31, 0.92));
+    border: 1px solid rgba(103, 126, 158, 0.45);
+    border-radius: 8px;
+    outline: none;
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.045),
+        0 10px 24px rgba(0, 0, 0, 0.14);
+    transition: border-color 160ms ease, box-shadow 160ms ease, background-color 160ms ease;
+}
+
+.shift-settings-table input:focus {
+    background: linear-gradient(180deg, rgba(16, 31, 55, 0.96), rgba(8, 20, 38, 0.98));
+    border-color: rgba(71, 149, 255, 0.95);
+    box-shadow:
+        0 0 0 2px rgba(59, 130, 246, 0.18),
+        0 0 22px rgba(59, 130, 246, 0.18);
+}
+
+.shift-settings-table input[type="number"] {
+    display: block;
+    max-width: 230px;
+    margin: 0 auto;
+}
+
+.shift-settings-table input[type="time"] {
+    display: block;
+    max-width: 230px;
+    margin: 0 auto;
+    color-scheme: dark;
+}
+
+.shift-settings-actions-cell {
+    white-space: nowrap;
+}
+
+.shift-settings-actions-group {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    min-height: 44px;
+}
+
+.shift-settings-icon-button,
+.shift-settings-delete-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 44px;
+    border: 1px solid rgba(69, 103, 153, 0.34);
+    border-radius: 8px;
+    color: #dbeafe;
+    background: linear-gradient(180deg, rgba(28, 54, 96, 0.74), rgba(17, 35, 68, 0.84));
+    cursor: pointer;
+    font-weight: 700;
+    box-shadow: 0 12px 26px rgba(0, 0, 0, 0.18);
+    transition: transform 160ms ease, border-color 160ms ease, background-color 160ms ease, color 160ms ease, box-shadow 160ms ease;
+}
+
+.shift-settings-icon-button:hover,
+.shift-settings-delete-button:hover {
+    transform: translateY(-1px);
+    border-color: rgba(71, 149, 255, 0.58);
+    box-shadow: 0 16px 30px rgba(0, 0, 0, 0.22);
+}
+
+.shift-settings-icon-button {
+    width: 54px;
+    padding: 0;
+    font-size: 1.85rem;
+    font-weight: 400;
+    line-height: 1;
+}
+
+.shift-settings-add-button {
+    color: #5ca2ff;
+    background: linear-gradient(180deg, rgba(31, 66, 126, 0.72), rgba(19, 39, 79, 0.86));
+}
+
+.shift-settings-delete-button {
+    min-width: 72px;
+    padding: 0 14px;
+    color: #ffb4b4;
+    background: linear-gradient(180deg, rgba(132, 42, 54, 0.76), rgba(95, 28, 39, 0.84));
+    border-color: rgba(248, 113, 113, 0.28);
+}
+
+.shift-settings-delete-button:hover {
+    color: #fee2e2;
+    border-color: rgba(248, 113, 113, 0.5);
+    background: linear-gradient(180deg, rgba(151, 50, 63, 0.82), rgba(112, 33, 45, 0.9));
+}
+
+.shift-settings-empty {
+    padding: 36px 18px;
+    color: #9fb5d1;
+    text-align: center;
+}
+
+@media (max-width: 760px) {
+    .shift-settings-table-shell {
+        border-radius: 10px;
+    }
+
+    .shift-settings-table {
+        min-width: 780px;
+        font-size: 0.95rem;
+    }
+
+    .shift-settings-table th,
+    .shift-settings-table td {
+        padding: 12px 16px;
+    }
+
+    .shift-settings-table td {
+        height: 64px;
+    }
+}

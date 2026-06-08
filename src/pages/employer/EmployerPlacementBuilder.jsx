@@ -2,12 +2,13 @@ import {useEffect, useState} from "react";
 import NavbarEmployer from "../../Navbar/navbar-employer/NavbarEmployer.jsx";
 import ShiftSettingsTable from "../../components/ShiftSettingsTable.jsx";
 import {
-    getAllActiveEmployees,
+    getAllEmployees,
     getEmployerShifts
 } from "../../service/employerApi.js";
 import {formatTimeForInput} from "../../utils/timeUtils.js";
 import {savePlacement} from "../../service/workApi.js";
 import "./EmployerDashboard.css";
+import "./EmployerPlacementBuilder.css";
 
 const weekDays = [
     {value: 1, label: "Sunday"},
@@ -67,7 +68,7 @@ function EmployerPlacementBuilder() {
                 setError("Could not load shifts.");
             });
 
-        getAllActiveEmployees()
+        getAllEmployees()
             .then((response) => {
                 setEmployees(response.data?.employees || response.data || []);
             })
@@ -105,16 +106,16 @@ function EmployerPlacementBuilder() {
         const requiredEmployees = getRequiredEmployees(shift);
 
         return (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+            <div className="placement-employee-grid">
                 {Array.from({length: requiredEmployees}).map((_, index) => {
                     const currentSelection = placements[shiftId]?.[index] || "";
 
                     return (
-                        <div key={index} style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                        <div key={index} className="placement-employee-select-wrap">
                             <select
                                 value={currentSelection}
                                 onChange={(e) => handleEmployeeChange(shiftId, index, e.target.value)}
-                                style={{ borderColor: !currentSelection ? 'orange' : '#ccc' }}
+                                className={!currentSelection ? "placement-select-required" : ""}
                             >
                                 <option value="">Select employee</option>
 
@@ -187,23 +188,23 @@ function EmployerPlacementBuilder() {
         <div className="manager-dashboard-shell employer-placement-page">
             <NavbarEmployer active="Placement" />
 
-            <div className="manager-dashboard-content">
-                <header className="manager-topbar">
-                    <div>
-                        <span className="manager-eyebrow">WorkSync Placement</span>
+            <main className="employer-placement-content">
+                <header className="employer-placement-hero">
+                    <div className="employer-placement-hero-copy">
+                        <span className="employer-placement-eyebrow">WorkSync Placement</span>
                         <h1>Employer Placement Builder</h1>
                         <p>Assign active employees to required work shifts.</p>
                     </div>
 
-                    <button className="manager-secondary-btn" type="button" onClick={handleSave}>
+                    <button className="employer-placement-save-button" type="button" onClick={handleSave}>
                         {isEditMode ? "Update Placement" : "Save Placement"}
                     </button>
                 </header>
 
-                {error && <div className="manager-error">{error}</div>}
-                {message && <div className="manager-toast">{message}</div>}
+                {error && <div className="employer-placement-message employer-placement-error">{error}</div>}
+                {message && <div className="employer-placement-message employer-placement-success">{message}</div>}
 
-                <section className="manager-glass-panel">
+                <section className="employer-placement-table-card">
                     <ShiftSettingsTable
                         mode="placement"
                         shifts={shifts}
@@ -214,8 +215,19 @@ function EmployerPlacementBuilder() {
                             shift.id || shift.shift_id || shift.shiftId || shiftIndex
                         }
                     />
+
+                    <section className="employer-placement-info-card">
+                        <span className="employer-placement-info-icon" aria-hidden="true">i</span>
+                        <div>
+                            <h2>About Placement</h2>
+                            <p>
+                                Assign the required number of employees for each day and time period.
+                                These assignments will be applied to the schedule.
+                            </p>
+                        </div>
+                    </section>
                 </section>
-            </div>
+            </main>
         </div>
     );
 }
