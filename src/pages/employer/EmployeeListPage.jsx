@@ -2,6 +2,7 @@ import {useEffect, useState} from "react";
 import {getAllEmployees} from "../../service/employerApi.js";
 import NavbarEmployer from "../../Navbar/navbar-employer/NavbarEmployer.jsx";
 import EmployeeList from "../../components/EmployeeList.jsx";
+import "./EmployerDashboard.css";
 
 
 
@@ -22,11 +23,21 @@ function EmployeeListPage () {
 
 
     return(
-        <div className="employee-list-page">
+        <div className="manager-dashboard-shell employee-list-page">
 
             <NavbarEmployer active={"EmployeeList"}/>
 
-            <EmployeeList employees = {employees}/>
+            <div className="manager-dashboard-content">
+                <header className="manager-topbar">
+                    <div>
+                        <span className="manager-eyebrow">WorkSync Directory</span>
+                        <h1>Employee List</h1>
+                        <p>Review employees and open individual work-hour details.</p>
+                    </div>
+                </header>
+
+                <EmployeeList employees = {employees}/>
+            </div>
 
         </div>
     );

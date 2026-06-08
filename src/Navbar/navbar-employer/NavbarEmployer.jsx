@@ -4,6 +4,14 @@ import LogoutButton from "../../components/LogoutButton.jsx";
 function NavbarEmployer({ active }) {
     return (
         <nav className="employerNavbar">
+            <div className="manager-nav-brand">
+                <span className="manager-nav-logo">WS</span>
+                <div>
+                    <strong>WorkSync</strong>
+                    <span>Manager</span>
+                </div>
+            </div>
+
             <div className="nav-employer-tabs">
                 <Link
                     to="/employer-dashboard"
@@ -32,7 +40,6 @@ function NavbarEmployer({ active }) {
                     Employee List
                 </Link>
 
-
                 <Link
                     to="/employer-constraints"
                     className={`tab-btn ${
@@ -42,10 +49,19 @@ function NavbarEmployer({ active }) {
                     Employee Constraints
                 </Link>
 
+                <Link
+                    to="/employer-requests"
+                    className={`tab-btn ${
+                        active === "Requests" ? "employer-active-tab" : ""
+                    }`}
+                >
+                    Requests
+                </Link>
             </div>
 
-            <LogoutButton />
-
+            <div className="manager-nav-footer">
+                <LogoutButton />
+            </div>
         </nav>
     );
 }

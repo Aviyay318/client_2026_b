@@ -62,9 +62,10 @@ function AbsencePopUp({ isAbsenceOpen, setAbsenceOpen }) {
         return "Choose a reason";
     };
     const handleAbsence = () => {
+        console.log("selectedDate =", selectedDate);
+        console.log("typeof =", typeof selectedDate);
         const data = {
-            // לבדוק עם אביה מחר
-            // selectedDate,
+            date:selectedDate.getTime(),
            reason: selectedResponse
         };
 

@@ -41,6 +41,39 @@ function NavbarEmployee({active}) {
                     Shifts
                 </Link>
 
+                <Link
+                    to="/employee-constraints"
+                    className={`tab-btn ${
+                        active === "Constraints"
+                            ? "active-tab"
+                            : ""
+                    }`}
+                >
+                    Constraints
+                </Link>
+
+                <Link
+                    to="/employee-final-shifts"
+                    className={`tab-btn ${
+                        active === "FinalShifts"
+                            ? "active-tab"
+                            : ""
+                    }`}
+                >
+                    Final Shifts
+                </Link>
+
+                <Link
+                    to="/employee-notifications"
+                    className={`tab-btn ${
+                        active === "Notifications"
+                            ? "active-tab"
+                            : ""
+                    }`}
+                >
+                    Notifications
+                </Link>
+
             </div>
 
 

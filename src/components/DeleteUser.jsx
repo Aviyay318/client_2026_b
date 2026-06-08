@@ -1,14 +1,16 @@
 import { useState } from "react";
 import { deleteEmployee } from "../service/employerApi.js";
+import ConfirmationPopUp from "./ConfirmationPopUp.jsx";
+import "./DeleteUser.css";
 
 function DeleteEmployee() {
-    const [userId, setUserId] = useState("");
+    const [personalId, setPersonalId] = useState("");
     const [message, setMessage] = useState("");
+    const [isConfirmOpen, setConfirmOpen] = useState(false);
 
-    const removeUser = (e) => {
-        e.preventDefault();
-
-        const cleanId = userId.trim();
+    const executeDelete = () => {
+        console.log("Execute Delete");
+        const cleanId = personalId.trim();
 
         if (!/^\d{1,9}$/.test(cleanId)) {
             setMessage("Id must contain up to 9 digits");
@@ -16,8 +18,9 @@ function DeleteEmployee() {
         }
 
         const data = {
-            id: cleanId
+            personalId: cleanId
         };
+        console.log("BEFORE API")
 
         deleteEmployee(data)
             .then((response) => {
@@ -25,7 +28,7 @@ function DeleteEmployee() {
 
                 if (response.data?.success === true) {
                     setMessage("User deletion succeeded");
-                    setUserId("");
+                    setPersonalId("");
                 } else {
                     setMessage("The user deletion failed");
                 }
@@ -35,24 +38,68 @@ function DeleteEmployee() {
                 setMessage("Request failed");
             });
     };
-
+    const confirmDelete = () => {
+        console.log("CONFIRM CLICKED");
+        setConfirmOpen(false);
+        executeDelete();
+    };
     return (
-        <form onSubmit={removeUser}>
-            <h2>Delete user</h2>
+        <>
+            <form
+                className="manager-form-card delete-employee-form"
+                onSubmit={(e) => {
+                    e.preventDefault();
+                    setConfirmOpen(true);
+                }}
+            >
+                <div className="manager-form-header">
+                    <span className="manager-eyebrow danger-eyebrow">
+                        Access Control
+                    </span>
 
-            <input
-                type="text"
-                value={userId}
-                placeholder="Enter user id"
-                onChange={(e) => setUserId(e.target.value)}
+                    <h2>Delete user</h2>
+
+                    <p>
+                        Remove an employee profile by entering the existing user id.
+                    </p>
+                </div>
+
+                <label>
+                    <span>User id</span>
+
+                    <input
+                        type="text"
+                        value={personalId}
+                        placeholder="Enter user id"
+                        onChange={(e) => setPersonalId(e.target.value)}
+                    />
+                </label>
+
+                <div className="manager-form-actions">
+                    <button
+                        className="delete-employee-button"
+                        type="submit"
+                    >
+                        Delete user
+                    </button>
+                </div>
+
+                <p className="manager-form-message">
+                    {message}
+                </p>
+            </form>
+
+            <ConfirmationPopUp
+                isOpen={isConfirmOpen}
+                title="Delete Employee?"
+                message="Are you sure you want to delete this employee?"
+                confirmLabel="Delete"
+                cancelLabel="Cancel"
+                danger={true}
+                onCancel={() => setConfirmOpen(false)}
+                onConfirm={confirmDelete}
             />
-
-            <button type="submit">
-                Delete user
-            </button>
-
-            <p>{message}</p>
-        </form>
+        </>
     );
 }
 

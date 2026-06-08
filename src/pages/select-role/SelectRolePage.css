@@ -226,6 +226,15 @@ body {
     font-size: 35px;
 }
 
+.admin-box .arrow {
+    font-size: 0;
+}
+
+.admin-box .arrow::before {
+    content: "›";
+    font-size: 35px;
+}
+
 .background-circle {
     position: absolute;
     border-radius: 50%;

@@ -1,18 +1,31 @@
-import { useState, useEffect } from "react";
+import {useCallback, useEffect, useState} from "react";
 import RealTimeEmployee from "../../components/RealTimeEmployee.jsx";
 import NavbarEmployer from "../../Navbar/navbar-employer/NavbarEmployer.jsx";
-import { getAllActiveEmployees } from "../../service/employerApi.js";
+import "./EmployerDashboard.css";
+import DashboardCard from "../../components/DashboardCard.jsx";
+import {
+    getAbsentEmployees,
+    getAllActiveEmployees,
+    getAllEmployees,
+    getLeftEmployees
+} from "../../service/employerApi.js";
+import {refreshToken} from "../../service/authApi.js";
+import RefreshButton from "../../components/RefreshButton.jsx";
+
 
 function EmployerDashboard() {
-    const [employeeList, setEmployeeList] = useState([]);
+    const [activeEmployees, setActiveEmployees] = useState([]);
+    const [totalEmployees, setTotalEmployees] = useState([]);
+    const [leftEmployees, setLeftEmployees] = useState([]);
+    const [absentEmployees,setAbsentEmployees] = useState([]);
 
-    useEffect(() => {
+
+    const AllActiveEmployees = useCallback(() => {
         getAllActiveEmployees()
             .then((response) => {
                 console.log("ACTIVE EMPLOYEES RESPONSE:", response.data);
-
                 if (response.data !== null) {
-                    setEmployeeList(response.data.employees || []);
+                    setActiveEmployees(response.data.employees || []);
                 }
             })
             .catch((error) => {
@@ -20,13 +33,97 @@ function EmployerDashboard() {
             });
     }, []);
 
+   const TotalEmployees = useCallback(() =>{
+       getAllEmployees ()
+   .then((response) => {
+           console.log("TOTAL EMPLOYYES RESPONSE:" , response.data);
+           if(response.data !== null){
+               setTotalEmployees(response.data.employees || [])
+           }
+       })
+           .catch((error) => {
+               console.log("Error loading total employees", error.response?.data || error);
+           });
+   }, []);
+
+    const LeftEmployees = useCallback(() => {
+        getLeftEmployees ({date: Date.now()})
+    .then((response) => {
+            console.log("LEFT EMPLOYYES RESPONSE:" , response.data);
+            if(response.data !== null){
+                setLeftEmployees(response.data.employees || [])
+            }
+        })
+            .catch((error) => {
+                console.log("Error loading left employees", error.response?.data || error);
+            });
+    }, []);
+
+    const AbsentEmployees = useCallback(() => {
+        getAbsentEmployees ({date: Date.now()})
+           .then((response) =>{
+               console.log("ABSENT EMPLOYEES RESPONSE:" , response.data);
+               if(response.data !== null) {
+                   setAbsentEmployees(response.data.employees || [])
+               }
+               })
+           .catch((error) => {
+               console.log("Error loading absent employees", error.response?.data || error);
+           });
+    }, []);
+    const Refreshing = useCallback(() => {
+        refreshToken ()
+            .then(response =>{
+                if (response.data !== null){
+                    setActiveEmployees(response.data.employees || [])
+                }
+            })
+    }, []);
+
+
+
+    useEffect(() => {
+     AllActiveEmployees();
+        Refreshing();
+        AbsentEmployees();
+        LeftEmployees();
+        TotalEmployees();
+    }, [AbsentEmployees, AllActiveEmployees, LeftEmployees, Refreshing, TotalEmployees]);
+
+
+
+
     return (
-        <div className="employer-dashboard">
+        <div className="manager-dashboard-shell">
             <NavbarEmployer active="Dashboard" />
 
-            <div className="employer-dashboard-content">
-                <h1>Employer Dashboard</h1>
-                <RealTimeEmployee employees={employeeList} />
+            <div className="manager-dashboard-content">
+                <header className="manager-topbar">
+                    <div>
+                        <span className="manager-eyebrow">WorkSync Manager Panel</span>
+                        <h1>Employer Dashboard</h1>
+                        <p>Monitor active employees and live workplace activity.</p>
+                    </div>
+                </header>
+
+                <DashboardCard title={"Total"} count={totalEmployees.length}/>
+                <DashboardCard title={"Active Employee"} count={activeEmployees.length}/>
+
+
+                <DashboardCard
+                    title={"Absent Employees"}
+                    count={absentEmployees.length}
+                    employees={absentEmployees}
+                />
+
+
+                <DashboardCard
+                    title={"Left Employees"}
+                    count={leftEmployees.length}
+                    employees={leftEmployees}
+                />
+                <RefreshButton onRefresh={AllActiveEmployees}/>
+                <RealTimeEmployee employees={activeEmployees} />
             </div>
         </div>
     );

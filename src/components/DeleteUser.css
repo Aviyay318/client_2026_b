@@ -1,0 +1,19 @@
+.delete-employee-form {
+    border-color: rgba(251, 113, 133, 0.22);
+    background:
+            linear-gradient(135deg, rgba(127, 29, 29, 0.16), rgba(15, 23, 42, 0.58)),
+            rgba(15, 23, 42, 0.72);
+}
+
+.danger-eyebrow {
+    color: #fb7185;
+}
+
+.delete-employee-form .delete-employee-button {
+    background: linear-gradient(135deg, #e11d48, #7c3aed);
+    box-shadow: 0 0 26px rgba(225, 29, 72, 0.22);
+}
+
+.delete-employee-form .delete-employee-button:hover {
+    box-shadow: 0 0 32px rgba(225, 29, 72, 0.34);
+}

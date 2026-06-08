@@ -6,3 +6,7 @@ export const getAllShifts = (data) => {
         params: data
     })
 };
+
+export const getEmployerSettingsShifts = () => {
+    return api.get("/employer-settings/get-shifts");
+};

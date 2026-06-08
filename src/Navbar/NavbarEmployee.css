@@ -23,14 +23,15 @@
 .nav-tabs-group {
     display: flex;
     align-items: center;
+    flex-wrap: wrap;
     gap: 8px;
 }
 
 .tab-btn {
-    min-width: 135px;
+    min-width: 122px;
     height: 48px;
 
-    padding: 0 18px;
+    padding: 0 14px;
 
     border-radius: 14px;
 
@@ -100,6 +101,7 @@
 
     .nav-tabs-group {
         width: 100%;
+        flex-direction: column;
     }
 
     .tab-btn,
@@ -125,3 +127,6 @@
         color: #f87171;
     }
 }
+
+
+

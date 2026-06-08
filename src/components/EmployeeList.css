@@ -1,0 +1,44 @@
+.employee-list-panel {
+    padding: 24px;
+    border-radius: 28px;
+}
+
+.employee-directory-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 14px;
+}
+
+.employee-directory-card {
+    border-radius: 18px;
+    border: 1px solid rgba(125, 211, 252, 0.16);
+    background: rgba(15, 23, 42, 0.42);
+    transition: transform 0.22s ease, border-color 0.22s ease, background 0.22s ease;
+}
+
+.employee-directory-card:hover {
+    transform: translateY(-2px);
+    border-color: rgba(125, 211, 252, 0.36);
+    background: rgba(59, 130, 246, 0.10);
+}
+
+.employee-directory-card a {
+    min-height: 64px;
+    display: flex;
+    align-items: center;
+    padding: 16px;
+    color: white;
+    font-size: 16px;
+    font-weight: 900;
+    text-decoration: none;
+}
+
+.manager-empty-state {
+    padding: 28px;
+    border-radius: 18px;
+    color: var(--manager-muted);
+    font-weight: 800;
+    text-align: center;
+    border: 1px solid rgba(148, 163, 184, 0.12);
+    background: rgba(2, 6, 23, 0.24);
+}
