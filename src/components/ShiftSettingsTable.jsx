@@ -1,5 +1,6 @@
 function ShiftSettingsTable({
     shifts,
+    weekDays,
     onChangeShift,
     onAddShift,
     onDeleteShift
@@ -23,7 +24,11 @@ function ShiftSettingsTable({
             {shifts.map((shift) => (
                 <tr key={shift.id}>
 
-                    <td>{shift.day}</td>
+                    <td>
+                        {weekDays.find(
+                            (weekDayOption) => weekDayOption.value === shift.weekDay
+                        )?.label}
+                    </td>
 
                     <td>
                         <input
@@ -50,9 +55,9 @@ function ShiftSettingsTable({
                             type="number"
                             min="1"
                             max="20"
-                            value={shift.employeesCount}
+                            value={shift.employeeAmount}
                             onChange={(event) =>
-                                onChangeShift(shift.id, "employeesCount", event.target.value)
+                                onChangeShift(shift.id, "employeeAmount", event.target.value)
                             }
                         />
                     </td>

@@ -24,3 +24,12 @@ export function calculateTotalHours(rows){
     },0);
 
 }
+export function formatTimeForServer(time) {
+    const [hours, minutes] = time.split(":");
+
+    return dayjs()
+        .hour(Number(hours))
+        .minute(Number(minutes))
+        .second(0)
+        .format("YYYY-MM-DD HH:mm:ss");
+}
