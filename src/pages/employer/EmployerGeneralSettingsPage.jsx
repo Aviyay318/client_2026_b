@@ -4,6 +4,7 @@ import {
     getEmployerSettings,
     setEmployerSettings
 } from "../../service/employerSettingsApi.js";
+import "./EmployerGeneralSettingsPage.css";
 
 function EmployerGeneralSettingsPage() {
     const [settings, setSettings] = useState({
@@ -123,59 +124,86 @@ function EmployerGeneralSettingsPage() {
 
             <NavbarEmployer active={"GeneralSettings"} />
 
-            <div className="employer-general-settings-card">
+            <main className="employer-general-settings-main">
+                <header className="employer-general-settings-header">
+                    <h1>General Settings</h1>
+                    <p>Manage general system settings and constraints</p>
+                </header>
 
-                <h1>General Settings</h1>
+                <section className="employer-general-settings-card">
+                    <div className="general-settings-section-heading">
+                        <span className="general-settings-section-icon" aria-hidden="true"></span>
+                        <div>
+                            <h2>Constraints Settings</h2>
+                            <p>
+                                Define the date and time constraints for scheduling and shift management.
+                            </p>
+                        </div>
+                    </div>
 
-                <h2>מועד אחרון להגשת אילוצים</h2>
+                    {loading ? (
+                        <p className="general-settings-state">Loading settings...</p>
+                    ) : (
+                        <form className="general-settings-form-panel" onSubmit={saveSettings}>
 
-                {loading ? (
-                    <p>Loading settings...</p>
-                ) : (
-                    <form onSubmit={saveSettings}>
+                            <label>Choose date and time:</label>
 
-                        <label>Choose date and time:</label>
+                            <div className="general-settings-form-row">
+                                <input
+                                    type="datetime-local"
+                                    value={settings.submissionExpiration}
+                                    disabled={!isEditMode}
+                                    onChange={(e) =>
+                                        setSettings({
+                                            ...settings,
+                                            submissionExpiration:
+                                            e.target.value,
+                                        })
+                                    }
+                                />
 
-                        <input
-                            type="datetime-local"
-                            value={settings.submissionExpiration}
-                            disabled={!isEditMode}
-                            onChange={(e) =>
-                                setSettings({
-                                    ...settings,
-                                    submissionExpiration:
-                                    e.target.value,
-                                })
-                            }
-                        />
+                                {isEditMode ? (
+                                    <button
+                                        className="general-settings-save-button"
+                                        type="submit"
+                                        disabled={saving}
+                                    >
+                                        {saving
+                                            ? "Saving..."
+                                            : "Save"}
+                                    </button>
+                                ) : (
+                                    <button
+                                        className="general-settings-save-button"
+                                        type="button"
+                                        onClick={() =>
+                                            setIsEditMode(true)
+                                        }
+                                    >
+                                        Edit
+                                    </button>
+                                )}
+                            </div>
 
-                        {isEditMode ? (
-                            <button
-                                type="submit"
-                                disabled={saving}
-                            >
-                                {saving
-                                    ? "Saving..."
-                                    : "Save"}
-                            </button>
-                        ) : (
-                            <button
-                                type="button"
-                                onClick={() =>
-                                    setIsEditMode(true)
-                                }
-                            >
-                                Edit
-                            </button>
-                        )}
+                        </form>
+                    )}
 
-                    </form>
-                )}
+                    <section className="general-settings-info-card">
+                        <span className="general-settings-info-icon" aria-hidden="true">i</span>
+                        <div>
+                            <h3>About Constraints</h3>
+                            <p>
+                                Set the global date and time limits that will be applied across the system.
+                                These constraints help ensure scheduling, availability, and shift assignments
+                                follow the defined rules.
+                            </p>
+                        </div>
+                    </section>
 
-                {error && <p>{error}</p>}
-                {message && <p>{message}</p>}
-
-            </div>
+                    {error && <p className="general-settings-message general-settings-error">{error}</p>}
+                    {message && <p className="general-settings-message general-settings-success">{message}</p>}
+                </section>
+            </main>
         </div>
     );
 }
