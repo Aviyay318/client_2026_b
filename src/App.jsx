@@ -16,6 +16,9 @@ import EmployeeListPage from "./pages/employer/EmployeeListPage.jsx";
 import EmployeeDetailsListPage from "./pages/employer/EmployeeDetailsListPage.jsx";
 import EmployerConstraintsView from "./pages/employer/EmployerConstraintsView.jsx";
 import EmployerRequestsPage from "./pages/employer/EmployerRequestsPage.jsx";
+import EmployerGeneralSettingsPage from "./pages/employer/EmployerGeneralSettingsPage.jsx";
+import WeeklyShiftSettingsPage from "./pages/employer/WeeklyShiftSettingsPage.jsx";
+import EmployerPlacementBuilder from "./pages/employer/EmployerPlacementBuilder.jsx";
 
 function App() {
     return (
@@ -40,9 +43,12 @@ function App() {
                 <Route path="/employee-management-page" element={<EmployeeManagementPage />} />
                 <Route path="/employee-list-page" element={<EmployeeListPage />} />
                 <Route path="/employer-requests" element={<EmployerRequestsPage />} />
-                <Route path="/employee-details-page/:id" element={<EmployeeDetailsListPage />}/>
+                <Route path="/employee-details-page/:id" element={<EmployeeDetailsListPage />} />
                 <Route path="/employer-constraints" element={<EmployerConstraintsView />} />
 
+                <Route path="/employer-settings" element={<EmployerGeneralSettingsPage />} />
+                <Route path="/employer-weekly-shift" element={<WeeklyShiftSettingsPage />} />
+                <Route path="/employer-placement-builder" element={<EmployerPlacementBuilder />} />
             </Routes>
         </BrowserRouter>
     );
