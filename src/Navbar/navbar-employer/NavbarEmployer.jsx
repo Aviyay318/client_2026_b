@@ -57,6 +57,24 @@ function NavbarEmployer({ active }) {
                 >
                     General Settings
                 </Link>
+
+                <Link
+                    to="/employer-weekly-shift"
+                    className={`tab-btn ${
+                        active === "WeeklyShiftSettings" ? "employer-active-tab" : ""
+                    }`}
+                >
+                    Setting Shift
+                </Link>
+
+                <Link
+                    to="/employer-placement-builder"
+                    className={`tab-btn ${
+                        active === "PlacementBuilder" ? "employer-active-tab" : ""
+                    }`}
+                >
+                    Shift Assignment
+                </Link>
             </div>
 
             <div className="manager-nav-footer">

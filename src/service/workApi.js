@@ -36,3 +36,15 @@ export const reportAbsence= (data)=>{
 export const getAllAbsenceReasons = () => {
     return api.get("/work/get-all-absence-reasons");
 }
+
+export const savePlacement = (data) => {
+    return api.post("/work-shifts/save-placement", data);
+};
+
+export const getAllWorkShifts = () => {
+    return api.get("/work-shifts/get-all");
+};
+
+export const updatePlacement = (data) => {
+    return api.post("/work-shifts/update-placement", data);
+};
