@@ -1,7 +1,6 @@
-/* --- עיצוב האנשים (הלוגו) בתוך הלוגין --- */
 .people-logo {
-    margin: 0 auto 10px; /* מרכוז */
-    transform: scale(1.1); /* הגדלה קלה */
+    margin: 0 auto 10px;
+    transform: scale(1.1);
     filter: drop-shadow(0 0 15px rgba(56, 189, 248, 0.5));
 }
 
@@ -14,7 +13,7 @@
 .person {
     position: absolute;
     border: 3px solid #38bdf8;
-    background: #0c152a; /* חייב להיות צבע הרקע של הכרטיס כדי שהחיתוך יעבוד */
+    background: #0c152a;
     border-radius: 50%;
 }
 
@@ -66,9 +65,6 @@
 
 .person.left { left: 0; }
 .person.right { right: 0; }
-/* --- סוף עיצוב האנשים --- */
-
-/* --- שאר עיצוב הלוגין (נשאר ללא שינוי, למעט מחיקת ה-lock-wrapper) --- */
 .login-page {
     width: 100%;
     min-height: 100vh;

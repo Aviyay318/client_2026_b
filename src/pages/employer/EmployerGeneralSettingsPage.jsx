@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import {useEffect, useState} from "react";
 import NavbarEmployer from "../../Navbar/navbar-employer/NavbarEmployer.jsx";
 import {
     getEmployerSettings,
@@ -17,43 +17,39 @@ function EmployerGeneralSettingsPage() {
     const [message, setMessage] = useState("");
     const [isEditMode, setIsEditMode] = useState(true);
 
+    const applySettingsResponse = (response) => {
+        const serverSettings =
+            response.data?.data?.settings
+            || response.data?.data
+            || response.data?.settings
+            || response.data;
+
+        const submissionDeadline =
+            serverSettings?.submissionExpiration
+            ?? serverSettings?.submitionExparation
+            ?? "";
+
+        setSettings({
+            submissionExpiration: submissionDeadline,
+        });
+
+        setIsEditMode(!submissionDeadline);
+    };
+
     useEffect(() => {
         getEmployerSettings()
             .then((response) => {
-
                 console.log("GET SETTINGS RESPONSE:", response);
                 console.log("GET SETTINGS DATA:", response.data);
 
-                const serverSettings =
-                    response.data?.settings || response.data;
-
-                console.log("SERVER SETTINGS:", serverSettings);
-
-                if (
-                    serverSettings &&
-                    serverSettings.submissionExpiration
-                ) {
-                    setSettings({
-                        submissionExpiration:
-                        serverSettings.submissionExpiration,
-                    });
-
-                    setIsEditMode(false);
-                } else {
-                    setSettings({
-                        submissionExpiration: "",
-                    });
-
-                    setIsEditMode(true);
-                }
+                applySettingsResponse(response);
             })
-            .catch((error) => {
+            .catch((requestError) => {
+                console.log("GET SETTINGS ERROR:", requestError);
+                console.log("GET STATUS:", requestError.response?.status);
+                console.log("GET DATA:", requestError.response?.data);
 
-                console.log("GET SETTINGS ERROR:", error);
-                console.log("GET STATUS:", error.response?.status);
-                console.log("GET DATA:", error.response?.data);
-
-                setError("Failed to load settings");
+                setError("Failed to load settings.");
             })
             .finally(() => {
                 setLoading(false);
@@ -62,15 +58,15 @@ function EmployerGeneralSettingsPage() {
 
     const isFormValid = () => {
         if (settings.submissionExpiration.trim() === "") {
-            setError("Please choose date and time");
+            setError("Please choose a date and time.");
             return false;
         }
 
         return true;
     };
 
-    const saveSettings = (e) => {
-        e.preventDefault();
+    const saveSettings = (event) => {
+        event.preventDefault();
 
         setError("");
         setMessage("");
@@ -85,34 +81,33 @@ function EmployerGeneralSettingsPage() {
         setSaving(true);
 
         setEmployerSettings(settings)
-            .then((response) => {
-
+            .then(async (response) => {
                 console.log("SAVE RESPONSE:", response);
                 console.log("SAVE RESPONSE DATA:", response.data);
 
                 if (response.data?.success === false) {
-                    setError("Failed to save settings");
+                    setError("Failed to save settings.");
                     return;
                 }
 
-                setMessage("Settings saved successfully");
-                setIsEditMode(false);
+                const refreshedResponse = await getEmployerSettings();
+                applySettingsResponse(refreshedResponse);
+                setMessage("Settings saved successfully.");
             })
-            .catch((error) => {
-
-                console.log("SET SETTINGS ERROR:", error);
-                console.log("STATUS:", error.response?.status);
-                console.log("DATA:", error.response?.data);
+            .catch((requestError) => {
+                console.log("SET SETTINGS ERROR:", requestError);
+                console.log("STATUS:", requestError.response?.status);
+                console.log("DATA:", requestError.response?.data);
                 console.log(
                     "DATA STRING:",
                     JSON.stringify(
-                        error.response?.data,
+                        requestError.response?.data,
                         null,
                         2
                     )
                 );
 
-                setError("Failed to save settings");
+                setError("Failed to save settings.");
             })
             .finally(() => {
                 setSaving(false);
@@ -121,22 +116,21 @@ function EmployerGeneralSettingsPage() {
 
     return (
         <div className="employer-general-settings-page">
-
-            <NavbarEmployer active={"GeneralSettings"} />
+            <NavbarEmployer active="GeneralSettings" />
 
             <main className="employer-general-settings-main">
                 <header className="employer-general-settings-header">
                     <h1>General Settings</h1>
-                    <p>Manage general system settings and constraints</p>
+                    <p>Set the deadline for employee constraint submissions.</p>
                 </header>
 
                 <section className="employer-general-settings-card">
                     <div className="general-settings-section-heading">
                         <span className="general-settings-section-icon" aria-hidden="true"></span>
                         <div>
-                            <h2>Constraints Settings</h2>
+                            <h2>Constraint submission deadline</h2>
                             <p>
-                                Define the date and time constraints for scheduling and shift management.
+                                Define the date and time limit for employee constraint submissions.
                             </p>
                         </div>
                     </div>
@@ -145,7 +139,6 @@ function EmployerGeneralSettingsPage() {
                         <p className="general-settings-state">Loading settings...</p>
                     ) : (
                         <form className="general-settings-form-panel" onSubmit={saveSettings}>
-
                             <label>Choose date and time:</label>
 
                             <div className="general-settings-form-row">
@@ -153,11 +146,10 @@ function EmployerGeneralSettingsPage() {
                                     type="datetime-local"
                                     value={settings.submissionExpiration}
                                     disabled={!isEditMode}
-                                    onChange={(e) =>
+                                    onChange={(event) =>
                                         setSettings({
                                             ...settings,
-                                            submissionExpiration:
-                                            e.target.value,
+                                            submissionExpiration: event.target.value,
                                         })
                                     }
                                 />
@@ -168,23 +160,18 @@ function EmployerGeneralSettingsPage() {
                                         type="submit"
                                         disabled={saving}
                                     >
-                                        {saving
-                                            ? "Saving..."
-                                            : "Save"}
+                                        {saving ? "Saving..." : "Save"}
                                     </button>
                                 ) : (
                                     <button
                                         className="general-settings-save-button"
                                         type="button"
-                                        onClick={() =>
-                                            setIsEditMode(true)
-                                        }
+                                        onClick={() => setIsEditMode(true)}
                                     >
                                         Edit
                                     </button>
                                 )}
                             </div>
-
                         </form>
                     )}
 
@@ -193,9 +180,8 @@ function EmployerGeneralSettingsPage() {
                         <div>
                             <h3>About Constraints</h3>
                             <p>
-                                Set the global date and time limits that will be applied across the system.
-                                These constraints help ensure scheduling, availability, and shift assignments
-                                follow the defined rules.
+                                This deadline controls when employees can submit availability constraints.
+                                After it passes, employees can view the page but cannot submit new constraints.
                             </p>
                         </div>
                     </section>

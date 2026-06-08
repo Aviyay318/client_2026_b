@@ -27,6 +27,20 @@ const extractConstraints = (payload) => {
     return [];
 };
 
+const getConstraintEmployeeLabel = (constraint) => (
+    constraint.employeeName
+    ?? constraint.employeeId
+    ?? constraint.employeePersonalId
+    ?? "Unknown employee"
+);
+
+const getConstraintDate = (constraint) => (
+    constraint.date
+    ?? constraint.createdAt
+    ?? constraint.submittedAt
+    ?? ""
+);
+
 function EmployerConstraintsView() {
 
     const [constraints, setConstraints] = useState([]);
@@ -54,11 +68,11 @@ function EmployerConstraintsView() {
 
     const filteredConstraints = constraints.filter((constraint) => {
 
-        const constraintDate = new Date(constraint.date);
+        const constraintDate = new Date(getConstraintDate(constraint));
 
         const matchEmployee =
             selectedEmployee === "" ||
-            constraint.employeeName === selectedEmployee;
+            getConstraintEmployeeLabel(constraint) === selectedEmployee;
 
         const matchAvailability =
             selectedAvailability === "" ||
@@ -96,7 +110,7 @@ function EmployerConstraintsView() {
 
 
     return (
-        <div className="manager-dashboard-shell">
+        <div className="manager-dashboard-shell employer-constraints-page">
 
             <NavbarEmployer active="EmployeeConstraints" />
 
@@ -109,7 +123,7 @@ function EmployerConstraintsView() {
                     </div>
                 </header>
 
-        <div className="filters manager-glass-panel">
+        <div className="constraints-filters manager-glass-panel">
 
             <CustomDatePicker
                 mode="range"
@@ -125,9 +139,7 @@ function EmployerConstraintsView() {
             >
                 <option value="">All Employees</option>
 
-                {[...new Set(constraints.map(
-                    (constraint) => constraint.employeeName
-                ))].map((employeeName) => (
+                {[...new Set(constraints.map(getConstraintEmployeeLabel))].map((employeeName) => (
                     <option key={employeeName} value={employeeName}>
                         {employeeName}
                     </option>

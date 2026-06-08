@@ -6,25 +6,24 @@ import {useNavigate} from "react-router-dom";
 function LoginForm({role}) {
     const [personalId, setPersonalId] = useState("");
     const [password, setPassword] = useState("");
-    const navigate = useNavigate();
     const [error, setError] = useState("");
+    const navigate = useNavigate();
 
-    const isValid = () => {
-        return (
-            personalId.trim() === "" ||
-            !/^\d{1,9}$/.test(personalId.trim()) ||
-            password.trim() === ""
-        );
-    };
+    const isValid = () => (
+        personalId.trim() === ""
+        || !/^\d{1,9}$/.test(personalId.trim())
+        || password.trim() === ""
+    );
 
-    const handleLogin = (e) => {
-        e.preventDefault();
+    const handleLogin = (event) => {
+        event.preventDefault();
         setError("");
 
         const data = {
-            personalId: personalId,
-            password: password
+            personalId,
+            password,
         };
+
         const requestApi =
             role === "employee"
                 ? loginEmployee(data)
@@ -32,35 +31,39 @@ function LoginForm({role}) {
                     ? loginAdmin(data)
                     : loginEmployer(data);
 
-        requestApi.then(response => {
-            if (response.data.success) {
-                if (role === "admin") {
-                    sessionStorage.setItem("adminLoggedIn", "true");
+        requestApi
+            .then((response) => {
+                if (response.data.success) {
+                    if (role === "admin") {
+                        sessionStorage.setItem("adminLoggedIn", "true");
+                    }
+
+                    if (role === "employee") {
+                        sessionStorage.setItem("employeePersonalId", personalId.trim());
+                    }
+
+                    const path =
+                        role === "employee"
+                            ? "/employee-dashboard"
+                            : role === "admin"
+                                ? "/admin/dashboard"
+                                : "/employer-dashboard";
+
+                    navigate(path);
+                } else {
+                    setError("Wrong ID or password");
                 }
-
-                const path =
-                    role === "employee"
-                        ? "/employee-dashboard"
-                        : role === "admin"
-                            ? "/admin/dashboard"
-                            : "/employer-dashboard";
-                navigate(path);
-            } else {
-                setError("Wrong ID or password");
-            }
-
-
-        }).catch(() => {
-            setError("Server error, try again");
-        })
-    }
+            })
+            .catch(() => {
+                setError("Server error, try again");
+            });
+    };
 
     return (
         <div className="login-page">
             <div className="login-card">
-
-                <button className="back-btn" onClick={() => navigate("/")}>
-                    ← Back
+                <button className="back-btn" type="button" onClick={() => navigate("/")}>
+                    Back
                 </button>
 
                 <div className="login-header">
@@ -82,13 +85,13 @@ function LoginForm({role}) {
                         <label>ID</label>
 
                         <div className="input-field">
-                            <span className="field-icon">👤</span>
+                            <span className="field-icon">ID</span>
 
                             <input
                                 type="text"
                                 value={personalId}
                                 placeholder="Enter your ID"
-                                onChange={(e) => setPersonalId(e.target.value)}
+                                onChange={(event) => setPersonalId(event.target.value)}
                             />
                         </div>
                     </div>
@@ -97,19 +100,19 @@ function LoginForm({role}) {
                         <label>Password</label>
 
                         <div className="input-field">
-                            <span className="field-icon">🔒</span>
+                            <span className="field-icon">PW</span>
 
                             <input
                                 type="password"
                                 value={password}
                                 placeholder="Enter your password"
-                                onChange={(e) => setPassword(e.target.value)}
+                                onChange={(event) => setPassword(event.target.value)}
                             />
                         </div>
                     </div>
 
                     <button className="login-btn" disabled={isValid()} type="submit">
-                        Login <span className="btn-arrow">→</span>
+                        Login <span className="btn-arrow">&gt;</span>
                     </button>
                 </form>
 

@@ -1,12 +1,11 @@
 import api from "./api";
-import {getEmployerSettingsShifts} from "./shiftsApi.js";
 
 export const getEmployerSettings = () => {
-    return api.get("/employer-settings/get-settings");
+    return api.get("/employee-constraints/get-settings");
 };
 
 export const getPublishedShifts = () => {
-    return getEmployerSettingsShifts();
+    return api.get("/employee-constraints/get-published-shifts");
 };
 
 export const saveEmployeeConstraints = (constraints) => {

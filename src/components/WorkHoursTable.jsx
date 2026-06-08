@@ -8,15 +8,13 @@ function WorkHoursTable({ rows }) {
             <table className="work-hours-table">
                 <thead>
                 <tr>
-                    <th>📅 Date</th>
+                    <th>Date</th>
 
                     <th className="start-head">
-                        <span className="start-icon">◷</span>
                         <span className="head-text">Start</span>
                     </th>
 
                     <th className="end-head">
-                        <span className="end-icon">◷</span>
                         <span className="head-text">End</span>
                     </th>
 
@@ -34,7 +32,6 @@ function WorkHoursTable({ rows }) {
                     </th>
 
                     <th className="total-head">
-                        <span className="total-icon-table">◷</span>
                         <span className="head-text">Total</span>
                     </th>
                 </tr>
@@ -54,7 +51,7 @@ function WorkHoursTable({ rows }) {
                                             {row.absenceReason || "----"}
                                         </div>
                                     )}
-                                    <div>📅 {dayjs(row.enterTime).format("DD/MM/YYYY")}</div>
+                                    <div>{dayjs(row.enterTime).format("DD/MM/YYYY")}</div>
                                 </td>
 
                                 <td className="start-time">
@@ -78,7 +75,7 @@ function WorkHoursTable({ rows }) {
                 ) : (
                     <tr>
                         <td className="no-data" colSpan="5">
-                            אין נתונים
+                            No data
                         </td>
                     </tr>
                 )}

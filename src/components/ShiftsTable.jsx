@@ -8,22 +8,18 @@ function ShiftsTable({ shifts }) {
                 <thead>
                 <tr>
                     <th className="shift-day-head">
-                        <span className="shift-head-icon">▦</span>
                         <span className="head-text">Day</span>
                     </th>
 
                     <th>
-                        <span className="shift-date-icon">📅</span>
                         <span className="head-text">Date</span>
                     </th>
 
                     <th className="start-head">
-                        <span className="start-icon">◷</span>
                         <span className="head-text">Start</span>
                     </th>
 
                     <th className="end-head">
-                        <span className="end-icon">◷</span>
                         <span className="head-text">End</span>
                     </th>
 
@@ -41,7 +37,6 @@ function ShiftsTable({ shifts }) {
                     </th>
 
                     <th className="shift-role-head">
-                        <span className="shift-role-icon">▣</span>
                         <span className="head-text">Role</span>
                     </th>
                 </tr>
@@ -62,7 +57,7 @@ function ShiftsTable({ shifts }) {
                 ) : (
                     <tr>
                         <td className="no-data shifts-no-data" colSpan="6">
-                            אין משמרות להצגה
+                            No shifts to display
                         </td>
                     </tr>
                 )}

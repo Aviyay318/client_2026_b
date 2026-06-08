@@ -17,7 +17,7 @@
 }
 .employee-dashboard-card {
     width: 100%;
-    max-width: 500px; /* ⬅️ יותר צר */
+    max-width: 500px;
 
     margin-top: 40px;
     padding: 35px 28px 40px;
@@ -26,7 +26,7 @@
 
     display: flex;
     flex-direction: column;
-    gap: 28px; /* ⬅️ יותר רווח בין אלמנטים */
+    gap: 28px;
 
     background: rgba(255, 255, 255, 0.045);
     backdrop-filter: blur(25px);
@@ -142,7 +142,7 @@
     }
     .employee-dashboard-card {
         width: 100%;
-        max-width: 560px; /* ⬅️ היה גדול מדי */
+        max-width: 560px;
 
         margin-top: 30px;
         padding: 30px 24px;
@@ -151,7 +151,7 @@
 
         display: flex;
         flex-direction: column;
-        gap: 22px; /* 🔥 זה המרווח בין כל דבר */
+        gap: 22px;
 
         background: rgba(255, 255, 255, 0.045);
         backdrop-filter: blur(25px);

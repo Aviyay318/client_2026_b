@@ -199,6 +199,8 @@
 }
 
 .placement-employee-select-wrap select {
+    position: relative;
+    z-index: 3;
     appearance: none;
     -webkit-appearance: none;
     width: 100%;
@@ -219,6 +221,8 @@
     font: inherit;
     font-size: 0.9rem;
     font-weight: 700;
+    pointer-events: auto;
+    cursor: pointer;
     transition: border-color 160ms ease, box-shadow 160ms ease, background-color 160ms ease, color 160ms ease;
 }
 

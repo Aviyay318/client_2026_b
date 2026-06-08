@@ -1,4 +1,4 @@
-import {useState, useEffect} from "react";
+import {useEffect, useState} from "react";
 import dayjs from "dayjs";
 import NavbarEmployee from "../../Navbar/navbar-employee/NavbarEmployee.jsx";
 import {getAllShifts} from "../../service/shiftsApi.js";
@@ -6,12 +6,9 @@ import ShiftsTable from "../../components/ShiftsTable.jsx";
 import CustomDatePicker from "../../components/CustomDatePicker.jsx";
 
 function EmployeeShiftsPage() {
-
-    const [fromDate, setFromeDate] = useState("");
-    const [toDate, setToDoDate] = useState("");
-    const [shifts, setShifts] = useState([{
-    }]);
-
+    const [fromDate, setFromDate] = useState("");
+    const [toDate, setToDate] = useState("");
+    const [shifts, setShifts] = useState([]);
 
     useEffect(() => {
         if (!fromDate || !toDate) {
@@ -24,28 +21,28 @@ function EmployeeShiftsPage() {
         };
 
         console.log("DATES SENT TO SERVER:", data);
+
         getAllShifts(data)
-            .then(response => {
+            .then((response) => {
                 console.log("SHIFTS", response.data);
 
                 if (response.data !== null) {
-                    setShifts(response.data.shifts);
+                    setShifts(response.data.shifts || []);
                 }
             })
-            .catch(err => {
+            .catch((err) => {
                 console.log("SHIFTS ERROR STATUS:", err.response?.status);
                 console.log("SHIFTS ERROR DATA:", err.response?.data);
             });
-
     }, [fromDate, toDate]);
 
-    return(
+    return (
         <div>
             <NavbarEmployee active="Shifts" />
 
             <div className="shifts-page-header">
                 <h1>
-                    <span className="shifts-title-icon">🗓️</span>
+                    <span className="shifts-title-icon">Calendar</span>
                     My Shifts
                 </h1>
 
@@ -55,9 +52,8 @@ function EmployeeShiftsPage() {
             </div>
 
             <div className="shifts-date-range-box">
-
                 <div className="date-range-title">
-                    <span className="date-range-main-icon">📅</span>
+                    <span className="date-range-main-icon">Date</span>
                     <span>Select date range</span>
                 </div>
 
@@ -67,11 +63,11 @@ function EmployeeShiftsPage() {
                     <CustomDatePicker
                         mode="single"
                         selectedDate={fromDate}
-                        setSelectedDate={setFromeDate}
+                        setSelectedDate={setFromDate}
                     />
                 </div>
 
-                <span className="date-arrow">→</span>
+                <span className="date-arrow">&gt;</span>
 
                 <div className="date-input-card">
                     <label>To date</label>
@@ -79,14 +75,14 @@ function EmployeeShiftsPage() {
                     <CustomDatePicker
                         mode="single"
                         selectedDate={toDate}
-                        setSelectedDate={setToDoDate}
+                        setSelectedDate={setToDate}
                     />
                 </div>
-
             </div>
 
             <ShiftsTable shifts={shifts} />
         </div>
     );
 }
+
 export default EmployeeShiftsPage;

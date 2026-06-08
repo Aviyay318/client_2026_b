@@ -46,24 +46,24 @@ function SelectRolePage() {
 
                 <button className="role-box manager-box" onClick={goToLoginManagement}>
                     <div className="role-left">
-                        <div className="role-icon">💼</div>
+                        <div className="role-icon">M</div>
                         <div>
                             <h2>Manager</h2>
                             <p>Access management dashboard</p>
                         </div>
                     </div>
-                    <div className="arrow">›</div>
+                    <div className="arrow">&gt;</div>
                 </button>
 
                 <button className="role-box employee-box" onClick={goToLoginWorker}>
                     <div className="role-left">
-                        <div className="role-icon">👤</div>
+                        <div className="role-icon">E</div>
                         <div>
                             <h2>Employee</h2>
                             <p>Access your schedule and shifts</p>
                         </div>
                     </div>
-                    <div className="arrow">›</div>
+                    <div className="arrow">&gt;</div>
                 </button>
 
                 <button className="role-box admin-box" onClick={goToLoginAdmin}>
@@ -74,7 +74,7 @@ function SelectRolePage() {
                             <p>Access system administration</p>
                         </div>
                     </div>
-                    <div className="arrow">ג€÷</div>
+                    <div className="arrow">&gt;</div>
                 </button>
             </div>
         </div>

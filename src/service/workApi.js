@@ -46,5 +46,5 @@ export const getAllWorkShifts = () => {
 };
 
 export const updatePlacement = (data) => {
-    return api.post("/work-shifts/update-placement", data);
+    return api.put("/work-shifts/update-placement", data);
 };

@@ -1,11 +1,26 @@
 .weekly-shift-settings-page {
     min-height: 100vh;
     padding: 34px 44px 42px;
+    grid-template-columns: 280px minmax(0, 1fr);
+    gap: 24px;
     color: #e5edf8;
     background:
         radial-gradient(circle at 50% 0%, rgba(32, 74, 131, 0.22), transparent 34rem),
         radial-gradient(circle at 0% 18%, rgba(11, 45, 88, 0.34), transparent 28rem),
         linear-gradient(180deg, #07111f 0%, #020b17 100%);
+}
+
+.weekly-shift-settings-page .employerNavbar {
+    border-radius: 22px;
+    background:
+        linear-gradient(180deg, rgba(12, 26, 48, 0.9), rgba(7, 18, 35, 0.92)),
+        rgba(8, 17, 31, 0.86);
+}
+
+.weekly-shift-settings-content {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
 }
 
 .weekly-shift-settings-card {
@@ -119,7 +134,13 @@
 
 @media (max-width: 760px) {
     .weekly-shift-settings-page {
+        grid-template-columns: 1fr;
         padding: 22px 16px 30px;
+    }
+
+    .weekly-shift-settings-page .employerNavbar {
+        position: static;
+        min-height: auto;
     }
 
     .weekly-shift-settings-card {

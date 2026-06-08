@@ -2,6 +2,7 @@ import {useEffect, useState} from "react";
 import NavbarEmployer from "../../Navbar/navbar-employer/NavbarEmployer.jsx";
 import ShiftSettingsTable from "../../components/ShiftSettingsTable.jsx";
 import {
+    getAllActiveEmployees,
     getAllEmployees,
     getEmployerShifts
 } from "../../service/employerApi.js";
@@ -21,6 +22,16 @@ const weekDays = [
 ];
 
 const getRequiredEmployees = (shift) => shift.employeeAmount || 0;
+
+const extractEmployees = (payload) => {
+    const rows = Array.isArray(payload)
+        ? payload
+        : payload?.employees ?? payload?.workers ?? payload?.data?.employees ?? [];
+
+    return rows
+        .map((row) => row.employee ?? row.user ?? row)
+        .filter(Boolean);
+};
 
 function EmployerPlacementBuilder() {
     const [shifts, setShifts] = useState([]);
@@ -63,29 +74,42 @@ function EmployerPlacementBuilder() {
                     setIsEditMode(true);
                 }
             })
-            .catch((err) => {
-                console.log("Error loading shifts", err);
+            .catch((requestError) => {
+                console.log("Error loading shifts", requestError);
                 setError("Could not load shifts.");
             });
 
-        getAllEmployees()
-            .then((response) => {
-                setEmployees(response.data?.employees || response.data || []);
+        getAllActiveEmployees()
+            .then(async (response) => {
+                const activeEmployees = extractEmployees(response.data);
+
+                if (activeEmployees.length > 0) {
+                    setEmployees(activeEmployees);
+                    return;
+                }
+
+                const allEmployeesResponse = await getAllEmployees();
+                setEmployees(extractEmployees(allEmployeesResponse.data));
             })
-            .catch((err) => {
-                console.log("Error loading employees", err);
-                setError("Could not load employees.");
+            .catch((requestError) => {
+                console.log("Error loading employees", requestError);
+                getAllEmployees()
+                    .then((response) => {
+                        setEmployees(extractEmployees(response.data));
+                    })
+                    .catch((fallbackError) => {
+                        console.log("Error loading fallback employees", fallbackError);
+                        setError("Could not load employees.");
+                    });
             });
     }, []);
-
 
     const isEmployeeAvailable = (employee, shift) => {
         if (!employee.constraints && !employee.constraintsList) return true;
         const constraints = employee.constraints || employee.constraintsList || [];
         const shiftDay = shift.weekDay || shift.day || shift.date;
 
-
-        const hasConflict = constraints.some(constraint =>
+        const hasConflict = constraints.some((constraint) =>
             constraint.day === shiftDay || constraint.date === shiftDay
         );
         return !hasConflict;
@@ -114,31 +138,35 @@ function EmployerPlacementBuilder() {
                         <div key={index} className="placement-employee-select-wrap">
                             <select
                                 value={currentSelection}
-                                onChange={(e) => handleEmployeeChange(shiftId, index, e.target.value)}
+                                onChange={(event) => handleEmployeeChange(shiftId, index, event.target.value)}
                                 className={!currentSelection ? "placement-select-required" : ""}
                             >
                                 <option value="">Select employee</option>
 
                                 {employees.map((employee) => {
-                                    const employeeId = employee.id || employee.employeeId || employee.personalId;
+                                    const employeeId = employee.id || employee.employeeId;
                                     const employeeName =
                                         employee.fullName ||
                                         `${employee.firstName || ""} ${employee.lastName || ""}`.trim() ||
                                         employee.name ||
+                                        employee.personalId ||
                                         "Employee";
 
-                                    // תוספת: בדיקת זמינות העובד מול המשמרת הנוכחית
                                     const available = isEmployeeAvailable(employee, shift);
 
                                     return (
-                                        <option key={employeeId} value={employeeId}>
-                                            {employeeName} {available ? "🟢 (Available)" : "🔴 (Not Available)"}
+                                        <option key={employeeId ?? employee.personalId} value={employeeId ?? ""}>
+                                            {employeeName} {available ? "(Available)" : "(Not Available)"}
                                         </option>
                                     );
                                 })}
                             </select>
-                            {/* תוספת: חיווי ויזואלי מהיר אם חסר שיבוץ בשורה הזו */}
-                            {!currentSelection && <span style={{ color: 'orange', fontSize: '12px' }}>⚠️ Required</span>}
+                            {employees.length === 0 && (
+                                <span className="placement-required-text">No employees loaded</span>
+                            )}
+                            {!currentSelection && (
+                                <span className="placement-required-text">Required</span>
+                            )}
                         </div>
                     );
                 })}
@@ -155,38 +183,40 @@ function EmployerPlacementBuilder() {
         for (const shift of shifts) {
             const shiftId = shift.id || shift.shift_id || shift.shiftId;
             const requiredEmployees = getRequiredEmployees(shift);
-            for (let i = 0; i < requiredEmployees; i++) {
-                const employeeId = placements[shiftId]?.[i];
+            for (let index = 0; index < requiredEmployees; index++) {
+                const employeeId = placements[shiftId]?.[index];
                 if (!employeeId) {
                     hasValidationErrors = true;
                     continue;
                 }
 
                 payload.push({
-                    employee_id: employeeId,
-                    shift_id: shiftId,
-                    date: shift.date || shift.day || shift.weekDay,
+                    employeeId,
+                    shiftId,
+                    date: new Date().toISOString(),
                 });
             }
         }
+
         if (hasValidationErrors) {
             setError("Validation Error: Please select employees for all required placements.");
             return;
         }
+
         savePlacement(payload)
             .then(() => {
                 setMessage(isEditMode ? "Placement updated successfully." : "Placement saved successfully.");
                 setIsEditMode(true);
             })
-            .catch((err) => {
-                console.log("Error saving placement", err);
+            .catch((requestError) => {
+                console.log("Error saving placement", requestError);
                 setError("Could not save placement.");
             });
     };
 
     return (
         <div className="manager-dashboard-shell employer-placement-page">
-            <NavbarEmployer active="Placement" />
+            <NavbarEmployer active="PlacementBuilder" />
 
             <main className="employer-placement-content">
                 <header className="employer-placement-hero">

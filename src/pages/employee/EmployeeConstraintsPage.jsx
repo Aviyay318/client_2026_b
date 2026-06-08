@@ -9,6 +9,26 @@ import "./EmployeeViewPages.css";
 
 const getResponsePayload = (response) => response?.data?.data ?? response?.data ?? {};
 
+const getSubmissionDeadline = (payload) => (
+    payload?.submissionExpiration
+    ?? payload?.submitionExparation
+    ?? payload?.settings?.submissionExpiration
+    ?? payload?.settings?.submitionExparation
+    ?? null
+);
+
+const getServerErrorMessage = (payload, fallback) => {
+    if (payload?.message) {
+        return payload.message;
+    }
+
+    if (payload?.errorCode) {
+        return `${fallback} Error code: ${payload.errorCode}`;
+    }
+
+    return fallback;
+};
+
 const extractList = (payload, keys) => {
     if (Array.isArray(payload)) {
         return payload;
@@ -46,7 +66,7 @@ const formatDate = (value) => {
         return value;
     }
 
-    return new Intl.DateTimeFormat("he-IL", {
+    return new Intl.DateTimeFormat("en-US", {
         dateStyle: "medium",
         timeStyle: "short",
     }).format(date);
@@ -68,7 +88,12 @@ const isPastDeadline = (value) => {
 
 const getShiftDate = (shift) => shift.date ?? shift.shiftDate ?? shift.dayDate ?? "";
 
-const getConstraintDate = (shift) => getShiftDate(shift) || shift.startTime || "";
+const toLocalDateTimeString = (date = new Date()) => {
+    const pad = (value) => String(value).padStart(2, "0");
+
+    return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`
+        + `T${pad(date.getHours())}:${pad(date.getMinutes())}:${pad(date.getSeconds())}`;
+};
 
 const formatTime = (value) => {
     if (!value) {
@@ -81,7 +106,7 @@ const formatTime = (value) => {
         return value;
     }
 
-    return new Intl.DateTimeFormat("he-IL", {
+    return new Intl.DateTimeFormat("en-US", {
         hour: "2-digit",
         minute: "2-digit",
     }).format(date);
@@ -127,15 +152,34 @@ function EmployeeConstraintsPage() {
 
                 const settingsPayload = getResponsePayload(settingsResponse);
                 const shiftsPayload = getResponsePayload(shiftsResponse);
+
+                if (settingsPayload?.success === false) {
+                    throw new Error(getServerErrorMessage(
+                        settingsPayload,
+                        "Could not load employer settings for this employee."
+                    ));
+                }
+
+                if (shiftsPayload?.success === false) {
+                    throw new Error(getServerErrorMessage(
+                        shiftsPayload,
+                        "Could not load published shifts."
+                    ));
+                }
+
                 const nextShifts = extractList(shiftsPayload, [
                     "shifts",
                     "publishedShifts",
                     "availableShifts",
                     "employerShifts",
                     "settingsShifts",
+                    "shiftSettings",
+                    "weeklyShifts",
+                    "shiftTemplates",
+                    "rows",
                 ]).filter((shift) => shift.posted !== false && shift.active !== false);
 
-                const nextDeadline = settingsPayload.submitionExparation ?? null;
+                const nextDeadline = getSubmissionDeadline(settingsPayload);
 
                 setDeadline(nextDeadline);
                 setDeadlinePassed(isPastDeadline(nextDeadline));
@@ -156,7 +200,7 @@ function EmployeeConstraintsPage() {
                 );
             } catch (err) {
                 if (isMounted) {
-                    setError(err.response?.data?.message || "Could not load constraints data.");
+                    setError(err.message || err.response?.data?.message || "Could not load constraints data.");
                 }
             } finally {
                 if (isMounted) {
@@ -189,18 +233,23 @@ function EmployeeConstraintsPage() {
             return;
         }
 
-        const payload = shifts
+        const constrains = shifts
             .map((shift) => {
                 const shiftId = getShiftId(shift);
 
                 return {
-                    shift_id: shiftId,
+                    shiftId,
                     available: constraints[shiftId]?.available ?? true,
                     comment: constraints[shiftId]?.comment ?? "",
-                    date: getConstraintDate(shift),
                 };
             })
-            .filter((item) => item.shift_id !== undefined && item.shift_id !== null);
+            .filter((item) => item.shiftId !== undefined && item.shiftId !== null);
+
+        const payload = {
+            employeePersonalId: sessionStorage.getItem("employeePersonalId") || "",
+            constrains,
+            date: toLocalDateTimeString(),
+        };
 
         try {
             setSaving(true);
@@ -209,7 +258,7 @@ function EmployeeConstraintsPage() {
 
             await saveEmployeeConstraints(payload);
 
-            setSuccessMessage("האילוצים נשמרו בהצלחה");
+            setSuccessMessage("Constraints saved successfully.");
         } catch (err) {
             setError(err.response?.data?.message || "Could not save constraints.");
         } finally {
@@ -221,18 +270,18 @@ function EmployeeConstraintsPage() {
         <div className="employee-view-page">
             <NavbarEmployee active="Constraints" />
 
-            <header className="employee-view-header" dir="rtl">
+            <header className="employee-view-header">
                 <p className="employee-view-kicker">Employee View</p>
-                <h1>הגשת אילוצים</h1>
+                <h1>Submit Constraints</h1>
                 <div className="employee-view-deadline">
-                    <span>מועד אחרון להגשת אילוצים</span>
+                    <span>Constraint submission deadline</span>
                     <strong>{formatDate(deadline)}</strong>
                 </div>
             </header>
 
             {deadlinePassed && (
-                <section className="employee-view-alert" dir="rtl">
-                    מועד ההגשה עבר. ניתן לצפות באילוצים, אך לא לערוך או לשלוח אותם.
+                <section className="employee-view-alert">
+                    The submission deadline has passed. You can view constraints, but you cannot edit or submit them.
                 </section>
             )}
 
@@ -242,9 +291,9 @@ function EmployeeConstraintsPage() {
             {loading ? (
                 <section className="employee-view-state">Loading available shifts...</section>
             ) : shifts.length === 0 ? (
-                <section className="employee-view-empty" dir="rtl">
-                    <h2>אין משמרות זמינות להגשת אילוצים</h2>
-                    <p>כאשר המעסיק יפרסם משמרות, הן יופיעו כאן בצורה מסודרת.</p>
+                <section className="employee-view-empty">
+                    <h2>No shifts are available for constraint submission</h2>
+                    <p>When your employer publishes shifts, they will appear here.</p>
                 </section>
             ) : (
                 <>

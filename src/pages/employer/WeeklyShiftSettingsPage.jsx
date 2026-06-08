@@ -1,8 +1,9 @@
-import { useEffect, useRef, useState } from "react";
+import {useEffect, useRef, useState} from "react";
 import {
     formatTimeForInput,
     formatTimeForServer
 } from "../../utils/timeUtils.js";
+import NavbarEmployer from "../../Navbar/navbar-employer/NavbarEmployer.jsx";
 import ShiftSettingsTable from "../../components/ShiftSettingsTable.jsx";
 import "./WeeklyShiftSettingsPage.css";
 import {
@@ -14,13 +15,13 @@ import {
 } from "../../service/employerApi.js";
 
 const weekDays = [
-    { value: 1, label: "Sunday" },
-    { value: 2, label: "Monday" },
-    { value: 3, label: "Tuesday" },
-    { value: 4, label: "Wednesday" },
-    { value: 5, label: "Thursday" },
-    { value: 6, label: "Friday" },
-    { value: 7, label: "Saturday" }
+    {value: 1, label: "Sunday"},
+    {value: 2, label: "Monday"},
+    {value: 3, label: "Tuesday"},
+    {value: 4, label: "Wednesday"},
+    {value: 5, label: "Thursday"},
+    {value: 6, label: "Friday"},
+    {value: 7, label: "Saturday"}
 ];
 
 const createDefaultShift = (weekDay) => ({
@@ -34,7 +35,7 @@ const createDefaultShift = (weekDay) => ({
     isNew: true
 });
 
-const mergeShiftsWithWeekDays = (currentShifts) => weekDays.flatMap(({ value }) => {
+const mergeShiftsWithWeekDays = (currentShifts) => weekDays.flatMap(({value}) => {
     const dayShifts = currentShifts.filter((shift) => shift.weekDay === value);
 
     if (dayShifts.length === 0) {
@@ -128,10 +129,10 @@ const hasInvalidTimeRange = (shift) => (
 
 const createShiftsPayload = (shifts) => shifts
     .filter((shift) => !isEmptyShift(shift))
-    .map(({ weekDay, startTime, endTime, employeeAmount }) => ({
+    .map(({weekDay, startTime, endTime, employeeAmount}) => ({
         weekDay,
-        startTime :formatTimeForServer(startTime),
-        endTime :formatTimeForServer(endTime),
+        startTime: formatTimeForServer(startTime),
+        endTime: formatTimeForServer(endTime),
         employeeAmount
     }));
 
@@ -149,11 +150,35 @@ const createUpdatePayload = ({
     employeeAmount
 });
 
+const getServerErrorMessage = (responseOrError, fallback) => {
+    const data = responseOrError?.response?.data ?? responseOrError?.data;
+    const status = responseOrError?.response?.status ?? responseOrError?.status;
+
+    if (data?.message) {
+        return data.message;
+    }
+
+    if (data?.error || data?.path) {
+        return `${fallback} ${status ? `HTTP ${status}. ` : ""}${data.error || ""}${data.path ? ` (${data.path})` : ""}`;
+    }
+
+    if (data?.errorCode) {
+        return `${fallback} Error code: ${data.errorCode}`;
+    }
+
+    if (status) {
+        return `${fallback} HTTP ${status}.`;
+    }
+
+    return fallback;
+};
+
 function WeeklyShiftSettingsPage() {
     const [shifts, setShiftRows] = useState([]);
     const [savedShifts, setSavedShifts] = useState([]);
     const [isUpdateMode, setIsUpdateMode] = useState(false);
     const [message, setMessage] = useState("");
+    const [loadFailed, setLoadFailed] = useState(false);
     const [isSaving, setIsSaving] = useState(false);
     const saveLockRef = useRef(false);
     const lastSavedPayloadRef = useRef(null);
@@ -161,12 +186,14 @@ function WeeklyShiftSettingsPage() {
     useEffect(() => {
         const loadShifts = async () => {
             try {
+                setLoadFailed(false);
                 const normalizedShifts = await fetchEmployerShiftRows();
                 setSavedShifts(normalizedShifts);
                 setShiftRows(normalizedShifts);
             } catch (error) {
                 console.log("GET SHIFTS ERROR:", error);
-                setMessage("Failed to load shift settings.");
+                setLoadFailed(true);
+                setMessage(getServerErrorMessage(error, "Failed to load shift settings. Please log in as employer and try again."));
             }
         };
 
@@ -246,13 +273,21 @@ function WeeklyShiftSettingsPage() {
     };
 
     const handleUpdateMode = () => {
+        if (loadFailed) {
+            setMessage("Cannot edit shifts before loading employer data. Please log in as employer and refresh.");
+            return;
+        }
+
         setShiftRows(mergeShiftsWithWeekDays(savedShifts));
         setIsUpdateMode(true);
     };
 
     const handleSave = async () => {
         console.log("SAVE CLICK", saveLockRef.current);
-        if (saveLockRef.current) {
+        if (saveLockRef.current || loadFailed) {
+            if (loadFailed) {
+                setMessage("Cannot save shifts before loading employer data. Please log in as employer and refresh.");
+            }
             return;
         }
 
@@ -267,18 +302,6 @@ function WeeklyShiftSettingsPage() {
             "INVALID TIME CHECK",
             filledShifts.some(hasInvalidTimeRange)
         );
-        filledShifts.forEach((shift) => {
-            console.log(
-                "SHIFT:",
-                shift.id,
-                "START:",
-                shift.startTime,
-                "END:",
-                shift.endTime,
-                "INVALID:",
-                hasInvalidTimeRange(shift)
-            );
-        });
 
         if (filledShifts.length === 0) {
             setMessage("No shifts to save.");
@@ -336,20 +359,27 @@ function WeeklyShiftSettingsPage() {
 
             const updateRequests = existingShiftPayloads.map((updatePayload) => {
                 console.log("UPDATE SHIFTS PAYLOAD:", updatePayload);
-                return updateShifts(updatePayload);
+                return () => updateShifts(updatePayload);
             });
 
-            const requests = [...updateRequests];
+            const responses = [];
 
-            if (newShiftPayload.shifts.length > 0) {
-                console.log("SET SHIFTS PAYLOAD:", newShiftPayload);
-                requests.push(setShifts(newShiftPayload));
+            for (const request of updateRequests) {
+                const response = await request();
+                responses.push(response);
             }
 
-            const responses = await Promise.all(requests);
+            for (const shift of newShiftPayload.shifts) {
+                const createPayload = {shifts: [shift]};
+                console.log("SET SHIFTS PAYLOAD:", createPayload);
+                const response = await setShifts(createPayload);
+                responses.push(response);
+            }
 
-            if (responses.some((response) => response.data?.success === false)) {
-                setMessage("Failed to save shift settings.");
+            const failedResponse = responses.find((response) => response.data?.success === false);
+
+            if (failedResponse) {
+                setMessage(getServerErrorMessage(failedResponse, "Failed to save shift settings."));
                 return;
             }
 
@@ -359,18 +389,14 @@ function WeeklyShiftSettingsPage() {
             setShiftRows(mergeShiftsWithWeekDays(refreshedShifts));
             setMessage("Shift settings saved successfully.");
         } catch (error) {
-
             console.log("STATUS:", error.response?.status);
-
             console.log("DATA:", error.response?.data);
-
             console.log(
                 "DATA STRING:",
                 JSON.stringify(error.response?.data, null, 2)
             );
 
-            setMessage("Failed to save shift settings.");
-
+            setMessage(getServerErrorMessage(error, "Failed to save shift settings."));
         } finally {
             saveLockRef.current = false;
             setIsSaving(false);
@@ -378,61 +404,77 @@ function WeeklyShiftSettingsPage() {
     };
 
     const handlePublish = async () => {
+        if (loadFailed) {
+            setMessage("Cannot publish shifts before loading employer data. Please log in as employer and refresh.");
+            return;
+        }
+
         try {
-            await postShifts();
+            const response = await postShifts();
+
+            if (response.data?.success === false) {
+                setMessage(getServerErrorMessage(response, "Failed to publish shifts."));
+                return;
+            }
+
             setMessage("Shifts published successfully.");
-        } catch {
-            setMessage("Failed to publish shifts.");
+        } catch (error) {
+            setMessage(getServerErrorMessage(error, "Failed to publish shifts."));
         }
     };
 
     return (
-        <div className="weekly-shift-settings-page">
+        <div className="manager-dashboard-shell weekly-shift-settings-page">
+            <NavbarEmployer active="WeeklyShiftSettings" />
 
-            <div className="weekly-shift-settings-header">
-                <h1>Weekly Shift Settings</h1>
-            </div>
-
-            <section className="weekly-shift-settings-card">
-                <ShiftSettingsTable
-                    shifts={shifts}
-                    weekDays={weekDays}
-                    mode={isUpdateMode ? "update" : "readonly"}
-                    onChangeShift={handleShiftChange}
-                    onAddShift={handleAddShift}
-                    onDeleteShift={handleDeleteShift}
-                />
-
-                <div className="weekly-shift-settings-actions">
-                    {isUpdateMode ? (
-                        <button
-                            className="weekly-shift-settings-button weekly-shift-settings-button-secondary"
-                            type="button"
-                            onClick={handleSave}
-                            disabled={isSaving}
-                        >
-                            {isSaving ? "Saving..." : "Save"}
-                        </button>
-                    ) : (
-                        <button
-                            className="weekly-shift-settings-button weekly-shift-settings-button-secondary"
-                            type="button"
-                            onClick={handleUpdateMode}
-                        >
-                            Update
-                        </button>
-                    )}
-                    <button
-                        className="weekly-shift-settings-button weekly-shift-settings-button-primary"
-                        type="button"
-                        onClick={handlePublish}
-                    >
-                        Publish Shifts
-                    </button>
+            <main className="weekly-shift-settings-content">
+                <div className="weekly-shift-settings-header">
+                    <h1>Weekly Shift Settings</h1>
                 </div>
 
-                {message && <p className="weekly-shift-settings-message">{message}</p>}
-            </section>
+                <section className="weekly-shift-settings-card">
+                    <ShiftSettingsTable
+                        shifts={shifts}
+                        weekDays={weekDays}
+                        mode={isUpdateMode ? "update" : "readonly"}
+                        onChangeShift={handleShiftChange}
+                        onAddShift={handleAddShift}
+                        onDeleteShift={handleDeleteShift}
+                    />
+
+                    <div className="weekly-shift-settings-actions">
+                        {isUpdateMode ? (
+                            <button
+                                className="weekly-shift-settings-button weekly-shift-settings-button-secondary"
+                                type="button"
+                                onClick={handleSave}
+                                disabled={isSaving || loadFailed}
+                            >
+                                {isSaving ? "Saving..." : "Save"}
+                            </button>
+                        ) : (
+                            <button
+                                className="weekly-shift-settings-button weekly-shift-settings-button-secondary"
+                                type="button"
+                                onClick={handleUpdateMode}
+                                disabled={loadFailed}
+                            >
+                                Update
+                            </button>
+                        )}
+                        <button
+                            className="weekly-shift-settings-button weekly-shift-settings-button-primary"
+                            type="button"
+                            onClick={handlePublish}
+                            disabled={loadFailed}
+                        >
+                            Publish Shifts
+                        </button>
+                    </div>
+
+                    {message && <p className="weekly-shift-settings-message">{message}</p>}
+                </section>
+            </main>
         </div>
     );
 }
