@@ -1,4 +1,6 @@
 function ConstraintsTable({constraints}) {
+    const rows = Array.isArray(constraints) ? constraints : [];
+
     return(
 
         <table>
@@ -13,7 +15,7 @@ function ConstraintsTable({constraints}) {
             </thead>
 
         <tbody>
-            {constraints.map((constraint, index)=>(
+            {rows.map((constraint, index)=>(
                 <tr key={index}>
                     <td>{constraint.employeeName}</td>
                     <td>{constraint.date}</td>

@@ -3,6 +3,29 @@ import ConstraintsTable from "../../components/ConstraintsTable.jsx";
 import {getEmployeeConstraints} from "../../service/employerApi.js";
 import CustomDatePicker from "../../components/CustomDatePicker.jsx";
 import NavbarEmployer from "../../Navbar/navbar-employer/NavbarEmployer.jsx";
+import "./EmployerDashboard.css";
+
+const getResponsePayload = (response) => response?.data?.data ?? response?.data?.result ?? response?.data ?? {};
+
+const extractConstraints = (payload) => {
+    if (Array.isArray(payload)) {
+        return payload;
+    }
+
+    if (Array.isArray(payload?.constraints)) {
+        return payload.constraints;
+    }
+
+    if (Array.isArray(payload?.employeeConstraints)) {
+        return payload.employeeConstraints;
+    }
+
+    if (Array.isArray(payload?.items)) {
+        return payload.items;
+    }
+
+    return [];
+};
 
 function EmployerConstraintsView() {
 
@@ -19,7 +42,7 @@ function EmployerConstraintsView() {
     useEffect(() => {
         getEmployeeConstraints()
             .then((response) => {
-                setConstraints(response.data);
+                setConstraints(extractConstraints(getResponsePayload(response)));
             })
             .catch(() => {
                 setError(true);
@@ -51,19 +74,42 @@ function EmployerConstraintsView() {
 
 
     if (loading) {
-        return <h2>Loading...</h2>
+        return (
+            <div className="manager-dashboard-shell">
+                <NavbarEmployer active="EmployeeConstraints" />
+                <main className="manager-dashboard-content">
+                    <section className="manager-state">Loading constraints...</section>
+                </main>
+            </div>
+        );
     }
     if (error) {
-        return <h2>Error loading constraints</h2>
+        return (
+            <div className="manager-dashboard-shell">
+                <NavbarEmployer active="EmployeeConstraints" />
+                <main className="manager-dashboard-content">
+                    <section className="manager-error">Error loading constraints</section>
+                </main>
+            </div>
+        );
     }
 
 
     return (
-        <div>
+        <div className="manager-dashboard-shell">
 
             <NavbarEmployer active="EmployeeConstraints" />
 
-        <div className="filters">
+            <main className="manager-dashboard-content">
+                <header className="manager-topbar">
+                    <div>
+                        <span className="manager-eyebrow">WorkSync Manager Panel</span>
+                        <h1>Employee Constraints</h1>
+                        <p>Review employee availability before building the final schedule.</p>
+                    </div>
+                </header>
+
+        <div className="filters manager-glass-panel">
 
             <CustomDatePicker
                 mode="range"
@@ -99,8 +145,13 @@ function EmployerConstraintsView() {
 
         </div>
 
-        <ConstraintsTable constraints={filteredConstraints}/>
+                {filteredConstraints.length === 0 ? (
+                    <section className="manager-state">No constraints found</section>
+                ) : (
+                    <ConstraintsTable constraints={filteredConstraints}/>
+                )}
 
+            </main>
 
         </div>
 
